@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<AssemblyName>sbabpgen</AssemblyName>
+		<Version>1.0.0</Version>
+		<PackAsTool>true</PackAsTool>
+		<Authors>Steff Beckers</Authors>
+		<Description>Steff's ABP.io Generator.</Description>
+		<RepositoryUrl>https://github.com/steffbeckers/abp-generator</RepositoryUrl>
+		<PackageTags>abp, cli</PackageTags>
+		<Product>Steff's ABP.io Generator</Product>
+		<PackageId>SteffBeckers.Abp.Generator</PackageId>
+	</PropertyGroup>
+
+</Project>
