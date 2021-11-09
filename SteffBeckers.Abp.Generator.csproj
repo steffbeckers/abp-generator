@@ -8,6 +8,7 @@
 		<AssemblyName>sbabpgen</AssemblyName>
 		<Version>1.0.0</Version>
 		<PackAsTool>true</PackAsTool>
+		<IsPackable>true</IsPackable>
 		<Authors>Steff Beckers</Authors>
 		<Description>Steff's ABP.io Generator.</Description>
 		<RepositoryUrl>https://github.com/steffbeckers/abp-generator</RepositoryUrl>
@@ -15,5 +16,9 @@
 		<Product>Steff's ABP.io Generator</Product>
 		<PackageId>SteffBeckers.Abp.Generator</PackageId>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	</ItemGroup>
 
 </Project>
