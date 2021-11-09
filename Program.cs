@@ -2,7 +2,11 @@
 using Newtonsoft.Json;
 using SteffBeckers.Abp.Generator.Settings;
 
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(new WebApplicationOptions()
+{
+    Args = args,
+    WebRootPath = "wwwroot/public/"
+});
 
 builder.Configuration.AddJsonFile(
     "generatorsettings.json",
