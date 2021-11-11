@@ -1,27 +1,36 @@
 ﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using SteffBeckers.Abp.Generator.Helpers;
 using SteffBeckers.Abp.Generator.Settings;
 
-string generatorRootPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}/.steffbeckers/abp/generator/";
+string contentRootPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}/.steffbeckers/abp/generator/";
+string webRootPath = Path.Combine("wwwroot", "public");
 
-if (!Directory.Exists(generatorRootPath))
+// Create content root path if not exists and copy initial settings
+if (!Directory.Exists(contentRootPath))
 {
-    Directory.CreateDirectory(generatorRootPath);
+    Directory.CreateDirectory(contentRootPath);
     
-    foreach (string jsonFile in Directory.GetFiles(Directory.GetCurrentDirectory(), "*.json"))
+    foreach (string jsonFile in Directory.GetFiles(Directory.GetCurrentDirectory(), "*settings.json"))
     {
-        File.Copy(jsonFile, Path.Combine(generatorRootPath, Path.GetFileName(jsonFile)));
+        File.Copy(jsonFile, Path.Combine(contentRootPath, Path.GetFileName(jsonFile)));
     }
 }
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(new WebApplicationOptions()
 {
     Args = args,
-    WebRootPath = "wwwroot/public/"
+    WebRootPath = webRootPath,
+    ContentRootPath = contentRootPath
 });
 
+// Copy wwwroot/public/
+FileHelpers.CopyFilesRecursively(
+    Path.Combine(Directory.GetCurrentDirectory(), webRootPath),
+    Path.Combine(contentRootPath, webRootPath));
+
 builder.Configuration.AddJsonFile(
-    Path.Combine(generatorRootPath, "generatorsettings.json"),
+    Path.Combine(contentRootPath, "generatorsettings.json"),
     optional: true,
     reloadOnChange: true);
 
@@ -48,7 +57,7 @@ app.MapPut(
             new { Generator = input },
             Formatting.Indented);
 
-        await File.WriteAllTextAsync(Path.Combine(generatorRootPath, "generatorsettings.json"), json);
+        await File.WriteAllTextAsync(Path.Combine(contentRootPath, "generatorsettings.json"), json);
     });
 
 app.Run();
