@@ -2,6 +2,18 @@
 using Newtonsoft.Json;
 using SteffBeckers.Abp.Generator.Settings;
 
+string generatorRootPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)}/.steffbeckers/abp/generator/";
+
+if (!Directory.Exists(generatorRootPath))
+{
+    Directory.CreateDirectory(generatorRootPath);
+    
+    foreach (string jsonFile in Directory.GetFiles(Directory.GetCurrentDirectory(), "*.json"))
+    {
+        File.Copy(jsonFile, Path.Combine(generatorRootPath, Path.GetFileName(jsonFile)));
+    }
+}
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder(new WebApplicationOptions()
 {
     Args = args,
@@ -9,12 +21,13 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(new WebApplicationO
 });
 
 builder.Configuration.AddJsonFile(
-    "generatorsettings.json",
-    optional: true);
+    Path.Combine(generatorRootPath, "generatorsettings.json"),
+    optional: true,
+    reloadOnChange: true);
 
 builder.Services
     .AddOptions<GeneratorSettings>()
-    .Bind(builder.Configuration.GetRequiredSection(GeneratorSettings.Key));
+    .Bind(builder.Configuration.GetRequiredSection("Generator"));
 
 WebApplication app = builder.Build();
 
@@ -35,7 +48,7 @@ app.MapPut(
             new { Generator = input },
             Formatting.Indented);
 
-        await File.WriteAllTextAsync("generatorsettings.json", json);
+        await File.WriteAllTextAsync(Path.Combine(generatorRootPath, "generatorsettings.json"), json);
     });
 
 app.Run();
