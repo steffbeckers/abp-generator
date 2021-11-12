@@ -13,7 +13,7 @@
 		<Description>Steff's ABP.io Generator.</Description>
 		<RepositoryUrl>https://github.com/steffbeckers/abp-generator</RepositoryUrl>
 		<PackageTags>abp, cli</PackageTags>
-		<Product>Steff's ABP.io Generator</Product>
+		<Product>ABP.io Generator</Product>
 		<PackageId>SteffBeckers.Abp.Generator</PackageId>
 	</PropertyGroup>
 

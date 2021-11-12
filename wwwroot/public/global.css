@@ -8,10 +8,17 @@ body {
 body {
   color: #333;
   margin: 0;
-  padding: 8px;
+  padding: 0;
   box-sizing: border-box;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+.container {
+  margin: 0 auto;
+  padding-left: 16px;
+  padding-right: 16px;
+  max-width: 960px;
 }
 
 a {
@@ -29,6 +36,8 @@ a:visited {
 
 label {
   display: block;
+  margin-bottom: 4px;
+  font-weight: bold;
 }
 
 input,
@@ -43,7 +52,6 @@ textarea {
   box-sizing: border-box;
   border: 1px solid #ccc;
   border-radius: 2px;
-  width: 100%;
 }
 
 input:disabled {

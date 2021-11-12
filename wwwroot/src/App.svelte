@@ -7,6 +7,10 @@
         settings = await (await fetch("/api/settings")).json();
     })
 
+    async function openTemplatesFolder() {
+        await fetch("/api/actions/open-templates-folder");
+    }
+
     async function updateSettings() {
         await fetch("/api/settings", {
             method: "PUT",
@@ -18,14 +22,21 @@
     }
 </script>
 
-<h1>ABP.io Generator</h1>
-
-{#if settings}
-<div>
-    <h2>Settings</h2>
+<div class="container">
+    <h1>ABP.io Generator</h1>
     <div>
-        <label for="projectPathSetting">Project path</label>
-        <input name="projectPathSetting" type="text" bind:value={settings.projectPath} on:blur={updateSettings} />
+        <h2>Settings</h2>
+        {#if settings}
+        <div>
+            <label for="projectPathSetting">Project path</label>
+            <input style="width: 100%;" name="projectPathSetting" type="text" bind:value={settings.projectPath} on:blur={updateSettings} />
+        </div>
+        {/if}
+    </div>
+    <div>
+        <h2>Templates</h2>
+        <div>
+            <button type="button" on:click={openTemplatesFolder}>Open folder</button>
+        </div>
     </div>
 </div>
-{/if}

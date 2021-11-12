@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using SteffBeckers.Abp.Generator.Helpers;
 using SteffBeckers.Abp.Generator.Settings;
+using System.Diagnostics;
 
 string userBasedStoragePath = Path.Combine(
     Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
@@ -42,6 +43,16 @@ WebApplication app = builder.Build();
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
+
+app.MapGet(
+    "/api/actions/open-templates-folder",
+    () => {
+        Process.Start(new ProcessStartInfo() {
+            FileName = templatesPath,
+            UseShellExecute = true,
+            Verb = "open"
+        });
+    });
 
 app.MapGet(
     "/api/settings",
