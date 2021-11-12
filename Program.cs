@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using SteffBeckers.Abp.Generator.Helpers;
 using SteffBeckers.Abp.Generator.Settings;
 
 string userBasedStoragePath = Path.Combine(
@@ -59,4 +60,11 @@ app.MapPut(
         await File.WriteAllTextAsync(Path.Combine(userBasedStoragePath, generatorSettingsFileName), json);
     });
 
-app.Run();
+Task run = app.RunAsync();
+
+// Open browser on startup
+string? url = app.Urls.FirstOrDefault();
+if (url != null)
+    BrowserHelper.OpenUrl(url);
+
+await run;
