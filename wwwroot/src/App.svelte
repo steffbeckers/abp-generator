@@ -2,8 +2,9 @@
     import { onMount } from "svelte";
     import * as signalR from "@microsoft/signalr";
 
-    let settings;
     let realtimeConnection;
+    let connected = true;
+    let settings;
 
     onMount(async () => {
         settings = await (await fetch("/api/settings")).json();
@@ -14,11 +15,22 @@
             .build();
         
         realtimeConnection.on("SettingsUpdated", (updatedSettings) => {
-            console.log("Settings updated!", updatedSettings)
             settings = updatedSettings;
         });
 
-        realtimeConnection.start();
+        realtimeConnection.onclose(() => {
+            connected = false;
+        });
+
+        realtimeConnection.onreconnecting(() => {
+            connected = false;
+        })
+
+        realtimeConnection.onreconnected(() => {
+            connected = true;
+        })
+
+        await realtimeConnection.start();
     })
 
     async function openTemplatesFolder() {
@@ -38,6 +50,11 @@
 
 <div class="container">
     <h1>ABP.io Generator</h1>
+    {#if !connected}
+    <h2 style="color: red; font-weigth: bold">
+        CLI connection lost!
+    </h2>
+    {:else}
     <div>
         <h2>Settings</h2>
         {#if settings}
@@ -53,4 +70,5 @@
             <button type="button" on:click={openTemplatesFolder}>Open folder</button>
         </div>
     </div>
+    {/if}
 </div>
