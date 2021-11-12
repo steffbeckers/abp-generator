@@ -1,10 +1,24 @@
 <script>
     import { onMount } from "svelte";
+    import * as signalR from "@microsoft/signalr";
 
     let settings;
+    let realtimeConnection;
 
     onMount(async () => {
         settings = await (await fetch("/api/settings")).json();
+
+        realtimeConnection = new signalR.HubConnectionBuilder()
+            .withUrl("/signalr-hubs/realtime")
+            .withAutomaticReconnect()
+            .build();
+        
+        realtimeConnection.on("SettingsUpdated", (updatedSettings) => {
+            console.log("Settings updated!", updatedSettings)
+            settings = updatedSettings;
+        });
+
+        realtimeConnection.start();
     })
 
     async function openTemplatesFolder() {

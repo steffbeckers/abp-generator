@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using SteffBeckers.Abp.Generator.Helpers;
+using SteffBeckers.Abp.Generator.Realtime;
 using SteffBeckers.Abp.Generator.Settings;
 using System.Diagnostics;
 
@@ -24,6 +24,8 @@ if (!Directory.Exists(userBasedStoragePath))
         Path.Combine(userBasedStoragePath, generatorSettingsFileName));
 }
 
+// TODO: Templates folder file watcher?
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder(new WebApplicationOptions()
 {
     Args = args,
@@ -38,6 +40,9 @@ builder.Configuration.AddJsonFile(
 builder.Services
     .AddOptions<GeneratorSettings>()
     .Bind(builder.Configuration.GetRequiredSection("Generator"));
+builder.Services.AddSingleton<GeneratorSettingsManager>();
+
+builder.Services.AddSignalR();
 
 WebApplication app = builder.Build();
 
@@ -46,8 +51,10 @@ app.UseStaticFiles();
 
 app.MapGet(
     "/api/actions/open-templates-folder",
-    () => {
-        Process.Start(new ProcessStartInfo() {
+    () =>
+    {
+        Process.Start(new ProcessStartInfo()
+        {
             FileName = templatesPath,
             UseShellExecute = true,
             Verb = "open"
@@ -56,8 +63,9 @@ app.MapGet(
 
 app.MapGet(
     "/api/settings",
-    (IOptionsMonitor<GeneratorSettings> settings) => {
-        return settings.CurrentValue;
+    (GeneratorSettingsManager settingsManager) =>
+    {
+        return settingsManager.CurrentValue;
     });
 
 app.MapPut(
@@ -70,6 +78,12 @@ app.MapPut(
 
         await File.WriteAllTextAsync(Path.Combine(userBasedStoragePath, generatorSettingsFileName), json);
     });
+
+app.UseRouting();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<RealtimeHub>("/signalr-hubs/realtime");
+});
 
 Task run = app.RunAsync();
 
