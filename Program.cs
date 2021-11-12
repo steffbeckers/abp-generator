@@ -10,18 +10,19 @@ string userBasedStoragePath = Path.Combine(
     "abp",
     "generator");
 string generatorSettingsFileName = "generatorsettings.json";
-string templatesPath = Path.Combine(userBasedStoragePath, "templates");
+string templatesPath = Path.Combine(userBasedStoragePath, "Templates");
 string webRootPath = Path.Combine("wwwroot", "public");
 
-// Create user based directory if not exists and copy initial generator settings
+// Create user based directory if not exists and copy initial generator settings and templates
 if (!Directory.Exists(userBasedStoragePath))
 {
     Directory.CreateDirectory(userBasedStoragePath);
-    Directory.CreateDirectory(templatesPath);
-
     File.Copy(
         Path.Combine(Directory.GetCurrentDirectory(), generatorSettingsFileName),
         Path.Combine(userBasedStoragePath, generatorSettingsFileName));
+
+    Directory.CreateDirectory(templatesPath);
+    FileHelpers.CopyFilesRecursively("Templates", templatesPath);
 }
 
 // TODO: Templates folder file watcher?
