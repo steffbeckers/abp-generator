@@ -29,6 +29,7 @@ if (!Directory.Exists(userBasedStoragePath))
 WebApplicationBuilder builder = WebApplication.CreateBuilder(new WebApplicationOptions()
 {
     Args = args,
+    ContentRootPath = AppDomain.CurrentDomain.BaseDirectory,
     WebRootPath = webRootPath
 });
 
