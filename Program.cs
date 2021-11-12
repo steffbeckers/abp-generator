@@ -93,6 +93,8 @@ Task run = app.RunAsync();
 // Open browser on startup
 string? url = app.Urls.FirstOrDefault();
 if (url != null)
+{
     BrowserHelper.OpenUrl(url);
+}
 
 await run;
