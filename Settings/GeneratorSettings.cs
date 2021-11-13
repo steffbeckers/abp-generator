@@ -2,5 +2,7 @@
 
 public class GeneratorSettings
 {
+    public string? ProjectName { get; set; }
+
     public string? ProjectPath { get; set; }
 }

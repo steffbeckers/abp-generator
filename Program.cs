@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using HandlebarsDotNet;
+using Newtonsoft.Json;
 using SteffBeckers.Abp.Generator.Helpers;
 using SteffBeckers.Abp.Generator.Realtime;
 using SteffBeckers.Abp.Generator.Settings;
@@ -22,10 +23,41 @@ if (!Directory.Exists(userBasedStoragePath))
         Path.Combine(userBasedStoragePath, generatorSettingsFileName));
 
     Directory.CreateDirectory(templatesPath);
-    FileHelpers.CopyFilesRecursively("Templates", templatesPath);
 }
 
-// TODO: Templates folder file watcher?
+FileHelpers.CopyFilesRecursively("Templates", templatesPath);
+
+// TODO: Extract to some template manager with a file watcher?
+Dictionary<string, string> templates = new Dictionary<string, string>();
+List<string> templateSettingFilePaths = Directory.GetFiles(templatesPath, "templatesettings.json", SearchOption.AllDirectories).ToList();
+foreach (string? templateSettingFilePath in templateSettingFilePaths)
+{
+    if (templateSettingFilePath.Contains(Path.Combine(templatesPath, "Snippets")))
+    {
+        string templateFilePath = Path.Combine(Path.GetDirectoryName(templateSettingFilePath), "Template.hbs");
+        if (File.Exists(templateFilePath))
+        {
+            string templateSource = File.ReadAllText(templateFilePath);
+            HandlebarsTemplate<object, object>? template = Handlebars.Compile(templateSource);
+            string? output = template(new
+            {
+                ProjectName = "MyCompany.MyProduct",
+                AggregateRootName = "Test",
+                AggregateRootNamePlural = "Tests"
+            });
+
+            templates.Add(Path.GetDirectoryName(templateSettingFilePath).Replace(templatesPath + Path.DirectorySeparatorChar, ""), output);
+        }
+    }
+}
+
+// TODO: Remove
+foreach (KeyValuePair<string, string> template in templates)
+{
+    Console.WriteLine(template.Key);
+    Console.WriteLine(template.Value);
+    Console.WriteLine();
+}
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(new WebApplicationOptions()
 {

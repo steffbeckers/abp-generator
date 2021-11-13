@@ -1,7 +1,4 @@
 {
-  "Template": {
-    "Name": "Aggregate root",
-    "Description": "Aggregate root template.",
-    "Path": "aspnet-core/src/{{ProjectName}}.Domain/{{AggregateRootNamePlural}}/{{AggregateRootName}}.cs"
-  }
+  "Name": "Aggregate root",
+  "FileName": "{{AggregateRootName}}.cs"
 }
