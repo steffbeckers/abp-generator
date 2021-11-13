@@ -4,5 +4,5 @@ public class GeneratorSettings
 {
     public GeneratorContext Context { get; set; } = new GeneratorContext();
 
-    public string? ProjectPath { get; set; }
+    public string ProjectPath { get; set; } = "";
 }

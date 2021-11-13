@@ -103,21 +103,34 @@ app.MapGet(
     "/api/templates/snippets",
     () =>
     {
-        return snippetTemplates.Keys.Select(x => x.ToString()).ToList();
+        return snippetTemplates.Keys.ToList();
     });
 
 app.MapGet(
     "/api/templates/snippets/{index}",
     (int index) =>
     {
-        return snippetTemplates.Values.ElementAt(index);
+        return snippetTemplates.Values.ElementAtOrDefault(index);
     });
 
 app.MapGet(
     "/api/templates/snippets/{index}/generate",
-    (int index) =>
+    async (int index, GeneratorSettingsManager settingsManager) =>
     {
-        // TODO: Generate template
+        string? snippetTemplatePath = snippetTemplates.Keys.ElementAtOrDefault(index);
+        if (!string.IsNullOrEmpty(snippetTemplatePath))
+        {
+            string snippetTemplate = snippetTemplates.Values.ElementAt(index);
+
+            string outputPath = Path.Combine(settingsManager.CurrentValue.ProjectPath, snippetTemplatePath);
+
+            if (!Directory.Exists(Path.GetDirectoryName(outputPath)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(outputPath));
+            }
+
+            await File.WriteAllTextAsync(outputPath, snippetTemplate);
+        }
     });
 
 app.MapGet(
