@@ -12,7 +12,9 @@ string userBasedStoragePath = Path.Combine(
     "generator");
 string generatorSettingsFileName = "generatorsettings.json";
 string templatesPath = Path.Combine(userBasedStoragePath, "Templates");
+string snippetTemplatesPath = Path.Combine(templatesPath, "Snippets");
 string webRootPath = Path.Combine("wwwroot", "public");
+GeneratorContext context = new GeneratorContext();
 
 // Create user based directory if not exists and copy initial generator settings and templates
 if (!Directory.Exists(userBasedStoragePath))
@@ -28,31 +30,31 @@ if (!Directory.Exists(userBasedStoragePath))
 FileHelpers.CopyFilesRecursively("Templates", templatesPath);
 
 // TODO: Extract to some template manager with a file watcher?
-Dictionary<string, string> templates = new Dictionary<string, string>();
-List<string> templateSettingFilePaths = Directory.GetFiles(templatesPath, "templatesettings.json", SearchOption.AllDirectories).ToList();
-foreach (string? templateSettingFilePath in templateSettingFilePaths)
+Dictionary<string, string> snippetTemplates = new Dictionary<string, string>();
+List<string> snippetTemplateFilePaths = Directory.GetFiles(Path.GetDirectoryName(snippetTemplatesPath), "*.hbs", SearchOption.AllDirectories).ToList();
+foreach (string snippetTemplateFilePath in snippetTemplateFilePaths)
 {
-    if (templateSettingFilePath.Contains(Path.Combine(templatesPath, "Snippets")))
-    {
-        string templateFilePath = Path.Combine(Path.GetDirectoryName(templateSettingFilePath), "Template.hbs");
-        if (File.Exists(templateFilePath))
-        {
-            string templateSource = File.ReadAllText(templateFilePath);
-            HandlebarsTemplate<object, object>? template = Handlebars.Compile(templateSource);
-            string? output = template(new
-            {
-                ProjectName = "MyCompany.MyProduct",
-                AggregateRootName = "Test",
-                AggregateRootNamePlural = "Tests"
-            });
+    string outputPath = snippetTemplateFilePath
+        .Replace(snippetTemplatesPath + Path.DirectorySeparatorChar, "")
+        .Replace(".hbs", "");
 
-            templates.Add(Path.GetDirectoryName(templateSettingFilePath).Replace(templatesPath + Path.DirectorySeparatorChar, ""), output);
-        }
+    // TODO: Reflection based string replacement?
+    outputPath = outputPath.Replace("{{ProjectName}}", context.ProjectName);
+    outputPath = outputPath.Replace("{{AggregateRootName}}", context.AggregateRootName);
+    outputPath = outputPath.Replace("{{AggregateRootNamePlural}}", context.AggregateRootNamePlural);
+
+    if (!snippetTemplates.ContainsKey(outputPath))
+    {
+        string templateSource = File.ReadAllText(snippetTemplateFilePath);
+        HandlebarsTemplate<object, object>? template = Handlebars.Compile(templateSource);
+        string? output = template(context);
+
+        snippetTemplates.Add(outputPath, output);
     }
 }
 
 // TODO: Remove
-foreach (KeyValuePair<string, string> template in templates)
+foreach (KeyValuePair<string, string> template in snippetTemplates)
 {
     Console.WriteLine(template.Key);
     Console.WriteLine(template.Value);
@@ -86,7 +88,7 @@ app.UseDefaultFiles();
 app.UseStaticFiles();
 
 app.MapGet(
-    "/api/actions/open-templates-folder",
+    "/api/templates/open-folder",
     () =>
     {
         Process.Start(new ProcessStartInfo()
@@ -95,6 +97,27 @@ app.MapGet(
             UseShellExecute = true,
             Verb = "open"
         });
+    });
+
+app.MapGet(
+    "/api/templates/snippets",
+    () =>
+    {
+        return snippetTemplates.Keys.Select(x => x.ToString()).ToList();
+    });
+
+app.MapGet(
+    "/api/templates/snippets/{index}",
+    (int index) =>
+    {
+        return snippetTemplates.Values.ElementAt(index);
+    });
+
+app.MapGet(
+    "/api/templates/snippets/{index}/generate",
+    (int index) =>
+    {
+        // TODO: Generate template
     });
 
 app.MapGet(

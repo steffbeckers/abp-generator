@@ -1,13 +1,29 @@
 <script>
     import { onMount } from "svelte";
     import * as signalR from "@microsoft/signalr";
+    
+    let settings;
 
     let realtimeConnection;
     let connected = true;
-    let settings;
+
+    let snippetTemplates;
+    let selectedSnippetTemplateIndex = 0;
+    let snippetTemplate;
 
     onMount(async () => {
-        settings = await (await fetch("/api/settings")).json();
+        fetch("/api/settings")
+            .then((response) => response.json())
+            .then((data) => {
+                settings = data;
+            });
+
+        fetch("/api/templates/snippets")
+            .then((response) => response.json())
+            .then((data) => {
+                snippetTemplates = data;
+                getSnippetTemplate();
+            });
 
         realtimeConnection = new signalR.HubConnectionBuilder()
             .withUrl("/signalr-hubs/realtime")
@@ -33,10 +49,6 @@
         await realtimeConnection.start();
     })
 
-    async function openTemplatesFolder() {
-        await fetch("/api/actions/open-templates-folder");
-    }
-
     async function updateSettings() {
         await fetch("/api/settings", {
             method: "PUT",
@@ -45,6 +57,18 @@
                 "Content-Type": "application/json"
             }
         });
+    }
+
+    async function openTemplatesFolder() {
+        await fetch("/api/templates/open-folder");
+    }
+
+    async function getSnippetTemplate() {
+        snippetTemplate = await (await fetch(`/api/templates/snippets/${selectedSnippetTemplateIndex}`)).text();
+    }
+
+    async function generateSnippetTemplate() {
+        await fetch(`/api/templates/snippets/${selectedSnippetTemplateIndex}/generate`);
     }
 </script>
 
@@ -69,6 +93,22 @@
         <div>
             <button type="button" on:click={openTemplatesFolder}>Open folder</button>
         </div>
+        <h3>Snippets</h3>
+        {#if snippetTemplates}
+        <div>
+            <select bind:value={selectedSnippetTemplateIndex} on:change={getSnippetTemplate}>
+                {#each snippetTemplates as snippetTemplate, index}
+                <option value={index}>{snippetTemplate}</option>
+                {/each}
+            </select>
+            <button type="button" on:click={generateSnippetTemplate}>Generate</button>
+        </div>
+        {/if}
+        {#if snippetTemplate}
+        <div style="white-space: pre">
+            {snippetTemplate}
+        </div>
+        {/if}
     </div>
     {/if}
 </div>

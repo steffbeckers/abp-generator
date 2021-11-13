@@ -2,7 +2,7 @@
 
 public class GeneratorSettings
 {
-    public string? ProjectName { get; set; }
+    public GeneratorContext Context { get; set; } = new GeneratorContext();
 
     public string? ProjectPath { get; set; }
 }
