@@ -5,29 +5,36 @@ using SteffBeckers.Abp.Generator.Realtime;
 using SteffBeckers.Abp.Generator.Settings;
 using System.Diagnostics;
 
+// TODO: From settings
+GeneratorContext context = new GeneratorContext();
+
+string contentRootPath = Directory.GetCurrentDirectory();
+#if !DEBUG
+contentRootPath = AppDomain.CurrentDomain.BaseDirectory;
+#endif
+string webRootPath = Path.Combine("wwwroot", "public");
+
 string userBasedStoragePath = Path.Combine(
     Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
     ".steffbeckers",
     "abp",
     "generator");
-string generatorSettingsFileName = "generatorsettings.json";
 string templatesPath = Path.Combine(userBasedStoragePath, "Templates");
 string snippetTemplatesPath = Path.Combine(templatesPath, "Snippets");
-string webRootPath = Path.Combine("wwwroot", "public");
-GeneratorContext context = new GeneratorContext();
 
 // Create user based directory if not exists and copy initial generator settings and templates
+string generatorSettingsFileName = "generatorsettings.json";
 if (!Directory.Exists(userBasedStoragePath))
 {
     Directory.CreateDirectory(userBasedStoragePath);
     File.Copy(
-        Path.Combine(Directory.GetCurrentDirectory(), generatorSettingsFileName),
+        Path.Combine(contentRootPath, generatorSettingsFileName),
         Path.Combine(userBasedStoragePath, generatorSettingsFileName));
 
     Directory.CreateDirectory(templatesPath);
 }
 
-FileHelpers.CopyFilesRecursively("Templates", templatesPath);
+FileHelpers.CopyFilesRecursively(Path.Combine(contentRootPath, "Templates"), templatesPath);
 
 // TODO: Extract to some template manager with a file watcher?
 Dictionary<string, string> snippetTemplates = new Dictionary<string, string>();
@@ -64,9 +71,7 @@ foreach (KeyValuePair<string, string> template in snippetTemplates)
 WebApplicationBuilder builder = WebApplication.CreateBuilder(new WebApplicationOptions()
 {
     Args = args,
-#if !DEBUG
-    ContentRootPath = AppDomain.CurrentDomain.BaseDirectory,
-#endif
+    ContentRootPath = contentRootPath,
     WebRootPath = webRootPath
 });
 
