@@ -9,7 +9,7 @@ using System.Diagnostics;
 GeneratorContext context = new GeneratorContext();
 
 string contentRootPath = Directory.GetCurrentDirectory();
-#if !DEBUG
+#if RELEASE
 contentRootPath = AppDomain.CurrentDomain.BaseDirectory;
 #endif
 string webRootPath = Path.Combine("wwwroot", "public");

@@ -6,7 +6,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<AssemblyName>sbabpgen</AssemblyName>
-		<Version>1.0.9</Version>
+		<Version>1.0.10</Version>
 		<PackAsTool>true</PackAsTool>
 		<IsPackable>true</IsPackable>
 		<Authors>Steff Beckers</Authors>
@@ -20,6 +20,17 @@
 	<ItemGroup>
 		<PackageReference Include="Handlebars.Net" Version="2.0.9" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="wwwroot\public\**\*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</None>
+		<Content Include="Templates\**\*.hbs">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
 	</ItemGroup>
 
 </Project>
