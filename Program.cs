@@ -5,14 +5,12 @@ using SteffBeckers.Abp.Generator.Realtime;
 using SteffBeckers.Abp.Generator.Settings;
 using System.Diagnostics;
 
-// TODO: From settings
-GeneratorContext context = new GeneratorContext();
-
 string contentRootPath = Directory.GetCurrentDirectory();
+string webRootPath = Path.Combine("wwwroot", "public");
 #if RELEASE
 contentRootPath = AppDomain.CurrentDomain.BaseDirectory;
+webRootPath = Path.Combine("..", "..", "..", "staticwebassets", "public");
 #endif
-string webRootPath = Path.Combine("wwwroot", "public");
 
 string userBasedStoragePath = Path.Combine(
     Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
@@ -38,7 +36,10 @@ FileHelpers.CopyFilesRecursively(Path.Combine(contentRootPath, "Templates"), tem
 
 // TODO: Extract to some template manager with a file watcher?
 Dictionary<string, string> snippetTemplates = new Dictionary<string, string>();
-List<string> snippetTemplateFilePaths = Directory.GetFiles(Path.GetDirectoryName(snippetTemplatesPath), "*.hbs", SearchOption.AllDirectories).ToList();
+List<string> snippetTemplateFilePaths = Directory.GetFiles(Path.GetDirectoryName(snippetTemplatesPath) ?? "", "*.hbs", SearchOption.AllDirectories).ToList();
+// TODO: From settings
+GeneratorContext context = new GeneratorContext();
+
 foreach (string snippetTemplateFilePath in snippetTemplateFilePaths)
 {
     string outputPath = snippetTemplateFilePath
@@ -131,7 +132,7 @@ app.MapGet(
 
             if (!Directory.Exists(Path.GetDirectoryName(outputPath)))
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(outputPath));
+                Directory.CreateDirectory(Path.GetDirectoryName(outputPath) ?? "");
             }
 
             await File.WriteAllTextAsync(outputPath, snippetTemplate);
