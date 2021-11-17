@@ -61,14 +61,6 @@ foreach (string snippetTemplateFilePath in snippetTemplateFilePaths)
     }
 }
 
-// TODO: Remove
-foreach (KeyValuePair<string, string> template in snippetTemplates)
-{
-    Console.WriteLine(template.Key);
-    Console.WriteLine(template.Value);
-    Console.WriteLine();
-}
-
 WebApplicationBuilder builder = WebApplication.CreateBuilder(new WebApplicationOptions()
 {
     Args = args,
@@ -165,10 +157,10 @@ app.UseEndpoints(endpoints =>
 
 Task run = app.RunAsync();
 
-// Open browser on startup
 string? url = app.Urls.FirstOrDefault();
 if (url != null)
 {
+    Console.WriteLine($"Navigating to: {url}");
     BrowserHelper.OpenUrl(url);
 }
 
