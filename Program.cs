@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using SteffBeckers.Abp.Generator.Helpers;
 using SteffBeckers.Abp.Generator.Realtime;
 using SteffBeckers.Abp.Generator.Settings;
+using SteffBeckers.Abp.Generator.Templates;
 using System.Diagnostics;
 
 string contentRootPath = Directory.GetCurrentDirectory();
@@ -31,10 +32,17 @@ if (!Directory.Exists(userBasedStoragePath))
 
     Directory.CreateDirectory(templatesPath);
 }
+else
+{
+    // TODO: Keep overridden templates? How to override?
+    Directory.Delete(templatesPath, true);
+    Directory.CreateDirectory(templatesPath);
+}
 
 FileHelpers.CopyFilesRecursively(Path.Combine(contentRootPath, "Templates"), templatesPath);
 
 // TODO: Extract to some template manager with a file watcher?
+string templateConfigDelimiter = "#-#-#";
 Dictionary<string, string> snippetTemplates = new Dictionary<string, string>();
 List<string> snippetTemplateFilePaths = Directory.GetFiles(Path.GetDirectoryName(snippetTemplatesPath) ?? "", "*.hbs", SearchOption.AllDirectories).ToList();
 // TODO: From settings
@@ -47,13 +55,27 @@ foreach (string snippetTemplateFilePath in snippetTemplateFilePaths)
         .Replace(".hbs", "");
 
     // TODO: Reflection based string replacement?
-    outputPath = outputPath.Replace("{{ProjectName}}", context.ProjectName);
-    outputPath = outputPath.Replace("{{AggregateRootName}}", context.AggregateRootName);
-    outputPath = outputPath.Replace("{{AggregateRootNamePlural}}", context.AggregateRootNamePlural);
+    outputPath = outputPath.Replace("{{Project.Name}}", context.Project.Name);
+    outputPath = outputPath.Replace("{{AggregateRoot.Name}}", context.AggregateRoot.Name);
+    outputPath = outputPath.Replace("{{AggregateRoot.NamePlural}}", context.AggregateRoot.NamePlural);
+
+    // TODO: Replace in entity context
+    //outputPath = outputPath.Replace("{{EntityName}}", context.Entity.Name);
+    //outputPath = outputPath.Replace("{{EntityNamePlural}}", context.Entity.NamePlural);
 
     if (!snippetTemplates.ContainsKey(outputPath))
     {
-        string templateSource = File.ReadAllText(snippetTemplateFilePath);
+        string templateText = File.ReadAllText(snippetTemplateFilePath);
+        TemplateConfig templateConfig = new TemplateConfig();
+        string templateSource = templateText;
+
+        int templateConfigDelimiterIndex = templateText.IndexOf(templateConfigDelimiter);
+        if (templateConfigDelimiterIndex > -1)
+        {
+            templateConfig = JsonConvert.DeserializeObject<TemplateConfig>(templateText.Substring(0, templateConfigDelimiterIndex));
+            templateSource = templateText.Substring(templateConfigDelimiterIndex + templateConfigDelimiter.Length + Environment.NewLine.Length);
+        }
+
         HandlebarsTemplate<object, object>? template = Handlebars.Compile(templateSource);
         string? output = template(context);
 

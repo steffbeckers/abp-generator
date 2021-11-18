@@ -1,0 +1,19 @@
+﻿using System;
+using Volo.Abp;
+using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.MultiTenancy;
+
+namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
+{
+    public class {{AggregateRoot.Name}}Translation : FullAuditedEntity<Guid>
+    {
+        public {{AggregateRoot.Name}}Translation(Guid id)
+        {
+            Id = id;
+        }
+
+        private {{AggregateRoot.Name}}Translation()
+        {
+        }
+    }
+}

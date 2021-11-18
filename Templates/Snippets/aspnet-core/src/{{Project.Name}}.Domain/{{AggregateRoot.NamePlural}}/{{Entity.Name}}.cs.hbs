@@ -1,0 +1,23 @@
+﻿{
+  "RunForEachEntity": true
+}
+#-#-#
+using System;
+using Volo.Abp;
+using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.MultiTenancy;
+
+namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
+{
+    public class {{Entity.Name}} : FullAuditedEntity<Guid>
+    {
+        public {{Entity.Name}}(Guid id)
+        {
+            Id = id;
+        }
+
+        private {{Entity.Name}}()
+        {
+        }
+    }
+}
