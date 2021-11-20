@@ -2,16 +2,23 @@
     import { onMount } from "svelte";
     import * as signalR from "@microsoft/signalr";
     
+    let version;
     let settings;
 
     let realtimeConnection;
     let connected = true;
 
     let snippetTemplates;
-    let selectedSnippetTemplateIndex = 0;
+    let selectedSnippetTemplateFullPath;
     let snippetTemplate;
 
     onMount(async () => {
+        fetch("/api/version")
+            .then((response) => response.text())
+            .then((data) => {
+                version = data;
+            });
+
         fetch("/api/settings")
             .then((response) => response.json())
             .then((data) => {
@@ -22,7 +29,8 @@
             .then((response) => response.json())
             .then((data) => {
                 snippetTemplates = data;
-                updateSnippetTemplate();
+                selectedSnippetTemplateFullPath = snippetTemplates[0].fullPath
+                setSnippetTemplate();
             });
 
         realtimeConnection = new signalR.HubConnectionBuilder()
@@ -33,6 +41,13 @@
         realtimeConnection.on("SettingsUpdated", (updatedSettings) => {
             settings = updatedSettings;
         });
+
+        realtimeConnection.on("SnippetTemplateLoaded", (loadedSnippetTemplate) => {
+            let loadedSnippetTemplateIndex = snippetTemplates.map(x => x.fullPath).indexOf(loadedSnippetTemplate.fullPath);
+            if (loadedSnippetTemplateIndex > -1) {
+                snippetTemplates[selectedSnippetTemplateIndex] = loadedSnippetTemplate;
+            }
+        })
 
         realtimeConnection.onclose(() => {
             connected = false;
@@ -60,16 +75,20 @@
     }
 
     async function openTemplatesFolder() {
-        await fetch("/api/templates/open-folder");
+        await fetch("/api/templates/snippets/open-folder");
     }
 
-    function updateSnippetTemplate() {
-        snippetTemplate = snippetTemplates[selectedSnippetTemplateIndex];
+    function setSnippetTemplate() {
+        let selectedSnippetTemplateIndex = snippetTemplates.map(x => x.fullPath).indexOf(selectedSnippetTemplateFullPath);
+        if (selectedSnippetTemplateIndex > -1) {
+            snippetTemplate = snippetTemplates[selectedSnippetTemplateIndex];
+        }
     }
 </script>
 
 <div class="container">
     <h1>ABP.io Generator</h1>
+    {#if version}<div>Version: {version}</div>{/if}
     {#if !connected}
     <h2 style="color: red; font-weigth: bold">
         CLI connection lost!
@@ -78,9 +97,39 @@
     <div>
         <h2>Settings</h2>
         {#if settings}
-        <div>
-            <label for="projectPathSetting">Project path</label>
-            <input style="width: 100%;" name="projectPathSetting" type="text" bind:value={settings.projectPath} on:blur={updateSettings} />
+        <!-- <div style="white-space: pre">
+            {JSON.stringify(settings, null, 2)}
+        </div> -->
+        <div style="display: flex; flex-direction: column">
+            <div style="flex: 1 1">
+                <label for="projectPathSetting">Project path</label>
+                <input bind:value={settings.projectPath} on:blur={updateSettings} type="text" id="projectPathSetting" />
+            </div>
+            <h3>Context</h3>
+            <div style="display: flex; gap: 12px">
+                <div style="flex: 1 1">
+                    <label for="projectNameSetting">Project.Name</label>
+                    <input bind:value={settings.context.project.name} on:blur={updateSettings} type="text" id="projectNameSetting" />
+                </div>
+                <div style="flex: 1 1">
+                    <label for="companyNameSetting">Project.CompanyName</label>
+                    <input bind:value={settings.context.project.companyName} type="text" id="companyNameSetting" disabled />
+                </div>
+                <div style="flex: 1 1">
+                    <label for="productNameSetting">Project.ProductName</label>
+                    <input bind:value={settings.context.project.productName} type="text" id="productNameSetting" disabled />
+                </div>
+            </div>
+            <div style="display: flex; gap: 12px">
+                <div style="flex: 1 1">
+                    <label for="aggregateRootNameSetting">AggregateRoot.Name</label>
+                    <input bind:value={settings.context.aggregateRoot.name} on:blur={updateSettings} type="text" id="aggregateRootNameSetting" />
+                </div>
+                <div style="flex: 1 1">
+                    <label for="aggregateRootNamePluralSetting">AggregateRoot.NamePlural</label>
+                    <input bind:value={settings.context.aggregateRoot.namePlural} on:blur={updateSettings} type="text" id="aggregateRootNamePluralSetting" />
+                </div>
+            </div>
         </div>
         {/if}
     </div>
@@ -92,9 +141,9 @@
         <h3>Snippets</h3>
         {#if snippetTemplates}
         <div>
-            <select bind:value={selectedSnippetTemplateIndex} on:change={updateSnippetTemplate}>
-                {#each snippetTemplates as snippetTemplate, index}
-                <option value={index}>{snippetTemplate.outputPath}</option>
+            <select bind:value={selectedSnippetTemplateFullPath} on:change={setSnippetTemplate}>
+                {#each snippetTemplates as snippetTemplate}
+                <option value={snippetTemplate.fullPath}>{snippetTemplate.outputPath}</option>
                 {/each}
             </select>
         </div>

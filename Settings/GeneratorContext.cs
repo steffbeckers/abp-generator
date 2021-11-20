@@ -6,7 +6,6 @@
 
         public string Name { get; set; } = "Recipe";
 
-        // TODO: Update with getter based on Name
         public string NamePlural { get; set; } = "Recipes";
     }
 
@@ -14,7 +13,6 @@
     {
         public string Name { get; set; } = "RecipeStep";
 
-        // TODO: Update with getter based on Name
         public string NamePlural { get; set; } = "RecipeSteps";
     }
 

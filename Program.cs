@@ -1,12 +1,12 @@
-﻿using Newtonsoft.Json;
-using SteffBeckers.Abp.Generator.Helpers;
+﻿using SteffBeckers.Abp.Generator.Helpers;
 using SteffBeckers.Abp.Generator.Realtime;
 using SteffBeckers.Abp.Generator.Settings;
 using SteffBeckers.Abp.Generator.Templates;
-using System.Diagnostics;
 using System.Reflection;
 
-Console.WriteLine($"Version: {Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}");
+string version = Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
+
+Console.WriteLine($"Version: {version}");
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(new WebApplicationOptions()
 {
@@ -23,58 +23,29 @@ builder.Configuration.AddJsonFile(
 builder.Services
     .AddOptions<GeneratorSettings>()
     .Bind(builder.Configuration.GetSection("Generator"));
-builder.Services.AddSingleton<SettingManager>();
-builder.Services.AddSingleton<SnippetTemplateManager>();
+builder.Services.AddSingleton<SettingsAppService>();
+builder.Services.AddSingleton<SnippetTemplatesAppService>();
 
 builder.Services.AddSignalR();
 
 WebApplication app = builder.Build();
 
-SettingManager? settingsManager = app.Services.GetRequiredService<SettingManager>();
-await settingsManager.InitializeAsync();
+SettingsAppService? settingsAppService = app.Services.GetRequiredService<SettingsAppService>();
+await settingsAppService.InitializeAsync();
 
-SnippetTemplateManager? snippetTemplateManager = app.Services.GetRequiredService<SnippetTemplateManager>();
-await snippetTemplateManager.InitializeAsync();
+SnippetTemplatesAppService? snippetTemplatesAppService = app.Services.GetRequiredService<SnippetTemplatesAppService>();
+await snippetTemplatesAppService.InitializeAsync();
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-app.MapGet(
-    "/api/templates/open-folder",
-    () =>
-    {
-        Process.Start(new ProcessStartInfo()
-        {
-            FileName = FileHelpers.UserBasedTemplatesPath,
-            UseShellExecute = true,
-            Verb = "open"
-        });
-    });
+app.MapGet("/api/version", () => version);
 
-app.MapGet(
-    "/api/templates/snippets",
-    (SnippetTemplateManager templateManager) =>
-    {
-        return templateManager.Templates;
-    });
+app.MapGet("/api/settings", () => settingsAppService.GetAsync());
+app.MapPut("/api/settings", (GeneratorSettings input) => settingsAppService.UpdateAsync(input));
 
-app.MapGet(
-    "/api/settings",
-    (SettingManager settingsManager) =>
-    {
-        return settingsManager.Settings;
-    });
-
-app.MapPut(
-    "/api/settings",
-    async (GeneratorSettings input) =>
-    {
-        string json = JsonConvert.SerializeObject(
-            new { Generator = input },
-            Formatting.Indented);
-
-        await File.WriteAllTextAsync(FileHelpers.UserBasedGeneratorSettingsFilePath, json);
-    });
+app.MapGet("/api/templates/snippets", () => snippetTemplatesAppService.GetListAsync());
+app.MapGet("/api/templates/snippets/open-folder", () => snippetTemplatesAppService.OpenFolderAsync());
 
 app.UseRouting();
 app.UseEndpoints(endpoints =>

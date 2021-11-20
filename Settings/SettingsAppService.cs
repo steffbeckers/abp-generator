@@ -1,17 +1,18 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using SteffBeckers.Abp.Generator.Helpers;
 using SteffBeckers.Abp.Generator.Realtime;
 
 namespace SteffBeckers.Abp.Generator.Settings;
 
-public class SettingManager
+public class SettingsAppService
 {
     public readonly IOptionsMonitor<GeneratorSettings> Monitor;
 
     public GeneratorSettings Settings { get => Monitor.CurrentValue; }
 
-    public SettingManager(
+    public SettingsAppService(
         IHubContext<RealtimeHub> realtimeHub,
         IOptionsMonitor<GeneratorSettings> optionsMonitor)
     {
@@ -21,6 +22,11 @@ public class SettingManager
         {
             await realtimeHub.Clients.All.SendAsync("SettingsUpdated", settings);
         });
+    }
+
+    public Task<GeneratorSettings> GetAsync()
+    {
+        return Task.FromResult(Settings);
     }
 
     public Task InitializeAsync()
@@ -35,5 +41,12 @@ public class SettingManager
         }
 
         return Task.CompletedTask;
+    }
+
+    public async Task UpdateAsync(GeneratorSettings input)
+    {
+        string json = JsonConvert.SerializeObject(new { Generator = input }, Formatting.Indented);
+
+        await File.WriteAllTextAsync(FileHelpers.UserBasedGeneratorSettingsFilePath, json);
     }
 }

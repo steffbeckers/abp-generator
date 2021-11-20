@@ -5,23 +5,29 @@ using Newtonsoft.Json;
 using SteffBeckers.Abp.Generator.Helpers;
 using SteffBeckers.Abp.Generator.Realtime;
 using SteffBeckers.Abp.Generator.Settings;
+using System.Diagnostics;
 
 namespace SteffBeckers.Abp.Generator.Templates;
 
-public class SnippetTemplateManager
+public class SnippetTemplatesAppService
 {
     public readonly List<SnippetTemplate> Templates = new List<SnippetTemplate>();
 
     private readonly IHubContext<RealtimeHub> _realtimeHub;
-    private readonly SettingManager _settingsManager;
+    private readonly SettingsAppService _settingsAppService;
     private readonly string _templateConfigDelimiter = "#-#-#";
 
-    public SnippetTemplateManager(
+    public SnippetTemplatesAppService(
         IHubContext<RealtimeHub> realtimeHub,
-        SettingManager settingsManager)
+        SettingsAppService settingsAppService)
     {
         _realtimeHub = realtimeHub;
-        _settingsManager = settingsManager;
+        _settingsAppService = settingsAppService;
+    }
+
+    public Task<List<SnippetTemplate>> GetListAsync()
+    {
+        return Task.FromResult(Templates);
     }
 
     public async Task InitializeAsync()
@@ -34,11 +40,15 @@ public class SnippetTemplateManager
 
         await LoadTemplatesAsync();
 
-        _settingsManager.Monitor.OnChange(async (settings) => await LoadTemplatesAsync());
+        _settingsAppService.Monitor.OnChange(async (settings) => await LoadTemplatesAsync());
 
-        FileSystemWatcher? watcher = new FileSystemWatcher(FileHelpers.UserBasedTemplatesPath, "*.hbs");
+        FileSystemWatcher? watcher = new FileSystemWatcher(FileHelpers.UserBasedSnippetTemplatesPath, "*.hbs");
+        watcher.IncludeSubdirectories = true;
+        watcher.Changed += async (watch, eventArgs) =>
+        {
+            await LoadTemplateAsync(eventArgs.FullPath);
+        };
         watcher.EnableRaisingEvents = true;
-        watcher.Changed += async (file, eventArgs) => await LoadTemplateAsync(eventArgs.FullPath);
     }
 
     public async Task LoadTemplateAsync(string fullPath)
@@ -50,15 +60,20 @@ public class SnippetTemplateManager
             .Replace(".hbs", "");
 
         // TODO: Reflection based string replacement?
-        outputPath = outputPath.Replace("{{Project.Name}}", _settingsManager.Settings.Context.Project.Name);
-        outputPath = outputPath.Replace("{{AggregateRoot.Name}}", _settingsManager.Settings.Context.AggregateRoot.Name);
-        outputPath = outputPath.Replace("{{AggregateRoot.NamePlural}}", _settingsManager.Settings.Context.AggregateRoot.NamePlural);
+        outputPath = outputPath.Replace("{{Project.Name}}", _settingsAppService.Settings.Context.Project.Name);
+        outputPath = outputPath.Replace("{{AggregateRoot.Name}}", _settingsAppService.Settings.Context.AggregateRoot.Name);
+        outputPath = outputPath.Replace("{{AggregateRoot.NamePlural}}", _settingsAppService.Settings.Context.AggregateRoot.NamePlural);
 
         // TODO: Replace in entity context
         //outputPath = outputPath.Replace("{{EntityName}}", _settingsManager.Settings.Context.Entity.Name);
         //outputPath = outputPath.Replace("{{EntityNamePlural}}", _settingsManager.Settings.Context.Entity.NamePlural);
 
-        string templateText = File.ReadAllText(fullPath);
+        string templateText;
+        using (StreamReader? templateTextStreamReader = new StreamReader(File.Open(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+        {
+            templateText = await templateTextStreamReader.ReadToEndAsync();
+        }
+
         SnippetTemplateContext templateContext = new SnippetTemplateContext();
         string templateSource = templateText;
 
@@ -70,7 +85,7 @@ public class SnippetTemplateManager
         }
 
         HandlebarsTemplate<object, object>? handlebarsTemplate = Handlebars.Compile(templateSource);
-        string? templateOutput = handlebarsTemplate(_settingsManager.Settings.Context);
+        string? templateOutput = handlebarsTemplate(_settingsAppService.Settings.Context);
 
         if (template != null)
         {
@@ -102,5 +117,17 @@ public class SnippetTemplateManager
         {
             await LoadTemplateAsync(templateFilePath);
         }
+    }
+
+    public Task OpenFolderAsync()
+    {
+        Process.Start(new ProcessStartInfo()
+        {
+            FileName = FileHelpers.UserBasedSnippetTemplatesPath,
+            UseShellExecute = true,
+            Verb = "open"
+        });
+
+        return Task.CompletedTask;
     }
 }
