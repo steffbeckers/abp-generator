@@ -22,7 +22,7 @@
             .then((response) => response.json())
             .then((data) => {
                 snippetTemplates = data;
-                getSnippetTemplate();
+                updateSnippetTemplate();
             });
 
         realtimeConnection = new signalR.HubConnectionBuilder()
@@ -63,12 +63,8 @@
         await fetch("/api/templates/open-folder");
     }
 
-    async function getSnippetTemplate() {
-        snippetTemplate = await (await fetch(`/api/templates/snippets/${selectedSnippetTemplateIndex}`)).text();
-    }
-
-    async function generateSnippetTemplate() {
-        await fetch(`/api/templates/snippets/${selectedSnippetTemplateIndex}/generate`);
+    function updateSnippetTemplate() {
+        snippetTemplate = snippetTemplates[selectedSnippetTemplateIndex];
     }
 </script>
 
@@ -96,17 +92,16 @@
         <h3>Snippets</h3>
         {#if snippetTemplates}
         <div>
-            <select bind:value={selectedSnippetTemplateIndex} on:change={getSnippetTemplate}>
+            <select bind:value={selectedSnippetTemplateIndex} on:change={updateSnippetTemplate}>
                 {#each snippetTemplates as snippetTemplate, index}
-                <option value={index}>{snippetTemplate}</option>
+                <option value={index}>{snippetTemplate.outputPath}</option>
                 {/each}
             </select>
-            <button type="button" on:click={generateSnippetTemplate}>Generate</button>
         </div>
         {/if}
         {#if snippetTemplate}
         <div style="white-space: pre">
-            {snippetTemplate}
+            {snippetTemplate.output}
         </div>
         {/if}
     </div>

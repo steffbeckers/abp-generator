@@ -1,108 +1,40 @@
-﻿using HandlebarsDotNet;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using SteffBeckers.Abp.Generator.Helpers;
 using SteffBeckers.Abp.Generator.Realtime;
 using SteffBeckers.Abp.Generator.Settings;
 using SteffBeckers.Abp.Generator.Templates;
 using System.Diagnostics;
+using System.Reflection;
 
-string contentRootPath = Directory.GetCurrentDirectory();
-string webRootPath = Path.Combine("wwwroot", "public");
-#if RELEASE
-contentRootPath = AppDomain.CurrentDomain.BaseDirectory;
-webRootPath = Path.Combine("..", "..", "..", "staticwebassets", "public");
-#endif
-
-string userBasedStoragePath = Path.Combine(
-    Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-    ".steffbeckers",
-    "abp",
-    "generator");
-string templatesPath = Path.Combine(userBasedStoragePath, "Templates");
-string snippetTemplatesPath = Path.Combine(templatesPath, "Snippets");
-
-// Create user based directory if not exists and copy initial generator settings and templates
-string generatorSettingsFileName = "generatorsettings.json";
-if (!Directory.Exists(userBasedStoragePath))
-{
-    Directory.CreateDirectory(userBasedStoragePath);
-    File.Copy(
-        Path.Combine(contentRootPath, generatorSettingsFileName),
-        Path.Combine(userBasedStoragePath, generatorSettingsFileName));
-
-    Directory.CreateDirectory(templatesPath);
-}
-else
-{
-    // TODO: Keep overridden templates? How to override?
-    Directory.Delete(templatesPath, true);
-    Directory.CreateDirectory(templatesPath);
-}
-
-FileHelpers.CopyFilesRecursively(Path.Combine(contentRootPath, "Templates"), templatesPath);
-
-// TODO: Extract to some template manager with a file watcher?
-string templateConfigDelimiter = "#-#-#";
-Dictionary<string, string> snippetTemplates = new Dictionary<string, string>();
-List<string> snippetTemplateFilePaths = Directory.GetFiles(Path.GetDirectoryName(snippetTemplatesPath) ?? "", "*.hbs", SearchOption.AllDirectories).ToList();
-// TODO: From settings
-GeneratorContext context = new GeneratorContext();
-
-foreach (string snippetTemplateFilePath in snippetTemplateFilePaths)
-{
-    string outputPath = snippetTemplateFilePath
-        .Replace(snippetTemplatesPath + Path.DirectorySeparatorChar, "")
-        .Replace(".hbs", "");
-
-    // TODO: Reflection based string replacement?
-    outputPath = outputPath.Replace("{{Project.Name}}", context.Project.Name);
-    outputPath = outputPath.Replace("{{AggregateRoot.Name}}", context.AggregateRoot.Name);
-    outputPath = outputPath.Replace("{{AggregateRoot.NamePlural}}", context.AggregateRoot.NamePlural);
-
-    // TODO: Replace in entity context
-    //outputPath = outputPath.Replace("{{EntityName}}", context.Entity.Name);
-    //outputPath = outputPath.Replace("{{EntityNamePlural}}", context.Entity.NamePlural);
-
-    if (!snippetTemplates.ContainsKey(outputPath))
-    {
-        string templateText = File.ReadAllText(snippetTemplateFilePath);
-        TemplateConfig templateConfig = new TemplateConfig();
-        string templateSource = templateText;
-
-        int templateConfigDelimiterIndex = templateText.IndexOf(templateConfigDelimiter);
-        if (templateConfigDelimiterIndex > -1)
-        {
-            templateConfig = JsonConvert.DeserializeObject<TemplateConfig>(templateText.Substring(0, templateConfigDelimiterIndex));
-            templateSource = templateText.Substring(templateConfigDelimiterIndex + templateConfigDelimiter.Length + Environment.NewLine.Length);
-        }
-
-        HandlebarsTemplate<object, object>? template = Handlebars.Compile(templateSource);
-        string? output = template(context);
-
-        snippetTemplates.Add(outputPath, output);
-    }
-}
+Console.WriteLine($"Version: {Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}");
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(new WebApplicationOptions()
 {
     Args = args,
-    ContentRootPath = contentRootPath,
-    WebRootPath = webRootPath
+    ContentRootPath = FileHelpers.ContentRootPath,
+    WebRootPath = FileHelpers.WebRootPath
 });
 
 builder.Configuration.AddJsonFile(
-    Path.Combine(userBasedStoragePath, generatorSettingsFileName),
+    FileHelpers.UserBasedGeneratorSettingsFilePath,
     optional: true,
     reloadOnChange: true);
 
 builder.Services
     .AddOptions<GeneratorSettings>()
-    .Bind(builder.Configuration.GetRequiredSection("Generator"));
-builder.Services.AddSingleton<GeneratorSettingsManager>();
+    .Bind(builder.Configuration.GetSection("Generator"));
+builder.Services.AddSingleton<SettingManager>();
+builder.Services.AddSingleton<SnippetTemplateManager>();
 
 builder.Services.AddSignalR();
 
 WebApplication app = builder.Build();
+
+SettingManager? settingsManager = app.Services.GetRequiredService<SettingManager>();
+await settingsManager.InitializeAsync();
+
+SnippetTemplateManager? snippetTemplateManager = app.Services.GetRequiredService<SnippetTemplateManager>();
+await snippetTemplateManager.InitializeAsync();
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
@@ -113,7 +45,7 @@ app.MapGet(
     {
         Process.Start(new ProcessStartInfo()
         {
-            FileName = templatesPath,
+            FileName = FileHelpers.UserBasedTemplatesPath,
             UseShellExecute = true,
             Verb = "open"
         });
@@ -121,43 +53,16 @@ app.MapGet(
 
 app.MapGet(
     "/api/templates/snippets",
-    () =>
+    (SnippetTemplateManager templateManager) =>
     {
-        return snippetTemplates.Keys.ToList();
-    });
-
-app.MapGet(
-    "/api/templates/snippets/{index}",
-    (int index) =>
-    {
-        return snippetTemplates.Values.ElementAtOrDefault(index);
-    });
-
-app.MapGet(
-    "/api/templates/snippets/{index}/generate",
-    async (int index, GeneratorSettingsManager settingsManager) =>
-    {
-        string? snippetTemplatePath = snippetTemplates.Keys.ElementAtOrDefault(index);
-        if (!string.IsNullOrEmpty(snippetTemplatePath))
-        {
-            string snippetTemplate = snippetTemplates.Values.ElementAt(index);
-
-            string outputPath = Path.Combine(settingsManager.CurrentValue.ProjectPath, snippetTemplatePath);
-
-            if (!Directory.Exists(Path.GetDirectoryName(outputPath)))
-            {
-                Directory.CreateDirectory(Path.GetDirectoryName(outputPath) ?? "");
-            }
-
-            await File.WriteAllTextAsync(outputPath, snippetTemplate);
-        }
+        return templateManager.Templates;
     });
 
 app.MapGet(
     "/api/settings",
-    (GeneratorSettingsManager settingsManager) =>
+    (SettingManager settingsManager) =>
     {
-        return settingsManager.CurrentValue;
+        return settingsManager.Settings;
     });
 
 app.MapPut(
@@ -168,7 +73,7 @@ app.MapPut(
             new { Generator = input },
             Formatting.Indented);
 
-        await File.WriteAllTextAsync(Path.Combine(userBasedStoragePath, generatorSettingsFileName), json);
+        await File.WriteAllTextAsync(FileHelpers.UserBasedGeneratorSettingsFilePath, json);
     });
 
 app.UseRouting();
