@@ -1,0 +1,18 @@
+using System;
+
+namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
+{
+    public class {{AggregateRoot.Name}}UpdateInputDto
+    {
+        {{#each AggregateRoot.Properties}}
+        {{#if Required}}
+        [Required]
+        {{/if}}
+        {{#if MaxLength}}
+        [StringLength({{../AggregateRoot.Name}}Consts.{{ Name }}MaxLength)]
+        {{/if}}
+        public {{ Type }} {{ Name }} { get; set; }
+
+        {{/each}}
+    }
+}
