@@ -64,7 +64,7 @@
             let deletedSnippetTemplateIndex = snippetTemplates.map(x => x.fullPath).indexOf(deletedSnippetTemplateFullPath);
 
             if (deletedSnippetTemplateIndex > -1) {
-                if (deletedSnippetTemplateFullPath == selectedSnippetTemplateFullPaths && snippetTemplates.length > 0) {
+                if (deletedSnippetTemplateFullPath == selectedSnippetTemplateFullPaths[0] && snippetTemplates.length > 0) {
                     selectedSnippetTemplateFullPaths = [snippetTemplates[0].fullPath];
                     setSnippetTemplate();
                 }
@@ -124,6 +124,11 @@
     }
 
     function setSnippetTemplate() {
+        if (selectedSnippetTemplateFullPaths && selectedSnippetTemplateFullPaths.length != 1) {
+            snippetTemplate = null;
+            return;
+        }
+
         let selectedSnippetTemplateIndex = snippetTemplates.map(x => x.fullPath).indexOf(selectedSnippetTemplateFullPaths[0]);
         if (selectedSnippetTemplateIndex > -1) {
             snippetTemplate = snippetTemplates[selectedSnippetTemplateIndex];
@@ -197,12 +202,18 @@
             </div>
         </div>
         {/if}
-        {#if snippetTemplate}
-        <h3>Preview</h3>
-        <div style="white-space: pre">
-            {snippetTemplate.output}
+        <div>
+            <h3>Preview</h3>
+            <div style="height: 450px; overflow-y: scroll; border: 1px solid #000000; padding: 8px 12px;">
+                {#if snippetTemplate}
+                <div style="white-space: pre">
+                    {snippetTemplate.output}
+                </div>
+                {:else}
+                <span>Only select a single template to preview.</span>        
+                {/if}
+            </div>
         </div>
-        {/if}
     </div>
     {/if}
 </div>

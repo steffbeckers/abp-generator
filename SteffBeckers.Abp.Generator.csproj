@@ -6,7 +6,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<AssemblyName>sbabpgen</AssemblyName>
-		<Version>1.0.17</Version>
+		<Version>1.0.18</Version>
 		<PackAsTool>true</PackAsTool>
 		<IsPackable>true</IsPackable>
 		<Authors>Steff Beckers</Authors>

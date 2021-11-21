@@ -24,16 +24,18 @@
     {
         public AggregateRoot AggregateRoot { get; set; } = new AggregateRoot();
 
+        public Entity Entity { get; set; } = new Entity();
+
         public Project Project { get; set; } = new Project();
     }
 
     public class Project
     {
-        public string CompanyName
+        public string? CompanyName
         {
             get
             {
-                return Name.Split(".").First();
+                return Name.Contains(".") ? Name.Split(".").First() : null;
             }
         }
 
@@ -43,7 +45,7 @@
         {
             get
             {
-                return Name.Contains(".") ? Name.Split(".").Last() : null;
+                return Name.Contains(".") ? string.Join(".", Name.Split(".").Skip(1)) : Name;
             }
         }
     }
