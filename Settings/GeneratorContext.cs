@@ -50,6 +50,8 @@
 
     public class Property
     {
+        public int? MaxLength { get; set; }
+
         public string Name { get; set; } = string.Empty;
 
         public bool Required { get; set; }
