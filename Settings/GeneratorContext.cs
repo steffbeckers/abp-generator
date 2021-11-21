@@ -4,16 +4,20 @@
     {
         public IList<Entity> Entities { get; set; } = new List<Entity>();
 
-        public string Name { get; set; } = "Recipe";
+        public string Name { get; set; } = string.Empty;
 
-        public string NamePlural { get; set; } = "Recipes";
+        public string NamePlural { get; set; } = string.Empty;
+
+        public IList<Property> Properties { get; set; } = new List<Property>();
     }
 
     public class Entity
     {
-        public string Name { get; set; } = "RecipeStep";
+        public string Name { get; set; } = string.Empty;
 
-        public string NamePlural { get; set; } = "RecipeSteps";
+        public string NamePlural { get; set; } = string.Empty;
+
+        public IList<Property> Properties { get; set; } = new List<Property>();
     }
 
     public class GeneratorContext
@@ -33,7 +37,7 @@
             }
         }
 
-        public string Name { get; set; } = "MyCompany.MyProduct";
+        public string Name { get; set; } = string.Empty;
 
         public string? ProductName
         {
@@ -42,5 +46,14 @@
                 return Name.Contains(".") ? Name.Split(".").Last() : null;
             }
         }
+    }
+
+    public class Property
+    {
+        public string Name { get; set; } = string.Empty;
+
+        public bool Required { get; set; }
+
+        public string Type { get; set; } = string.Empty;
     }
 }

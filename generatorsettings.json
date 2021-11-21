@@ -1,5 +1,48 @@
 {
   "Generator": {
-    "ProjectPath": null
+    "ProjectPath": "C:/Dev/tmp/abp-generator",
+    "Context": {
+      "Project": {
+        "Name": "MyCompany.MyProduct"
+      },
+      "AggregateRoot": {
+        "Name": "Recipe",
+        "NamePlural": "Recipes",
+        "Properties": [
+          {
+            "Name": "Name",
+            "Type": "string",
+            "Required": true
+          },
+          {
+            "Name": "Description",
+            "Type": "string"
+          }
+        ],
+        "Entities": [
+          {
+            "Name": "RecipeStep",
+            "NamePlural": "RecipeSteps",
+            "Properties": [
+              {
+                "Name": "RecipeId",
+                "Type": "Guid",
+                "Required": true
+              },
+              {
+                "Name": "Number",
+                "Type": "int",
+                "Required": true
+              },
+              {
+                "Name": "Instructions",
+                "Type": "string",
+                "Required": true
+              }
+            ]
+          }
+        ]
+      }
+    }
   }
 }

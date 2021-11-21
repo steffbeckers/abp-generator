@@ -1,0 +1,12 @@
+using System;
+using Volo.Abp.Application.Dtos;
+
+namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
+{
+    public class {{AggregateRoot.Name}}Dto : FullAuditedEntityDto<Guid>
+    {
+        {{#each AggregateRoot.Properties}}
+        public {{ Type }} {{ Name }} { get; set; }
+        {{/each}}
+    }
+}

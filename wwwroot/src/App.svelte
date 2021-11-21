@@ -103,6 +103,10 @@
         });
     }
 
+    async function openSettingsJson() {
+        await fetch("/api/settings/open-json");
+    }
+
     async function openTemplatesFolder() {
         await fetch("/api/templates/snippets/open-folder");
     }
@@ -125,6 +129,9 @@
     {:else}
     <div>
         <h2>Settings</h2>
+        <div>
+            <button on:click={openSettingsJson} type="button">Open JSON</button>
+        </div>
         {#if settings}
         <!-- <div style="white-space: pre">
             {JSON.stringify(settings, null, 2)}
@@ -166,7 +173,6 @@
         <div>
             <button on:click={openTemplatesFolder} type="button">Open folder</button>
         </div>
-        <h3>Snippets</h3>
         {#if snippetTemplates}
         <div style="display: flex; gap: 12px">
             <select bind:value={selectedSnippetTemplateFullPath} on:change={setSnippetTemplate} style="flex: 1 1">
@@ -174,7 +180,7 @@
                 <option value={snippetTemplate.fullPath}>{snippetTemplate.outputPath}</option>
                 {/each}
             </select>
-            <button type="button" style="flex: 0 1">Generate</button>
+            <!-- <button type="button" style="flex: 0 1">Generate</button> -->
         </div>
         {/if}
         {#if snippetTemplate}

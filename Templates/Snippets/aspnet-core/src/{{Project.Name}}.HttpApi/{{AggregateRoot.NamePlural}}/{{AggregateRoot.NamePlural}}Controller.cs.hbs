@@ -1,0 +1,63 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using {{Project.Name}}.Shared;
+using System;
+using System.Threading.Tasks;
+using Volo.Abp;
+using Volo.Abp.Application.Dtos;
+
+namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
+{
+    [RemoteService]
+    [Area("app")]
+    [ControllerName("{{AggregateRoot.NamePlural}}")]
+    [Route("api/{{String.Lowercase AggregateRoot.NamePlural}}")]
+    public class {{AggregateRoot.NamePlural}}Controller : {{Project.ProductName}}ControllerBase, I{{AggregateRoot.NamePlural}}AppService
+    {
+        private readonly I{{AggregateRoot.NamePlural}}AppService _{{String.Camelcase AggregateRoot.NamePlural}}AppService;
+
+        public {{AggregateRoot.NamePlural}}Controller(I{{AggregateRoot.NamePlural}}AppService {{String.Camelcase AggregateRoot.NamePlural}}AppService)
+        {
+            _{{String.Camelcase AggregateRoot.NamePlural}}AppService = {{String.Camelcase AggregateRoot.NamePlural}}AppService;
+        }
+
+        [HttpPost]
+        public Task<{{AggregateRoot.Name}}Dto> CreateAsync({{AggregateRoot.Name}}CreateInputDto input)
+        {
+            return _{{String.Camelcase AggregateRoot.NamePlural}}AppService.CreateAsync(input);
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public Task DeleteAsync(Guid id)
+        {
+            return _{{String.Camelcase AggregateRoot.NamePlural}}AppService.DeleteAsync(id);
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public Task<{{AggregateRoot.Name}}Dto> GetAsync(Guid id)
+        {
+            return _{{String.Camelcase AggregateRoot.NamePlural}}AppService.GetAsync(id);
+        }
+
+        [HttpGet]
+        public Task<PagedResultDto<{{AggregateRoot.Name}}ListDto>> GetListAsync({{AggregateRoot.Name}}ListInputDto input)
+        {
+            return _{{String.Camelcase AggregateRoot.NamePlural}}AppService.GetListAsync(input);
+        }
+
+        [HttpGet]
+        [Route("lookup")]
+        public Task<PagedResultDto<LookupDto<Guid>>> GetLookupAsync(LookupInputDto input)
+        {
+            return _{{String.Camelcase AggregateRoot.NamePlural}}AppService.GetLookupAsync(input);
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        public Task<{{AggregateRoot.Name}}Dto> UpdateAsync(Guid id, {{AggregateRoot.Name}}UpdateInputDto input)
+        {
+            return _{{String.Camelcase AggregateRoot.NamePlural}}AppService.UpdateAsync(id, input);
+        }
+    }
+}

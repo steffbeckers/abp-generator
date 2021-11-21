@@ -122,8 +122,20 @@ public class SnippetTemplatesService
             templateSource = templateText.Substring(templateConfigDelimiterIndex + _templateConfigDelimiter.Length + Environment.NewLine.Length);
         }
 
-        HandlebarsTemplate<object, object>? handlebarsTemplate = Handlebars.Compile(templateSource);
-        string? templateOutput = handlebarsTemplate(_settingsAppService.Settings.Context);
+        string? templateOutput = string.Empty;
+        try
+        {
+            if (_handlebarsContext != null)
+            {
+                HandlebarsTemplate<object, object>? handlebarsTemplate = _handlebarsContext.Compile(templateSource);
+                templateOutput = handlebarsTemplate(_settingsAppService.Settings.Context);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine(ex.Message);
+            templateOutput = ex.Message;
+        }
 
         if (template != null)
         {

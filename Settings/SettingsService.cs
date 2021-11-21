@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using SteffBeckers.Abp.Generator.Helpers;
 using SteffBeckers.Abp.Generator.Realtime;
+using System.Diagnostics;
 
 namespace SteffBeckers.Abp.Generator.Settings;
 
@@ -39,6 +40,18 @@ public class SettingsService
                 Path.Combine(FileHelpers.ContentRootPath, FileHelpers.GeneratorSettingsFileName),
                 Path.Combine(FileHelpers.UserBasedPath, FileHelpers.GeneratorSettingsFileName));
         }
+
+        return Task.CompletedTask;
+    }
+
+    public Task OpenJsonAsync()
+    {
+        Process.Start(new ProcessStartInfo()
+        {
+            FileName = FileHelpers.UserBasedGeneratorSettingsFilePath,
+            UseShellExecute = true,
+            Verb = "open"
+        });
 
         return Task.CompletedTask;
     }

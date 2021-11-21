@@ -43,6 +43,7 @@ app.MapGet("/api/version", () => version);
 
 app.MapGet("/api/settings", () => settingsService.GetAsync());
 app.MapPut("/api/settings", (GeneratorSettings input) => settingsService.UpdateAsync(input));
+app.MapGet("/api/settings/open-json", () => settingsService.OpenJsonAsync());
 
 app.MapGet("/api/templates/snippets", () => snippetTemplatesService.GetListAsync());
 app.MapGet("/api/templates/snippets/open-folder", () => snippetTemplatesService.OpenFolderAsync());
