@@ -47,6 +47,7 @@ app.MapGet("/api/settings/open-json", () => settingsService.OpenJsonAsync());
 
 app.MapGet("/api/templates/snippets", () => snippetTemplatesService.GetListAsync());
 app.MapGet("/api/templates/snippets/open-folder", () => snippetTemplatesService.OpenFolderAsync());
+app.MapPost("/api/templates/snippets/generate", (GenerateSnippetTemplates input) => snippetTemplatesService.GenerateAsync(input));
 
 app.UseRouting();
 app.UseEndpoints(endpoints =>

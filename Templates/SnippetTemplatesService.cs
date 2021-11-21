@@ -16,17 +16,42 @@ public class SnippetTemplatesService
 
     private readonly IHandlebars? _handlebarsContext = Handlebars.Create();
     private readonly IHubContext<RealtimeHub> _realtimeHub;
-    private readonly SettingsService _settingsAppService;
+    private readonly SettingsService _settingsService;
     private readonly string _templateConfigDelimiter = "#-#-#";
 
     public SnippetTemplatesService(
         IHubContext<RealtimeHub> realtimeHub,
-        SettingsService settingsAppService)
+        SettingsService settingsService)
     {
         _realtimeHub = realtimeHub;
-        _settingsAppService = settingsAppService;
+        _settingsService = settingsService;
 
         HandlebarsHelpers.Register(_handlebarsContext);
+    }
+
+    public Task GenerateAsync(GenerateSnippetTemplates input)
+    {
+        return Parallel.ForEachAsync(input.FullPaths, async (fullPath, cancellationToken) =>
+        {
+            SnippetTemplate? snippetTemplate = Templates.FirstOrDefault(x => x.FullPath == fullPath);
+
+            if (snippetTemplate == null)
+            {
+                return;
+            }
+
+            string fullOutputPath = Path.Combine(_settingsService.Settings.ProjectPath, snippetTemplate.OutputPath);
+
+            if (!Directory.Exists(fullOutputPath))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(fullOutputPath));
+            }
+
+            await File.WriteAllTextAsync(
+                fullOutputPath,
+                snippetTemplate.Output,
+                cancellationToken);
+        });
     }
 
     public Task<List<SnippetTemplate>> GetListAsync()
@@ -47,7 +72,7 @@ public class SnippetTemplatesService
         await LoadTemplatesAsync();
 
         // Reload all snippet templates when the settings change.
-        _settingsAppService.Monitor.OnChange(async (settings) =>
+        _settingsService.Monitor.OnChange(async (settings) =>
         {
             await LoadTemplatesAsync();
             await _realtimeHub.Clients.All.SendAsync("SnippetTemplatesReloaded", Templates);
@@ -98,37 +123,42 @@ public class SnippetTemplatesService
         // TODO: Replace based on handlebars?
         // HandlebarsTemplate<object, object>? handlebarsOutputPath = _handlebarsContext.Compile(outputPath);
         // outputPath = handlebarsOutputPath(_settingsService.Settings.Context);
-        outputPath = outputPath.Replace("{{Project.Name}}", _settingsAppService.Settings.Context.Project.Name);
-        outputPath = outputPath.Replace("{{AggregateRoot.Name}}", _settingsAppService.Settings.Context.AggregateRoot.Name);
-        outputPath = outputPath.Replace("{{AggregateRoot.NamePlural}}", _settingsAppService.Settings.Context.AggregateRoot.NamePlural);
+        outputPath = outputPath.Replace("{{Project.Name}}", _settingsService.Settings.Context.Project.Name);
+        outputPath = outputPath.Replace("{{AggregateRoot.Name}}", _settingsService.Settings.Context.AggregateRoot.Name);
+        outputPath = outputPath.Replace("{{AggregateRoot.NamePlural}}", _settingsService.Settings.Context.AggregateRoot.NamePlural);
 
         // TODO: Replace in entity context
         //outputPath = outputPath.Replace("{{EntityName}}", _settingsManager.Settings.Context.Entity.Name);
         //outputPath = outputPath.Replace("{{EntityNamePlural}}", _settingsManager.Settings.Context.Entity.NamePlural);
 
         string templateText;
-        using (StreamReader? templateTextStreamReader = new StreamReader(File.Open(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
-        {
-            templateText = await templateTextStreamReader.ReadToEndAsync();
-        }
-
         SnippetTemplateContext templateContext = new SnippetTemplateContext();
-        string templateSource = templateText;
+        string templateOutput = String.Empty;
 
-        int templateConfigDelimiterIndex = templateText.IndexOf(_templateConfigDelimiter);
-        if (templateConfigDelimiterIndex > -1)
-        {
-            templateContext = JsonConvert.DeserializeObject<SnippetTemplateContext>(templateText.Substring(0, templateConfigDelimiterIndex)) ?? templateContext;
-            templateSource = templateText.Substring(templateConfigDelimiterIndex + _templateConfigDelimiter.Length + Environment.NewLine.Length);
-        }
-
-        string? templateOutput = string.Empty;
         try
         {
+            using (StreamReader? templateTextStreamReader = new StreamReader(File.Open(
+                fullPath,
+                FileMode.Open,
+                FileAccess.Read,
+                FileShare.ReadWrite)))
+            {
+                templateText = await templateTextStreamReader.ReadToEndAsync();
+            }
+
+            string templateSource = templateText;
+
+            int templateConfigDelimiterIndex = templateText.IndexOf(_templateConfigDelimiter);
+            if (templateConfigDelimiterIndex > -1)
+            {
+                templateContext = JsonConvert.DeserializeObject<SnippetTemplateContext>(templateText.Substring(0, templateConfigDelimiterIndex)) ?? templateContext;
+                templateSource = templateText.Substring(templateConfigDelimiterIndex + _templateConfigDelimiter.Length + Environment.NewLine.Length);
+            }
+
             if (_handlebarsContext != null)
             {
                 HandlebarsTemplate<object, object>? handlebarsTemplate = _handlebarsContext.Compile(templateSource);
-                templateOutput = handlebarsTemplate(_settingsAppService.Settings.Context);
+                templateOutput = handlebarsTemplate(_settingsService.Settings.Context);
             }
         }
         catch (Exception ex)

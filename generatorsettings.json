@@ -12,11 +12,13 @@
           {
             "Name": "Name",
             "Type": "string",
-            "Required": true
+            "Required": true,
+            "MaxLength": 100
           },
           {
             "Name": "Description",
-            "Type": "string"
+            "Type": "string",
+            "MaxLength": 500
           }
         ],
         "Entities": [

@@ -9,7 +9,7 @@
     let connected = true;
 
     let snippetTemplates = [];
-    let selectedSnippetTemplateFullPath;
+    let selectedSnippetTemplateFullPaths = [];
     let snippetTemplate;
 
     onMount(async () => {
@@ -29,7 +29,7 @@
             .then((response) => response.json())
             .then((data) => {
                 snippetTemplates = data;
-                selectedSnippetTemplateFullPath = snippetTemplates[0].fullPath
+                selectedSnippetTemplateFullPaths = [snippetTemplates[0].fullPath]
                 setSnippetTemplate();
             });
 
@@ -45,7 +45,7 @@
         realtimeConnection.on("SnippetTemplateCreated", (createdSnippetTemplate) => {
             snippetTemplates.unshift(createdSnippetTemplate);
 
-            selectedSnippetTemplateFullPath = createdSnippetTemplate.fullPath;
+            selectedSnippetTemplateFullPaths = [createdSnippetTemplate.fullPath];
             setSnippetTemplate();
         });
 
@@ -55,7 +55,7 @@
             if (updatedSnippetTemplateIndex > -1) {
                 snippetTemplates[updatedSnippetTemplateIndex] = updatedSnippetTemplate;
 
-                selectedSnippetTemplateFullPath = updatedSnippetTemplate.fullPath;
+                selectedSnippetTemplateFullPaths = [updatedSnippetTemplate.fullPath];
                 setSnippetTemplate();
             }
         });
@@ -64,8 +64,8 @@
             let deletedSnippetTemplateIndex = snippetTemplates.map(x => x.fullPath).indexOf(deletedSnippetTemplateFullPath);
 
             if (deletedSnippetTemplateIndex > -1) {
-                if (deletedSnippetTemplateFullPath == selectedSnippetTemplateFullPath && snippetTemplates.length > 0) {
-                    selectedSnippetTemplateFullPath = snippetTemplates[0].fullPath;
+                if (deletedSnippetTemplateFullPath == selectedSnippetTemplateFullPaths && snippetTemplates.length > 0) {
+                    selectedSnippetTemplateFullPaths = [snippetTemplates[0].fullPath];
                     setSnippetTemplate();
                 }
 
@@ -107,12 +107,24 @@
         await fetch("/api/settings/open-json");
     }
 
-    async function openTemplatesFolder() {
+    async function openSnippetTemplatesFolder() {
         await fetch("/api/templates/snippets/open-folder");
     }
 
+    async function generateSelectedSnippetTemplates() {
+        await fetch("/api/templates/snippets/generate", {
+            method: "POST",
+            body: JSON.stringify({
+                fullPaths: selectedSnippetTemplateFullPaths
+            }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+    }
+
     function setSnippetTemplate() {
-        let selectedSnippetTemplateIndex = snippetTemplates.map(x => x.fullPath).indexOf(selectedSnippetTemplateFullPath);
+        let selectedSnippetTemplateIndex = snippetTemplates.map(x => x.fullPath).indexOf(selectedSnippetTemplateFullPaths[0]);
         if (selectedSnippetTemplateIndex > -1) {
             snippetTemplate = snippetTemplates[selectedSnippetTemplateIndex];
         }
@@ -171,19 +183,22 @@
     <div>
         <h2>Templates</h2>
         <div>
-            <button on:click={openTemplatesFolder} type="button">Open folder</button>
+            <button on:click={openSnippetTemplatesFolder} type="button">Open folder</button>
         </div>
         {#if snippetTemplates}
-        <div style="display: flex; gap: 12px">
-            <select bind:value={selectedSnippetTemplateFullPath} on:change={setSnippetTemplate} style="flex: 1 1">
+        <div style="display: flex; flex-direction: column">
+            <select bind:value={selectedSnippetTemplateFullPaths} on:change={setSnippetTemplate} style="flex: 1 1 200px" multiple>
                 {#each snippetTemplates as snippetTemplate}
                 <option value={snippetTemplate.fullPath}>{snippetTemplate.outputPath}</option>
                 {/each}
             </select>
-            <!-- <button type="button" style="flex: 0 1">Generate</button> -->
+            <div>
+                <button on:click={generateSelectedSnippetTemplates} type="button">Generate</button>
+            </div>
         </div>
         {/if}
         {#if snippetTemplate}
+        <h3>Preview</h3>
         <div style="white-space: pre">
             {snippetTemplate.output}
         </div>
