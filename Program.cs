@@ -23,29 +23,29 @@ builder.Configuration.AddJsonFile(
 builder.Services
     .AddOptions<GeneratorSettings>()
     .Bind(builder.Configuration.GetSection("Generator"));
-builder.Services.AddSingleton<SettingsAppService>();
-builder.Services.AddSingleton<SnippetTemplatesAppService>();
+builder.Services.AddSingleton<SettingsService>();
+builder.Services.AddSingleton<SnippetTemplatesService>();
 
 builder.Services.AddSignalR();
 
 WebApplication app = builder.Build();
 
-SettingsAppService? settingsAppService = app.Services.GetRequiredService<SettingsAppService>();
-await settingsAppService.InitializeAsync();
+SettingsService? settingsService = app.Services.GetRequiredService<SettingsService>();
+await settingsService.InitializeAsync();
 
-SnippetTemplatesAppService? snippetTemplatesAppService = app.Services.GetRequiredService<SnippetTemplatesAppService>();
-await snippetTemplatesAppService.InitializeAsync();
+SnippetTemplatesService? snippetTemplatesService = app.Services.GetRequiredService<SnippetTemplatesService>();
+await snippetTemplatesService.InitializeAsync();
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
 app.MapGet("/api/version", () => version);
 
-app.MapGet("/api/settings", () => settingsAppService.GetAsync());
-app.MapPut("/api/settings", (GeneratorSettings input) => settingsAppService.UpdateAsync(input));
+app.MapGet("/api/settings", () => settingsService.GetAsync());
+app.MapPut("/api/settings", (GeneratorSettings input) => settingsService.UpdateAsync(input));
 
-app.MapGet("/api/templates/snippets", () => snippetTemplatesAppService.GetListAsync());
-app.MapGet("/api/templates/snippets/open-folder", () => snippetTemplatesAppService.OpenFolderAsync());
+app.MapGet("/api/templates/snippets", () => snippetTemplatesService.GetListAsync());
+app.MapGet("/api/templates/snippets/open-folder", () => snippetTemplatesService.OpenFolderAsync());
 
 app.UseRouting();
 app.UseEndpoints(endpoints =>
@@ -59,7 +59,7 @@ string? url = app.Urls.FirstOrDefault();
 if (url != null)
 {
     Console.WriteLine($"Navigating to: {url}");
-    BrowserHelper.OpenUrl(url);
+    BrowserHelpers.OpenUrl(url);
 }
 
 await run;

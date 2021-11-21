@@ -6,13 +6,13 @@ using SteffBeckers.Abp.Generator.Realtime;
 
 namespace SteffBeckers.Abp.Generator.Settings;
 
-public class SettingsAppService
+public class SettingsService
 {
     public readonly IOptionsMonitor<GeneratorSettings> Monitor;
 
     public GeneratorSettings Settings { get => Monitor.CurrentValue; }
 
-    public SettingsAppService(
+    public SettingsService(
         IHubContext<RealtimeHub> realtimeHub,
         IOptionsMonitor<GeneratorSettings> optionsMonitor)
     {

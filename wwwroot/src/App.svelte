@@ -8,7 +8,7 @@
     let realtimeConnection;
     let connected = true;
 
-    let snippetTemplates;
+    let snippetTemplates = [];
     let selectedSnippetTemplateFullPath;
     let snippetTemplate;
 
@@ -42,12 +42,41 @@
             settings = updatedSettings;
         });
 
-        realtimeConnection.on("SnippetTemplateLoaded", (loadedSnippetTemplate) => {
-            let loadedSnippetTemplateIndex = snippetTemplates.map(x => x.fullPath).indexOf(loadedSnippetTemplate.fullPath);
-            if (loadedSnippetTemplateIndex > -1) {
-                snippetTemplates[selectedSnippetTemplateIndex] = loadedSnippetTemplate;
+        realtimeConnection.on("SnippetTemplateCreated", (createdSnippetTemplate) => {
+            snippetTemplates.unshift(createdSnippetTemplate);
+
+            selectedSnippetTemplateFullPath = createdSnippetTemplate.fullPath;
+            setSnippetTemplate();
+        });
+
+        realtimeConnection.on("SnippetTemplateUpdated", (updatedSnippetTemplate) => {
+            let updatedSnippetTemplateIndex = snippetTemplates.map(x => x.fullPath).indexOf(updatedSnippetTemplate.fullPath);
+
+            if (updatedSnippetTemplateIndex > -1) {
+                snippetTemplates[updatedSnippetTemplateIndex] = updatedSnippetTemplate;
+
+                selectedSnippetTemplateFullPath = updatedSnippetTemplate.fullPath;
+                setSnippetTemplate();
             }
-        })
+        });
+
+        realtimeConnection.on("SnippetTemplateDeleted", (deletedSnippetTemplateFullPath) => {
+            let deletedSnippetTemplateIndex = snippetTemplates.map(x => x.fullPath).indexOf(deletedSnippetTemplateFullPath);
+
+            if (deletedSnippetTemplateIndex > -1) {
+                if (deletedSnippetTemplateFullPath == selectedSnippetTemplateFullPath && snippetTemplates.length > 0) {
+                    selectedSnippetTemplateFullPath = snippetTemplates[0].fullPath;
+                    setSnippetTemplate();
+                }
+
+                snippetTemplates.splice(deletedSnippetTemplateIndex, 1);
+            }
+        });
+
+        realtimeConnection.on("SnippetTemplatesReloaded", (reloadedSnippetTemplates) => {
+            snippetTemplates = reloadedSnippetTemplates;
+            setSnippetTemplate();
+        });
 
         realtimeConnection.onclose(() => {
             connected = false;
@@ -105,7 +134,6 @@
                 <label for="projectPathSetting">Project path</label>
                 <input bind:value={settings.projectPath} on:blur={updateSettings} type="text" id="projectPathSetting" />
             </div>
-            <h3>Context</h3>
             <div style="display: flex; gap: 12px">
                 <div style="flex: 1 1">
                     <label for="projectNameSetting">Project.Name</label>
@@ -136,16 +164,17 @@
     <div>
         <h2>Templates</h2>
         <div>
-            <button type="button" on:click={openTemplatesFolder}>Open folder</button>
+            <button on:click={openTemplatesFolder} type="button">Open folder</button>
         </div>
         <h3>Snippets</h3>
         {#if snippetTemplates}
-        <div>
-            <select bind:value={selectedSnippetTemplateFullPath} on:change={setSnippetTemplate}>
+        <div style="display: flex; gap: 12px">
+            <select bind:value={selectedSnippetTemplateFullPath} on:change={setSnippetTemplate} style="flex: 1 1">
                 {#each snippetTemplates as snippetTemplate}
                 <option value={snippetTemplate.fullPath}>{snippetTemplate.outputPath}</option>
                 {/each}
             </select>
+            <button type="button" style="flex: 0 1">Generate</button>
         </div>
         {/if}
         {#if snippetTemplate}
