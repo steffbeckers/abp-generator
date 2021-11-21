@@ -6,8 +6,8 @@
         "Name": "MyCompany.MyProduct"
       },
       "AggregateRoot": {
-        "Name": "Recipe",
-        "NamePlural": "Recipes",
+        "Name": "Category",
+        "NamePlural": "Categories",
         "Properties": [
           {
             "Name": "Name",
@@ -23,22 +23,38 @@
         ],
         "Entities": [
           {
-            "Name": "RecipeStep",
-            "NamePlural": "RecipeSteps",
+            "Name": "CategoryTranslation",
+            "NamePlural": "CategoryTranslations",
             "Properties": [
               {
-                "Name": "RecipeId",
+                "Name": "CategoryId",
                 "Type": "Guid",
                 "Required": true
               },
               {
-                "Name": "Number",
-                "Type": "int",
+                "Name": "Name",
+                "Type": "string",
+                "Required": true
+              }
+            ]
+          },
+          {
+            "Name": "CategoryExtraInformationFieldValue",
+            "NamePlural": "CategoryExtraInformationFieldValues",
+            "Properties": [
+              {
+                "Name": "CategoryId",
+                "Type": "Guid",
                 "Required": true
               },
               {
-                "Name": "Instructions",
-                "Type": "string",
+                "Name": "ExtraInformationFieldId",
+                "Type": "Guid",
+                "Required": true
+              },
+              {
+                "Name": "Value",
+                "Type": "object",
                 "Required": true
               }
             ]
