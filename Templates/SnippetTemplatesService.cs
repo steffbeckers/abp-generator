@@ -31,25 +31,23 @@ public class SnippetTemplatesService
 
     public Task GenerateAsync(GenerateSnippetTemplates input)
     {
-        return Parallel.ForEachAsync(input.FullPaths, async (fullPath, cancellationToken) =>
+        return Parallel.ForEachAsync(input.OutputPaths, async (outputPath, cancellationToken) =>
         {
-            foreach (SnippetTemplate? snippetTemplate in Templates.Where(x => x.FullPath == fullPath).ToList())
+            SnippetTemplate? snippetTemplate = Templates.FirstOrDefault(x => x.OutputPath == outputPath);
+            if (snippetTemplate?.OutputPath == null) return;
+
+            string fullOutputPath = Path.Combine(_settingsService.Settings.ProjectPath, snippetTemplate.OutputPath);
+            if (fullOutputPath == null) return;
+
+            if (!Directory.Exists(fullOutputPath))
             {
-                if (snippetTemplate?.OutputPath == null) continue;
-
-                string fullOutputPath = Path.Combine(_settingsService.Settings.ProjectPath, snippetTemplate.OutputPath);
-                if (fullOutputPath == null) continue;
-
-                if (!Directory.Exists(fullOutputPath))
-                {
-                    Directory.CreateDirectory(Path.GetDirectoryName(fullOutputPath));
-                }
-
-                await File.WriteAllTextAsync(
-                    fullOutputPath,
-                    snippetTemplate.Output,
-                    cancellationToken);
+                Directory.CreateDirectory(Path.GetDirectoryName(fullOutputPath));
             }
+
+            await File.WriteAllTextAsync(
+                fullOutputPath,
+                snippetTemplate.Output,
+                cancellationToken);
         });
     }
 
@@ -159,36 +157,25 @@ public class SnippetTemplatesService
                 {
                     generatorContext.Entity = entity;
 
-                    // TODO: Remove duplicated code
-                    HandlebarsTemplate<object, object>? handlebarsOutputPath = _handlebarsContext.Compile(outputPath);
-                    outputPath = handlebarsOutputPath(generatorContext);
+                    string entityOutputPath = outputPath;
+
+                    HandlebarsTemplate<object, object>? handlebarsOutputPath = _handlebarsContext.Compile(entityOutputPath);
+                    entityOutputPath = handlebarsOutputPath(generatorContext);
 
                     HandlebarsTemplate<object, object>? handlebarsTemplate = _handlebarsContext.Compile(templateSource);
                     templateOutput = handlebarsTemplate(generatorContext);
 
-                    if (template != null)
+                    Templates.Add(new SnippetTemplate()
                     {
-                        template.OutputPath = outputPath;
-                        template.Context = templateContext;
-                        template.Output = templateOutput;
-                    }
-                    else
-                    {
-                        template = new SnippetTemplate()
-                        {
-                            FullPath = fullPath,
-                            OutputPath = outputPath,
-                            Context = templateContext,
-                            Output = templateOutput
-                        };
-
-                        Templates.Add(template);
-                    }
+                        FullPath = fullPath,
+                        OutputPath = entityOutputPath,
+                        Context = templateContext,
+                        Output = templateOutput
+                    });
                 }
             }
             else
             {
-                // TODO: Remove duplicated code
                 HandlebarsTemplate<object, object>? handlebarsOutputPath = _handlebarsContext.Compile(outputPath);
                 outputPath = handlebarsOutputPath(generatorContext);
 

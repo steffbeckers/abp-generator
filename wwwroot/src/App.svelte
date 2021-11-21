@@ -9,7 +9,7 @@
     let connected = true;
 
     let snippetTemplates = [];
-    let selectedSnippetTemplateFullPaths = [];
+    let selectedSnippetTemplateOutputPaths = [];
     let snippetTemplate;
 
     onMount(async () => {
@@ -29,7 +29,7 @@
             .then((response) => response.json())
             .then((data) => {
                 snippetTemplates = data;
-                selectedSnippetTemplateFullPaths = [snippetTemplates[0].fullPath]
+                selectedSnippetTemplateOutputPaths = [snippetTemplates[0].outputPath]
                 setSnippetTemplate();
             });
 
@@ -45,17 +45,17 @@
         realtimeConnection.on("SnippetTemplateCreated", (createdSnippetTemplate) => {
             snippetTemplates.unshift(createdSnippetTemplate);
 
-            selectedSnippetTemplateFullPaths = [createdSnippetTemplate.fullPath];
+            selectedSnippetTemplateOutputPaths = [createdSnippetTemplate.outputPath];
             setSnippetTemplate();
         });
 
         realtimeConnection.on("SnippetTemplateUpdated", (updatedSnippetTemplate) => {
-            let updatedSnippetTemplateIndex = snippetTemplates.map(x => x.fullPath).indexOf(updatedSnippetTemplate.fullPath);
+            let updatedSnippetTemplateIndex = snippetTemplates.map(x => x.outputPath).indexOf(updatedSnippetTemplate.outputPath);
 
             if (updatedSnippetTemplateIndex > -1) {
                 snippetTemplates[updatedSnippetTemplateIndex] = updatedSnippetTemplate;
 
-                selectedSnippetTemplateFullPaths = [updatedSnippetTemplate.fullPath];
+                selectedSnippetTemplateOutputPaths = [updatedSnippetTemplate.outputPath];
                 setSnippetTemplate();
             }
         });
@@ -64,12 +64,10 @@
             let deletedSnippetTemplateIndex = snippetTemplates.map(x => x.fullPath).indexOf(deletedSnippetTemplateFullPath);
 
             if (deletedSnippetTemplateIndex > -1) {
-                if (deletedSnippetTemplateFullPath == selectedSnippetTemplateFullPaths[0] && snippetTemplates.length > 0) {
-                    selectedSnippetTemplateFullPaths = [snippetTemplates[0].fullPath];
-                    setSnippetTemplate();
-                }
-
                 snippetTemplates.splice(deletedSnippetTemplateIndex, 1);
+                
+                selectedSnippetTemplateOutputPaths = [snippetTemplates[0].outputPath];
+                setSnippetTemplate();
             }
         });
 
@@ -115,7 +113,7 @@
         await fetch("/api/templates/snippets/generate", {
             method: "POST",
             body: JSON.stringify({
-                fullPaths: selectedSnippetTemplateFullPaths
+                outputPaths: selectedSnippetTemplateOutputPaths
             }),
             headers: {
                 "Content-Type": "application/json"
@@ -124,12 +122,12 @@
     }
 
     function setSnippetTemplate() {
-        if (selectedSnippetTemplateFullPaths && selectedSnippetTemplateFullPaths.length != 1) {
+        if (selectedSnippetTemplateOutputPaths && selectedSnippetTemplateOutputPaths.length != 1) {
             snippetTemplate = null;
             return;
         }
 
-        let selectedSnippetTemplateIndex = snippetTemplates.map(x => x.fullPath).indexOf(selectedSnippetTemplateFullPaths[0]);
+        let selectedSnippetTemplateIndex = snippetTemplates.map(x => x.outputPath).indexOf(selectedSnippetTemplateOutputPaths[0]);
         if (selectedSnippetTemplateIndex > -1) {
             snippetTemplate = snippetTemplates[selectedSnippetTemplateIndex];
         }
@@ -192,9 +190,9 @@
         </div>
         {#if snippetTemplates}
         <div style="display: flex; flex-direction: column">
-            <select bind:value={selectedSnippetTemplateFullPaths} on:change={setSnippetTemplate} style="flex: 1 1 200px" multiple>
+            <select bind:value={selectedSnippetTemplateOutputPaths} on:change={setSnippetTemplate} style="flex: 1 1 200px" multiple>
                 {#each snippetTemplates as snippetTemplate}
-                <option value={snippetTemplate.fullPath}>{snippetTemplate.outputPath}</option>
+                <option value={snippetTemplate.outputPath}>{snippetTemplate.outputPath}</option>
                 {/each}
             </select>
             <div>
@@ -206,6 +204,8 @@
             <h3>Preview</h3>
             <div style="height: 450px; overflow-y: scroll; border: 1px solid #000000; padding: 8px 12px;">
                 {#if snippetTemplate}
+                <div style="margin-bottom: 12px">{snippetTemplate.fullPath}</div>
+                <hr />
                 <div style="white-space: pre">
                     {snippetTemplate.output}
                 </div>

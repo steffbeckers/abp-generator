@@ -2,5 +2,5 @@
 
 public class GenerateSnippetTemplates
 {
-    public List<string> FullPaths { get; set; } = new List<string>();
+    public List<string> OutputPaths { get; set; } = new List<string>();
 }
