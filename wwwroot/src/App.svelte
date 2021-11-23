@@ -142,6 +142,7 @@
             <button on:click={openSettingsJson} type="button">Open JSON</button>
         </div>
         {#if settings}
+        <!-- To view the settings as JSON -->
         <!-- <div style="white-space: pre">
             {JSON.stringify(settings, null, 2)}
         </div> -->
@@ -174,11 +175,12 @@
                     <input bind:value={settings.context.aggregateRoot.namePlural} on:blur={updateSettings} type="text" id="aggregateRootNamePluralSetting" />
                 </div>
             </div>
+            <!-- TODO: Add other context based settings -->
         </div>
         {/if}
     </div>
     <div>
-        <h2>Templates</h2>
+        <h2>Snippet templates</h2>
         <div>
             <button on:click={openSnippetTemplatesFolder} type="button">Open folder</button>
         </div>

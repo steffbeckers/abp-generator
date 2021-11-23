@@ -8,6 +8,8 @@ string version = Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
 
 Console.WriteLine($"Version: {version}");
 
+// TODO: Add version check with based nuget.org
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder(new WebApplicationOptions()
 {
     Args = args,
