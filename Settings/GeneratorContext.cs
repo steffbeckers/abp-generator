@@ -1,4 +1,6 @@
-﻿namespace SteffBeckers.Abp.Generator.Settings
+﻿using Newtonsoft.Json;
+
+namespace SteffBeckers.Abp.Generator.Settings
 {
     public class AggregateRoot
     {
@@ -13,6 +15,8 @@
 
     public class Entity
     {
+        public string AggregateRootPropertyName { get; set; } = string.Empty;
+
         public string Name { get; set; } = string.Empty;
 
         public string NamePlural { get; set; } = string.Empty;
@@ -24,6 +28,7 @@
     {
         public AggregateRoot AggregateRoot { get; set; } = new AggregateRoot();
 
+        [JsonIgnore]
         public Entity Entity { get; set; } = new Entity();
 
         public Project Project { get; set; } = new Project();

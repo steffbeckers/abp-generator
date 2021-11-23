@@ -11,9 +11,18 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
 {
     public class {{Entity.Name}} : FullAuditedEntity<Guid>
     {
-        public {{Entity.Name}}(Guid id)
+        public Guid {{AggregateRoot.Name}}Id { get; set; }
+
+        public {{AggregateRoot.Name}} {{AggregateRoot.Name}} { get; }
+
+        {{#each Entity.Properties}}
+        public {{Type}} {{Name}} { get; set; }
+        
+        {{/each}}
+        public {{Entity.Name}}(Guid id, Guid {{String.Camelcase AggregateRoot.Name}}Id)
         {
             Id = id;
+            {{AggregateRoot.Name}}Id = {{String.Camelcase AggregateRoot.Name}}Id;
         }
 
         private {{Entity.Name}}()

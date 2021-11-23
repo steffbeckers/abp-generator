@@ -42,37 +42,31 @@
             settings = updatedSettings;
         });
 
-        realtimeConnection.on("SnippetTemplateCreated", (createdSnippetTemplate) => {
-            snippetTemplates.unshift(createdSnippetTemplate);
-
-            selectedSnippetTemplateOutputPaths = [createdSnippetTemplate.outputPath];
-            setSnippetTemplate();
-        });
-
         realtimeConnection.on("SnippetTemplateUpdated", (updatedSnippetTemplate) => {
             let updatedSnippetTemplateIndex = snippetTemplates.map(x => x.outputPath).indexOf(updatedSnippetTemplate.outputPath);
 
             if (updatedSnippetTemplateIndex > -1) {
                 snippetTemplates[updatedSnippetTemplateIndex] = updatedSnippetTemplate;
-
-                selectedSnippetTemplateOutputPaths = [updatedSnippetTemplate.outputPath];
-                setSnippetTemplate();
+            } else {
+                snippetTemplates.push(updatedSnippetTemplate);
             }
+
+            snippetTemplates = snippetTemplates.sort((x, y) => (x.outputPath > y.outputPath) ? 1 : ((y.outputPath > x.outputPath) ? -1 : 0))
+
+            selectedSnippetTemplateOutputPaths = [updatedSnippetTemplate.outputPath];
+            setSnippetTemplate();
         });
 
         realtimeConnection.on("SnippetTemplateDeleted", (deletedSnippetTemplateFullPath) => {
-            let deletedSnippetTemplateIndex = snippetTemplates.map(x => x.fullPath).indexOf(deletedSnippetTemplateFullPath);
+            snippetTemplates = snippetTemplates.filter(x => x.fullPath != deletedSnippetTemplateFullPath);
 
-            if (deletedSnippetTemplateIndex > -1) {
-                snippetTemplates.splice(deletedSnippetTemplateIndex, 1);
-                
-                selectedSnippetTemplateOutputPaths = [snippetTemplates[0].outputPath];
-                setSnippetTemplate();
-            }
+            selectedSnippetTemplateOutputPaths = [snippetTemplates[0].outputPath];
+            setSnippetTemplate();
         });
 
         realtimeConnection.on("SnippetTemplatesReloaded", (reloadedSnippetTemplates) => {
             snippetTemplates = reloadedSnippetTemplates;
+
             setSnippetTemplate();
         });
 
@@ -202,11 +196,11 @@
         {/if}
         <div>
             <h3>Preview</h3>
-            <div style="height: 450px; overflow-y: scroll; border: 1px solid #000000; padding: 8px 12px;">
+            <div style="height: 450px; overflow-y: scroll; border: 1px solid #000000; padding: 8px 12px">
                 {#if snippetTemplate}
-                <div style="margin-bottom: 12px">{snippetTemplate.fullPath}</div>
-                <hr />
-                <div style="white-space: pre">
+                <div style="margin-bottom: 12px; font-size: 12px">// {snippetTemplate.fullPath}</div>
+                <!-- TODO: Preview syntax highlighting? -->
+                <div style="white-space: pre; font-family: Consolas">
                     {snippetTemplate.output}
                 </div>
                 {:else}

@@ -60,6 +60,8 @@ public class SettingsService
     {
         string json = JsonConvert.SerializeObject(new { Generator = input }, Formatting.Indented);
 
+        json = json.Insert(("{" + Environment.NewLine).Length, "  \"$schema\": \"./generatorsettings.schema.json\"," + Environment.NewLine);
+
         await File.WriteAllTextAsync(FileHelpers.UserBasedGeneratorSettingsFilePath, json);
     }
 }

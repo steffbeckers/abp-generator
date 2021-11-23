@@ -1,66 +1,58 @@
 {
+  "$schema": "./generatorsettings.schema.json",
   "Generator": {
-    "ProjectPath": "C:/Dev/tmp/abp-generator",
     "Context": {
-      "Project": {
-        "Name": "MyCompany.MyProduct"
-      },
       "AggregateRoot": {
-        "Name": "Category",
-        "NamePlural": "Categories",
-        "Properties": [
-          {
-            "Name": "Name",
-            "Type": "string",
-            "Required": true,
-            "MaxLength": 100
-          },
-          {
-            "Name": "Description",
-            "Type": "string",
-            "MaxLength": 500
-          }
-        ],
         "Entities": [
           {
+            "AggregateRootPropertyName": "Translations",
             "Name": "CategoryTranslation",
             "NamePlural": "CategoryTranslations",
             "Properties": [
               {
+                "MaxLength": null,
                 "Name": "CategoryId",
-                "Type": "Guid",
-                "Required": true
+                "Required": true,
+                "Type": "Guid"
               },
               {
+                "MaxLength": 10,
+                "Name": "CultureName",
+                "Required": true,
+                "Type": "string"
+              },
+              {
+                "MaxLength": 100,
                 "Name": "Name",
-                "Type": "string",
-                "Required": true
-              }
-            ]
-          },
-          {
-            "Name": "CategoryExtraInformationFieldValue",
-            "NamePlural": "CategoryExtraInformationFieldValues",
-            "Properties": [
-              {
-                "Name": "CategoryId",
-                "Type": "Guid",
-                "Required": true
+                "Required": true,
+                "Type": "string"
               },
               {
-                "Name": "ExtraInformationFieldId",
-                "Type": "Guid",
-                "Required": true
-              },
-              {
-                "Name": "Value",
-                "Type": "object",
-                "Required": true
+                "MaxLength": 500,
+                "Name": "Description",
+                "Required": false,
+                "Type": "string"
               }
             ]
           }
+        ],
+        "Name": "Category",
+        "NamePlural": "Categories",
+        "Properties": [
+          {
+            "MaxLength": null,
+            "Name": "SortOrder",
+            "Required": true,
+            "Type": "long"
+          }
         ]
+      },
+      "Project": {
+        "CompanyName": "MyCompany",
+        "Name": "MyCompany.MyProduct",
+        "ProductName": "MyProduct"
       }
-    }
+    },
+    "ProjectPath": "C:/Dev/tmp/abp-generator"
   }
 }

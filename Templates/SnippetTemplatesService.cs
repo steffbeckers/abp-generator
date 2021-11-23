@@ -39,15 +39,15 @@ public class SnippetTemplatesService
             string fullOutputPath = Path.Combine(_settingsService.Settings.ProjectPath, snippetTemplate.OutputPath);
             if (fullOutputPath == null) return;
 
+            string? fullOutputDirectoryPath = Path.GetDirectoryName(fullOutputPath);
+            if (fullOutputDirectoryPath == null) return;
+
             if (!Directory.Exists(fullOutputPath))
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(fullOutputPath));
+                Directory.CreateDirectory(fullOutputDirectoryPath);
             }
 
-            await File.WriteAllTextAsync(
-                fullOutputPath,
-                snippetTemplate.Output,
-                cancellationToken);
+            await File.WriteAllTextAsync(fullOutputPath, snippetTemplate.Output, cancellationToken);
         });
     }
 
@@ -72,6 +72,7 @@ public class SnippetTemplatesService
         _settingsService.Monitor.OnChange(async (settings) =>
         {
             await LoadTemplatesAsync();
+
             await _realtimeHub.Clients.All.SendAsync("SnippetTemplatesReloaded", Templates);
         });
 
@@ -82,45 +83,41 @@ public class SnippetTemplatesService
             EnableRaisingEvents = true
         };
 
-        watcher.Created += async (watch, eventArgs) =>
-        {
-            SnippetTemplate? snippetTemplate = await LoadTemplateAsync(eventArgs.FullPath);
-            if (snippetTemplate == null) return;
-
-            await _realtimeHub.Clients.All.SendAsync("SnippetTemplateCreated", snippetTemplate);
-        };
-
         watcher.Changed += async (watch, eventArgs) =>
         {
-            SnippetTemplate? snippetTemplate = await LoadTemplateAsync(eventArgs.FullPath);
-            if (snippetTemplate == null) return;
+            await LoadTemplateAsync(eventArgs.FullPath);
 
-            await _realtimeHub.Clients.All.SendAsync("SnippetTemplateUpdated", snippetTemplate);
+            foreach (SnippetTemplate snippetTemplate in Templates.Where(x => x.FullPath == eventArgs.FullPath).ToList())
+            {
+                await _realtimeHub.Clients.All.SendAsync("SnippetTemplateUpdated", snippetTemplate);
+            }
+        };
+
+        watcher.Renamed += async (watch, eventArgs) =>
+        {
+            Templates.RemoveAll(x => x.FullPath == eventArgs.OldFullPath);
+
+            await _realtimeHub.Clients.All.SendAsync("SnippetTemplateDeleted", eventArgs.OldFullPath);
         };
 
         watcher.Deleted += async (watch, eventArgs) =>
         {
-            SnippetTemplate? snippetTemplateToDelete = Templates.FirstOrDefault(x => x.FullPath == eventArgs.FullPath);
-
-            if (snippetTemplateToDelete != null)
-            {
-                Templates.Remove(snippetTemplateToDelete);
-            }
+            Templates.RemoveAll(x => x.FullPath == eventArgs.FullPath);
 
             await _realtimeHub.Clients.All.SendAsync("SnippetTemplateDeleted", eventArgs.FullPath);
         };
     }
 
-    public async Task<SnippetTemplate?> LoadTemplateAsync(string fullPath)
+    public async Task LoadTemplateAsync(string fullPath)
     {
-        SnippetTemplate? template = Templates.FirstOrDefault(x => x.FullPath == fullPath);
-
         try
         {
             if (_handlebarsContext == null)
             {
                 throw new Exception("Handlebars templating context could not be loaded.");
             }
+
+            Templates.RemoveAll(x => x.FullPath == fullPath);
 
             string outputPath = fullPath
                 .Replace(FileHelpers.UserBasedSnippetTemplatesPath + Path.DirectorySeparatorChar, "")
@@ -151,10 +148,14 @@ public class SnippetTemplatesService
 
             GeneratorContext generatorContext = _settingsService.Settings.Context;
 
+            generatorContext.AggregateRoot.Properties = generatorContext.AggregateRoot.Properties.OrderBy(x => x.Name).ToList();
+
             if (templateContext.RunForEachEntity)
             {
-                foreach (Entity? entity in _settingsService.Settings.Context.AggregateRoot.Entities)
+                foreach (Entity entity in _settingsService.Settings.Context.AggregateRoot.Entities)
                 {
+                    entity.Properties = entity.Properties.OrderBy(x => x.Name).ToList();
+
                     generatorContext.Entity = entity;
 
                     string entityOutputPath = outputPath;
@@ -182,24 +183,13 @@ public class SnippetTemplatesService
                 HandlebarsTemplate<object, object>? handlebarsTemplate = _handlebarsContext.Compile(templateSource);
                 templateOutput = handlebarsTemplate(generatorContext);
 
-                if (template != null)
+                Templates.Add(new SnippetTemplate()
                 {
-                    template.OutputPath = outputPath;
-                    template.Context = templateContext;
-                    template.Output = templateOutput;
-                }
-                else
-                {
-                    template = new SnippetTemplate()
-                    {
-                        FullPath = fullPath,
-                        OutputPath = outputPath,
-                        Context = templateContext,
-                        Output = templateOutput
-                    };
-
-                    Templates.Add(template);
-                }
+                    FullPath = fullPath,
+                    OutputPath = outputPath,
+                    Context = templateContext,
+                    Output = templateOutput
+                });
             }
 
             Templates = Templates.OrderBy(x => x.OutputPath).ToList();
@@ -208,8 +198,6 @@ public class SnippetTemplatesService
         {
             Console.Error.WriteLine(ex.Message);
         }
-
-        return template;
     }
 
     public async Task LoadTemplatesAsync()
@@ -227,6 +215,8 @@ public class SnippetTemplatesService
                 searchPattern: "*.hbs",
                 searchOption: SearchOption.AllDirectories)
             .ToList();
+
+        Templates.Clear();
 
         foreach (string templateFilePath in templateFilePaths)
         {

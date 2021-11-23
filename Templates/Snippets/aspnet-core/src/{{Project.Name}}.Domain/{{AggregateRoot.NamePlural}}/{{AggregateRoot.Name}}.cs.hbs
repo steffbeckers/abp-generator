@@ -7,6 +7,14 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
 {
     public class {{AggregateRoot.Name}} : FullAuditedAggregateRoot<Guid>
     {
+        {{#each AggregateRoot.Properties}}
+        public {{Type}} {{Name}} { get; set; }
+        
+        {{/each}}
+        {{#each AggregateRoot.Entities}}
+        public IList<{{Name}}> {{AggregateRootPropertyName}} { get; private set; } = new List<{{Name}}>();
+        
+        {{/each}}
         public {{AggregateRoot.Name}}(Guid id)
         {
             Id = id;
