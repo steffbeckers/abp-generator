@@ -18,6 +18,8 @@ public static class FileHelpers
 
     public static string GeneratorSettingsFileName = "generatorsettings.json";
 
+    public static string GeneratorSettingsSchemaFileName = "generatorsettings.schema.json";
+
     public static string UserBasedPath { get; set; } = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
         ".steffbeckers",

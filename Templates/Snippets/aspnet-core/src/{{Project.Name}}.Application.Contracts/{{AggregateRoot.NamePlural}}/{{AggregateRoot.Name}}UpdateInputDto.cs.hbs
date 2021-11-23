@@ -9,9 +9,9 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
         [Required]
         {{/if}}
         {{#if MaxLength}}
-        [StringLength({{../AggregateRoot.Name}}Consts.{{ Name }}MaxLength)]
+        [StringLength({{../AggregateRoot.Name}}Consts.{{Name}}MaxLength)]
         {{/if}}
-        public {{ Type }} {{ Name }} { get; set; }
+        public {{Type}} {{Name}} { get; set; }
 
         {{/each}}
     }

@@ -34,8 +34,4 @@
 		</Content>
 	</ItemGroup>
 
-	<ItemGroup>
-	  <None Remove="Templates\Snippets\aspnet-core\src\{{Project.Name}}.HttpApi\{{AggregateRoot.NamePlural}}\{{AggregateRoot.NamePlural}}Controller.cs.hbs" />
-	</ItemGroup>
-
 </Project>

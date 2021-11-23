@@ -39,6 +39,10 @@ public class SettingsService
             File.Copy(
                 Path.Combine(FileHelpers.ContentRootPath, FileHelpers.GeneratorSettingsFileName),
                 Path.Combine(FileHelpers.UserBasedPath, FileHelpers.GeneratorSettingsFileName));
+
+            File.Copy(
+                Path.Combine(FileHelpers.ContentRootPath, FileHelpers.GeneratorSettingsSchemaFileName),
+                Path.Combine(FileHelpers.UserBasedPath, FileHelpers.GeneratorSettingsSchemaFileName));
         }
 
         return Task.CompletedTask;
@@ -58,7 +62,10 @@ public class SettingsService
 
     public async Task UpdateAsync(GeneratorSettings input)
     {
-        string json = JsonConvert.SerializeObject(new { Generator = input }, Formatting.Indented);
+        string json = JsonConvert.SerializeObject(
+            new { Generator = input },
+            Formatting.Indented,
+            new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
 
         json = json.Insert(("{" + Environment.NewLine).Length, "  \"$schema\": \"./generatorsettings.schema.json\"," + Environment.NewLine);
 

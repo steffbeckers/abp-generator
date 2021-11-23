@@ -6,7 +6,7 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
     public class {{AggregateRoot.Name}}ListDto : EntityDto<Guid>
     {
         {{#each AggregateRoot.Properties}}
-        public {{ Type }} {{ Name }} { get; set; }
+        public {{Type}} {{Name}} { get; set; }
         
         {{/each}}
     }
