@@ -1,37 +1,33 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
-	<PropertyGroup>
-		<OutputType>Exe</OutputType>
-		<TargetFramework>net6.0</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-		<AssemblyName>sbabpgen</AssemblyName>
-		<Version>1.0.20</Version>
-		<PackAsTool>true</PackAsTool>
-		<IsPackable>true</IsPackable>
-		<Authors>Steff Beckers</Authors>
-		<Description>Steff's ABP.io Generator.</Description>
-		<RepositoryUrl>https://github.com/steffbeckers/abp-generator</RepositoryUrl>
-		<PackageTags>abp, cli</PackageTags>
-		<Product>ABP.io Generator</Product>
-		<PackageId>SteffBeckers.Abp.Generator</PackageId>
-	</PropertyGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Handlebars.Net" Version="2.0.9" />
-		<PackageReference Include="Handlebars.Net.Helpers" Version="2.2.1" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Include="wwwroot\public\**\*">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		</None>
-		<Content Include="Templates\**\*.hbs">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-		</Content>
-	</ItemGroup>
-
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>sbabpgen</AssemblyName>
+    <Version>1.0.21</Version>
+    <PackAsTool>true</PackAsTool>
+    <IsPackable>true</IsPackable>
+    <Authors>Steff Beckers</Authors>
+    <Description>Steff's ABP.io Generator.</Description>
+    <RepositoryUrl>https://github.com/steffbeckers/abp-generator</RepositoryUrl>
+    <PackageTags>abp, cli</PackageTags>
+    <Product>ABP.io Generator</Product>
+    <PackageId>SteffBeckers.Abp.Generator</PackageId>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Handlebars.Net" Version="2.0.9" />
+    <PackageReference Include="Handlebars.Net.Helpers" Version="2.2.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\public\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+    <Content Include="Templates\**\*.hbs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
 </Project>
