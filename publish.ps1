@@ -16,3 +16,7 @@ $csproj.Save($projectPath);
 
 dotnet pack -c Release
 dotnet nuget push bin/Release/SteffBeckers.Abp.Generator.$major.$minor.$patch.nupkg --api-key $apiKey --source https://api.nuget.org/v3/index.json
+
+git add SteffBeckers.Abp.Generator.csproj
+git commit -m "Published version $major.$minor.$patch"
+git push
