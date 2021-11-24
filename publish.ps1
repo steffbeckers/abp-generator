@@ -1,4 +1,4 @@
-param ([string] $apiKey)
+Param ([Parameter(Mandatory=$true)][string] $apiKey)
 
 # Increment version
 $projectPath = "SteffBeckers.Abp.Generator.csproj";
