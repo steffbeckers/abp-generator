@@ -39,7 +39,7 @@ namespace SteffBeckers.Abp.Generator.Updates;
                 return;
 
             Console.WriteLine();
-            Console.WriteLine($"Update to version {latestVersion} available! Use following command to update:");
+            Console.WriteLine($"New update available! Use following command to update:");
             Console.WriteLine();
             Console.WriteLine($"dotnet tool update -g SteffBeckers.Abp.Generator --no-cache");
             Console.WriteLine();
