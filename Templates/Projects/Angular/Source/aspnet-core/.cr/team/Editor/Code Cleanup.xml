@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Root Type="DevExpress.CodeAnalysis.CodeCleanUp.CodeCleanUpOptions">
+  <Options Language="C#">
+    <Providers>
+      <Item Id="{53ccb10f-f7af-40a6-9472-d05054672052}">
+        <Enabled>True</Enabled>
+        <ApplyOnSave>True</ApplyOnSave>
+      </Item>
+      <Item Id="{bb96a982-bed0-4d8f-93a7-1e1ce7493e96}">
+        <Enabled>True</Enabled>
+        <ApplyOnSave>True</ApplyOnSave>
+      </Item>
+      <Item Id="{12f6d456-d2ec-407e-aa44-2b74d7c56e9c}" />
+      <Item Id="{ffa114f4-9122-46e4-96c8-655d54c904e6}" />
+      <Item Id="{0e6b7b2c-84e6-4eee-83d1-6149282c8501}">
+        <ApplyOnSave>True</ApplyOnSave>
+      </Item>
+      <Item Id="{03781427-dea7-45b0-9eef-81abe2961a61}" />
+      <Item Id="{ab07124b-0893-4a2d-b6f5-39bfa9f10148}">
+        <ApplyOnSave>True</ApplyOnSave>
+      </Item>
+      <Item Id="{5d712912-91ed-4728-ba16-ac1821b702ca}">
+        <ApplyOnSave>True</ApplyOnSave>
+      </Item>
+      <Item Id="{4216ef39-52bd-4e7f-92a7-673406f92bc8}" />
+      <Item Id="{f410df1e-6e44-4854-a3f0-14bb756113f9}">
+        <ApplyOnSave>True</ApplyOnSave>
+      </Item>
+      <Item Id="{d2f76d4e-97a9-4031-a7a2-23f192201426}" />
+      <Item Id="{3824f6f0-fee1-4847-94ff-1efa133ba199}">
+        <Enabled>True</Enabled>
+        <ApplyOnSave>True</ApplyOnSave>
+      </Item>
+      <Item Id="{d24bd9c7-7686-4101-9ec1-f61c19af8d2e}" />
+      <Item Id="{f804e36e-414f-409c-9b90-63b7727745a7}">
+        <ApplyOnSave>True</ApplyOnSave>
+      </Item>
+      <Item Id="{163af547-186c-4fa1-9a3e-b9b0a1ceec32}" />
+      <Item Id="{00bb41b3-3de9-458a-93c1-1f126253eab0}" />
+      <Item Id="{8e24f031-d25c-4ddb-86a5-c28f8fc354eb}" />
+      <Item Id="{e950f01e-2b15-4da5-8176-cafe3cc883d9}" />
+      <Item Id="{37bde68f-a39d-4791-adba-8ad7b2952ab0}" />
+      <Item Id="{ef51c8cb-e48a-498f-98b2-eadda592c4c7}" />
+      <Item Id="{20943A7B-2B32-4727-8E9D-61CB5B5F2A0D}" />
+      <Item Id="{528bdd86-5882-4b4c-b717-e0ec33958bd7}">
+        <Enabled>True</Enabled>
+        <ApplyOnSave>True</ApplyOnSave>
+      </Item>
+      <Item Id="{40c971cf-ebeb-419d-a559-6183d8d0d6a4}">
+        <Enabled>True</Enabled>
+        <ApplyOnSave>True</ApplyOnSave>
+      </Item>
+      <Item Id="{4B42E272-EE39-4E83-924C-B2458D827DE3}">
+        <Enabled>True</Enabled>
+        <ApplyOnSave>True</ApplyOnSave>
+      </Item>
+      <Item Id="{73a73e0e-5575-4c34-a97b-a942c6da1f90}" />
+      <Item Id="{f7752b2b-7ba5-43ec-b0f7-7f45c21c1c23}" />
+      <Item Id="{9dab2827-57cc-40e9-a330-a0626261453e}" />
+      <Item Id="{6bf7cfc1-1332-4bec-982e-c2d0968237cd}" />
+      <Item Id="{7e640eab-b585-47a5-afdc-0f110357cebb}">
+        <Enabled>True</Enabled>
+        <ApplyOnSave>True</ApplyOnSave>
+      </Item>
+      <Item Id="{44ac74a7-dba7-45aa-b2ca-8094b85cb9c9}" />
+      <Item Id="{2cd1441b-9e0f-4e39-bd8c-8aaa6e2a1728}" />
+      <Item Id="{41388575-074b-49f2-b3bc-9d28b212bd1a}">
+        <Enabled>True</Enabled>
+        <ApplyOnSave>True</ApplyOnSave>
+      </Item>
+      <Item Id="{4fa0bfa3-0a7e-471b-9933-3a379bdd5bd7}">
+        <Enabled>True</Enabled>
+        <ApplyOnSave>True</ApplyOnSave>
+      </Item>
+      <Item Id="{1f88209e-45e2-40b9-a235-1df251df05dd}">
+        <Enabled>True</Enabled>
+        <ApplyOnSave>True</ApplyOnSave>
+      </Item>
+      <Item Id="{086b0e70-893d-4b97-a6cf-d366ddbae573}" />
+      <Item Id="{4771fd98-4357-4780-b479-a7a875fec011}" />
+      <Item Id="{174C98E6-48C4-42D0-BC30-35EDE6377C9B}">
+        <Enabled>True</Enabled>
+        <ApplyOnSave>True</ApplyOnSave>
+      </Item>
+    </Providers>
+    <CleanupOnSave>True</CleanupOnSave>
+    <IsNewVersion>True</IsNewVersion>
+  </Options>
+</Root>

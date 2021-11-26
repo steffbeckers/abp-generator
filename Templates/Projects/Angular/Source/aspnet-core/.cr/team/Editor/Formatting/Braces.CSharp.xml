@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Root Type="DevExpress.CodeRush.Formatting.UI.Options.BracesOptionsContainer">
+  <Options Language="C#">
+    <Options>
+      <Item Id="{95544f1e-a8ad-42c7-a7d2-2a147291d4ef}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.NamespaceBracesOption" />
+      <Item Id="{f788644a-acf4-4a51-8ef8-43ff863a3b14}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.TypeBracesOption" />
+      <Item Id="{5ba90e1e-a284-494b-9c53-c55ffc81d419}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.SimpleMethodBracesOption">
+        <WrapOpenBrace>
+          <Option>Wrap</Option>
+        </WrapOpenBrace>
+        <WrapCloseBrace>
+          <Option>Wrap</Option>
+        </WrapCloseBrace>
+      </Item>
+      <Item Id="{e17f171b-b192-4eea-a017-4f4216755705}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.MethodBracesOption" />
+      <Item Id="{3920243c-1bac-46ce-960d-e4186d99c187}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.PropertyBracesOption" />
+      <Item Id="{cc5d29d5-963b-4994-839e-2af4b72c56b0}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.AutoImplementedPropertyBracesOption" />
+      <Item Id="{692dd27b-3066-4dd3-beac-516a569f5203}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.SimplePropertyBracesOption" />
+      <Item Id="{1952ca32-6dff-414c-b446-9c19dabedcc4}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.AccessorBracesOption" />
+      <Item Id="{558b4244-4600-43f6-8270-aaabc4b5ba3a}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.SimpleAccessorBracesOption" />
+      <Item Id="{5c85c8c8-501e-4a52-a990-2df5c9f068e6}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.AnonymousMethodBracesOption" />
+      <Item Id="{96acee87-0d55-4a99-9c55-49009b17f258}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.StatementBracesOption" />
+      <Item Id="{13277150-7e30-46a8-90b5-bf86f8f5682f}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.SimpleStatementBracesOption" />
+      <Item Id="{ebb5168d-cd54-4ec7-8a62-9863dc3319fd}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.EmptyBracesOption" />
+    </Options>
+  </Options>
+</Root>
