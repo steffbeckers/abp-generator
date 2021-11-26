@@ -3,47 +3,21 @@
   "Generator": {
     "Context": {
       "AggregateRoot": {
-        "Entities": [
-          {
-            "AggregateRootPropertyName": "Translations",
-            "Name": "CategoryTranslation",
-            "NamePlural": "CategoryTranslations",
-            "Properties": [
-              {
-                "MaxLength": null,
-                "Name": "CategoryId",
-                "Required": true,
-                "Type": "Guid"
-              },
-              {
-                "MaxLength": 10,
-                "Name": "CultureName",
-                "Required": true,
-                "Type": "string"
-              },
-              {
-                "MaxLength": 100,
-                "Name": "Name",
-                "Required": true,
-                "Type": "string"
-              },
-              {
-                "MaxLength": 500,
-                "Name": "Description",
-                "Required": false,
-                "Type": "string"
-              }
-            ]
-          }
-        ],
-        "Name": "Category",
-        "NamePlural": "Categories",
+        "Entities": [],
+        "Name": "Sample",
+        "NamePlural": "Samples",
         "Properties": [
           {
-            "MaxLength": null,
-            "Name": "SortOrder",
+            "MaxLength": 100,
+            "Name": "Name",
             "Required": true,
-            "Type": "long"
+            "Type": "string"
+          },
+          {
+            "MaxLength": 500,
+            "Name": "Description",
+            "Required": false,
+            "Type": "string"
           }
         ]
       },
