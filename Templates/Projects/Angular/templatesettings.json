@@ -1,5 +1,5 @@
 {
   "Name": "Angular",
   "Description": "ABP.io project with Angular frontend template.",
-  "AbpNewCommand": "abp new MyCompany.MyProject -u angular"
+  "AbpNewCommand": "abp new MyCompany.MyProduct -u angular"
 }
