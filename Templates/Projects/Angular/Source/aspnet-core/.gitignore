@@ -251,6 +251,9 @@ paket-files/
 .idea/
 *.sln.iml
 
+# CodeRush personal settings
+.cr/personal
+
 # MyProduct
 src/MyCompany.MyProduct.Web/Logs/*
 src/MyCompany.MyProduct.Web.Host/Logs/*

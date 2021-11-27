@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Root Type="DevExpress.CodeRush.Formatting.UI.Options.SpacesOptionsContainer">
+  <Options Language="C#">
+    <Options>
+      <Item Id="{a4f7d021-5762-49a9-956e-040794d03b98}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.BinaryExpressionSpacesOption" />
+      <Item Id="{a957508f-bb2d-484c-b792-7eba9a44f0d4}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.RelationalExpressionSpacesOption" />
+      <Item Id="{12b5408f-751d-4709-908f-d269e40b26ab}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.BitwiseExpressionSpacesOption" />
+      <Item Id="{1be4039d-43ba-4867-b1c6-1453ef76638b}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.LogicalExpressionSpacesOption" />
+      <Item Id="{8e1642cf-2fd0-4bd8-b0f9-a289bf7f889a}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.UnaryExpressionSpacesOption" />
+      <Item Id="{43888577-23ae-4e8c-9103-b0e8b006dffd}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.TernaryExpressionSpacesOption" />
+      <Item Id="{6bd37f4f-1c00-4c06-a83a-2746936e6c8b}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.AssignmentExpressionSpacesOption" />
+      <Item Id="{07d202aa-0580-489b-9883-c3a9d2f750f6}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.ExpressionSpacesOption" />
+      <Item Id="{b6cc94db-d940-47bc-9e4c-46e7d397e829}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.StatementSpacesOption">
+        <BeforeParentheses>True</BeforeParentheses>
+        <WithinParentheses>False</WithinParentheses>
+        <BeforeSemicolon>False</BeforeSemicolon>
+        <BeforeForSemicolon>False</BeforeForSemicolon>
+        <BeforeCaseColon>False</BeforeCaseColon>
+      </Item>
+      <Item Id="{20314921-1cb7-4b58-a259-e7200cfd1014}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.ArgumentListSpacesOption">
+        <Before>False</Before>
+        <Within>False</Within>
+        <WithinEmpty>False</WithinEmpty>
+        <BeforeSeparator>False</BeforeSeparator>
+        <BeforeColon>False</BeforeColon>
+      </Item>
+      <Item Id="{b031d570-6511-4aa1-8dbb-075d09d9ed72}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.ParameterListSpacesOption">
+        <Before>False</Before>
+        <Within>False</Within>
+        <WithinEmpty>False</WithinEmpty>
+        <BeforeSeparator>False</BeforeSeparator>
+      </Item>
+      <Item Id="{ca5e97ed-0399-47cd-8bc2-8c2677f273ed}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.InitializerSpacesOption">
+        <BeforeSeparator>False</BeforeSeparator>
+      </Item>
+      <Item Id="{bd007738-8ed3-480b-8618-0c8841c68fb1}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.LambdaExpressionSpacesOption" />
+      <Item Id="{e677064b-b741-49b6-b6ad-b2634258bbed}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.ArrowExpressionSpacesOption" />
+      <Item Id="{1ee97312-d3a8-49b0-b557-e396e73a7898}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.TypeParameterListSpacesOption" />
+      <Item Id="{3d7f395a-bb87-43c2-b483-45b0e5662607}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.TypeArgumentListSpacesOption">
+        <BeforeArgAngle>False</BeforeArgAngle>
+        <WithinAngles>False</WithinAngles>
+        <BeforeSeparator>False</BeforeSeparator>
+      </Item>
+      <Item Id="{a8d62687-d898-460d-9322-1088c09f5d9b}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.AttributeListSpacesOption" />
+      <Item Id="{35f5e5b0-a043-4989-8680-da5aa592ece0}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.CoalesceExpressionSpacesOption" />
+      <Item Id="{c63dcf47-261a-4a10-9a4d-5ca4957f5061}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.BaseListSpacesOption" />
+      <Item Id="{6c1b5b15-b7c8-4b91-ad28-a52e7389dc9b}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.CtorInitSpacesOption" />
+      <Item Id="{10781ebe-9235-4229-a95b-a184827b9815}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.CommentSpacesOption">
+        <SingleLineCommentShouldBeginWithSingleSpace>True</SingleLineCommentShouldBeginWithSingleSpace>
+      </Item>
+    </Options>
+  </Options>
+</Root>

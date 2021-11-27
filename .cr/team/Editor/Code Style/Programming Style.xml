@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Root Type="DevExpress.CodeAnalysis.CodeStyle.Options.CodeStyleOptions">
+  <Options Language="C#">
+    <TypeVisibilityStyle>UseExplicit</TypeVisibilityStyle>
+    <MembersVisibilityStyle>UseExplicit</MembersVisibilityStyle>
+    <UseParensInNewObjectCreation>True</UseParensInNewObjectCreation>
+  </Options>
+</Root>
