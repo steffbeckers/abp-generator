@@ -7,14 +7,14 @@ namespace MyCompany.MyProduct
 {
     public class Startup
     {
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddApplication<MyProductHttpApiHostModule>();
-        }
-
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             app.InitializeApplication();
+        }
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddApplication<MyProductHttpApiHostModule>();
         }
     }
 }

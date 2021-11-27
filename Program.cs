@@ -18,6 +18,7 @@ builder.Configuration.AddJsonFile(FileHelpers.UserBasedGeneratorSettingsFilePath
 builder.Services.AddOptions<GeneratorSettings>().Bind(builder.Configuration.GetSection("Generator"));
 builder.Services.AddSingleton<SettingsService>();
 
+builder.Services.AddSingleton<ProjectTemplatesService>();
 builder.Services.AddSingleton<SnippetTemplatesService>();
 
 builder.Services.AddSignalR();
@@ -32,6 +33,9 @@ await updateService.CheckForUpdateAsync(app.Lifetime.ApplicationStopping);
 SettingsService? settingsService = app.Services.GetRequiredService<SettingsService>();
 await settingsService.InitializeAsync();
 
+ProjectTemplatesService? projectTemplatesService = app.Services.GetRequiredService<ProjectTemplatesService>();
+await projectTemplatesService.InitializeAsync();
+
 SnippetTemplatesService? snippetTemplatesService = app.Services.GetRequiredService<SnippetTemplatesService>();
 await snippetTemplatesService.InitializeAsync();
 
@@ -44,11 +48,11 @@ app.MapGet("/api/settings", () => settingsService.GetAsync());
 app.MapPut("/api/settings", (GeneratorSettings input) => settingsService.UpdateAsync(input));
 app.MapGet("/api/settings/open-json", () => settingsService.OpenJsonAsync());
 
+app.MapGet("/api/templates/projects", () => projectTemplatesService.GetListAsync());
+app.MapPost("/api/templates/projects/generate", (ProjectTemplateGenerateInputDto input) => projectTemplatesService.GenerateAsync(input));
 app.MapGet("/api/templates/snippets", () => snippetTemplatesService.GetListAsync());
 app.MapGet("/api/templates/snippets/open-folder", () => snippetTemplatesService.OpenFolderAsync());
-app.MapPost(
-    "/api/templates/snippets/generate",
-    (GenerateSnippetTemplates input) => snippetTemplatesService.GenerateAsync(input));
+app.MapPost("/api/templates/snippets/generate", (SnippetTemplateGenerateInputDto input) => snippetTemplatesService.GenerateAsync(input));
 
 app.UseRouting();
 app.UseEndpoints(

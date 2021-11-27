@@ -12,12 +12,12 @@ namespace SteffBeckers.Abp.Generator.Templates;
 
 public class SnippetTemplatesService
 {
-    public List<SnippetTemplate> Templates = new List<SnippetTemplate>();
-
     private readonly IHandlebars? _handlebarsContext = Handlebars.Create();
     private readonly IHubContext<RealtimeHub> _realtimeHub;
     private readonly SettingsService _settingsService;
     private readonly string _templateConfigDelimiter = "#-#-#";
+
+    public List<SnippetTemplate> Templates = new List<SnippetTemplate>();
 
     public SnippetTemplatesService(
         IHubContext<RealtimeHub> realtimeHub,
@@ -29,7 +29,7 @@ public class SnippetTemplatesService
         HandlebarsHelpers.Register(_handlebarsContext);
     }
 
-    public Task GenerateAsync(GenerateSnippetTemplates input)
+    public Task GenerateAsync(SnippetTemplateGenerateInputDto input)
     {
         return Parallel.ForEachAsync(input.OutputPaths, async (outputPath, cancellationToken) =>
         {
@@ -108,7 +108,7 @@ public class SnippetTemplatesService
         };
     }
 
-    public async Task LoadTemplateAsync(string fullPath)
+    private async Task LoadTemplateAsync(string fullPath)
     {
         try
         {
@@ -120,9 +120,9 @@ public class SnippetTemplatesService
             Templates.RemoveAll(x => x.FullPath == fullPath);
 
             string outputPath = fullPath
-                .Replace(FileHelpers.UserBasedSnippetTemplatesPath + Path.DirectorySeparatorChar, "")
+                .Replace(FileHelpers.UserBasedSnippetTemplatesPath + Path.DirectorySeparatorChar, string.Empty)
                 .Replace(Path.DirectorySeparatorChar, '/')
-                .Replace(".hbs", "");
+                .Replace(".hbs", string.Empty);
 
             string templateText;
             SnippetTemplateContext templateContext = new SnippetTemplateContext();
@@ -200,7 +200,7 @@ public class SnippetTemplatesService
         }
     }
 
-    public async Task LoadTemplatesAsync()
+    private async Task LoadTemplatesAsync()
     {
         string? templateFilesDirectory = Path.GetDirectoryName(FileHelpers.UserBasedSnippetTemplatesPath);
 

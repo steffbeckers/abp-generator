@@ -1,18 +1,18 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MyCompany.MyProduct.Data;
 using Serilog;
+using System.Threading;
+using System.Threading.Tasks;
 using Volo.Abp;
 
 namespace MyCompany.MyProduct.DbMigrator
 {
     public class DbMigratorHostedService : IHostedService
     {
-        private readonly IHostApplicationLifetime _hostApplicationLifetime;
         private readonly IConfiguration _configuration;
+        private readonly IHostApplicationLifetime _hostApplicationLifetime;
 
         public DbMigratorHostedService(IHostApplicationLifetime hostApplicationLifetime, IConfiguration configuration)
         {
@@ -22,12 +22,13 @@ namespace MyCompany.MyProduct.DbMigrator
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            using (var application = AbpApplicationFactory.Create<MyProductDbMigratorModule>(options =>
-            {
-                options.Services.ReplaceConfiguration(_configuration);
-                options.UseAutofac();
-                options.Services.AddLogging(c => c.AddSerilog());
-            }))
+            using (IAbpApplicationWithInternalServiceProvider application = AbpApplicationFactory.Create<MyProductDbMigratorModule>(
+                options =>
+                {
+                    options.Services.ReplaceConfiguration(_configuration);
+                    options.UseAutofac();
+                    options.Services.AddLogging(c => c.AddSerilog());
+                }))
             {
                 application.Initialize();
 
@@ -42,6 +43,9 @@ namespace MyCompany.MyProduct.DbMigrator
             }
         }
 
-        public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

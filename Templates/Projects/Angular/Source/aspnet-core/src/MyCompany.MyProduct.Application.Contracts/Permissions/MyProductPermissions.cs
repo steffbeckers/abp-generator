@@ -4,7 +4,7 @@
     {
         public const string GroupName = "MyProduct";
 
-        //Add your own permission names. Example:
-        //public const string MyPermission1 = GroupName + ".MyPermission1";
+        // Add your own permission names. Example:
+        // public const string MyPermission1 = GroupName + ".MyPermission1";
     }
 }

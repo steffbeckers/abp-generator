@@ -29,6 +29,8 @@ public static class FileHelpers
 
     public static string TemplatesPath { get => Path.Combine(ContentRootPath, "Templates"); }
 
+    public static string ProjectTemplatesPath { get => Path.Combine(TemplatesPath, "Projects"); }
+
     public static string SnippetTemplatesPath { get => Path.Combine(TemplatesPath, "Snippets"); }
 
     public static string UserBasedTemplatesPath { get => Path.Combine(UserBasedPath, "Templates"); }

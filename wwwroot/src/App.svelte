@@ -12,6 +12,9 @@
     let selectedSnippetTemplateOutputPaths = [];
     let snippetTemplate;
 
+    let projectTemplates = [];
+    let selectedProjectTemplateName;
+
     onMount(async () => {
         fetch("/api/version")
             .then((response) => response.text())
@@ -31,6 +34,14 @@
                 snippetTemplates = data;
                 selectedSnippetTemplateOutputPaths = [snippetTemplates[0].outputPath]
                 setSnippetTemplate();
+            });
+
+            
+        fetch("/api/templates/projects")
+            .then((response) => response.json())
+            .then((data) => {
+                projectTemplates = data;
+                selectedProjectTemplateName = projectTemplates[0].name
             });
 
         realtimeConnection = new signalR.HubConnectionBuilder()
@@ -126,6 +137,18 @@
             snippetTemplate = snippetTemplates[selectedSnippetTemplateIndex];
         }
     }
+
+    async function generateSelectedProjectTemplate() {
+        await fetch("/api/templates/projects/generate", {
+            method: "POST",
+            body: JSON.stringify({
+                templateName: selectedProjectTemplateName
+            }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+    }
 </script>
 
 <div class="container">
@@ -139,7 +162,7 @@
     <div>
         <h2>Settings</h2>
         <div>
-            <button on:click={openSettingsJson} type="button">Open JSON</button>
+            <button on:click={openSettingsJson} type="button">Open generatorsettings.json</button>
         </div>
         {#if settings}
         <!-- To view the settings as JSON -->
@@ -149,7 +172,11 @@
         <div style="display: flex; flex-direction: column">
             <div style="flex: 1 1">
                 <label for="projectPathSetting">Project path</label>
-                <input bind:value={settings.projectPath} on:blur={updateSettings} type="text" id="projectPathSetting" />
+                <div style="display: flex; gap: 12px">
+                    <input style="flex: 3 1" bind:value={settings.projectPath} on:blur={updateSettings} type="text" id="projectPathSetting" />
+                    <!-- TODO -->
+                    <!-- <button style="flex: 1 1" on:click={openProjectPathFolder} type="button">Open folder</button> -->
+                </div>
             </div>
             <div style="display: flex; gap: 12px">
                 <div style="flex: 1 1">
@@ -191,25 +218,46 @@
                 <option value={snippetTemplate.outputPath}>{snippetTemplate.outputPath}</option>
                 {/each}
             </select>
-            <div>
-                <button on:click={generateSelectedSnippetTemplates} type="button">Generate</button>
+            <div style="display: flex; gap: 12px">
+                <!-- TODO -->
+                <!-- <button style="flex: 1 1" type="button">Edit template(s)</button> -->
+                <button style="flex: 1 1" on:click={generateSelectedSnippetTemplates} type="button">Generate</button>
             </div>
         </div>
         {/if}
+        {#if snippetTemplate}
         <div>
             <h3>Preview</h3>
             <div style="height: 450px; overflow-y: scroll; border: 1px solid #000000; padding: 8px 12px">
-                {#if snippetTemplate}
                 <div style="margin-bottom: 12px; font-size: 12px">// {snippetTemplate.fullPath}</div>
                 <!-- TODO: Preview syntax highlighting? -->
                 <div style="white-space: pre; font-family: Consolas">
                     {snippetTemplate.output}
                 </div>
-                {:else}
-                <span>Only select a single template to preview.</span>        
-                {/if}
             </div>
         </div>
+        {/if}
+    </div>
+    <div>
+        <h2>Project templates</h2>
+        <!-- TODO -->
+        <!-- <div>
+            <button on:click={openProjectTemplatesFolder} type="button">Open folder</button>
+        </div> -->
+        {#if projectTemplates}
+        <div style="display: flex; flex-direction: column">
+            <select bind:value={selectedProjectTemplateName}>
+                {#each projectTemplates as projectTemplate}
+                <option value={projectTemplate.name}>{projectTemplate.name} - {projectTemplate.description}</option>
+                {/each}
+            </select>
+            <div style="display: flex; gap: 12px">
+                <!-- TODO -->
+                <!-- <button style="flex: 1 1" type="button">Edit template</button> -->
+                <button style="flex: 1 1" on:click={generateSelectedProjectTemplate} type="button">Generate</button>
+            </div>
+        </div>
+        {/if}
     </div>
     {/if}
 </div>

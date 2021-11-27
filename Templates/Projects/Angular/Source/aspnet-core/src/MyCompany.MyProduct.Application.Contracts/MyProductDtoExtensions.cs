@@ -1,6 +1,4 @@
-﻿using Volo.Abp.Identity;
-using Volo.Abp.ObjectExtending;
-using Volo.Abp.Threading;
+﻿using Volo.Abp.Threading;
 
 namespace MyCompany.MyProduct
 {
@@ -10,9 +8,10 @@ namespace MyCompany.MyProduct
 
         public static void Configure()
         {
-            OneTimeRunner.Run(() =>
-            {
-                /* You can add extension properties to DTOs
+            OneTimeRunner.Run(
+                () =>
+                {
+                    /* You can add extension properties to DTOs
                  * defined in the depended modules.
                  *
                  * Example:
@@ -23,7 +22,7 @@ namespace MyCompany.MyProduct
                  * See the documentation for more:
                  * https://docs.abp.io/en/abp/latest/Object-Extensions
                  */
-            });
+                });
         }
     }
 }

@@ -17,16 +17,12 @@ namespace MyCompany.MyProduct
         typeof(AbpPermissionManagementApplicationModule),
         typeof(AbpTenantManagementApplicationModule),
         typeof(AbpFeatureManagementApplicationModule),
-        typeof(AbpSettingManagementApplicationModule)
-        )]
+        typeof(AbpSettingManagementApplicationModule))]
     public class MyProductApplicationModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<AbpAutoMapperOptions>(options =>
-            {
-                options.AddMaps<MyProductApplicationModule>();
-            });
+            Configure<AbpAutoMapperOptions>(options => options.AddMaps<MyProductApplicationModule>());
         }
     }
 }
