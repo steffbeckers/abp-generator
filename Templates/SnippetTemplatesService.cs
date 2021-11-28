@@ -146,6 +146,31 @@ namespace SteffBeckers.Abp.Generator.Templates;
             }
         }
 
+        public Task EditAsync(SnippetTemplateEditInputDto input)
+        {
+            Parallel.ForEach(
+                input.OutputPaths,
+                (string outputPath) =>
+                {
+                    SnippetTemplate? snippetTemplate = Templates.FirstOrDefault(x => x.OutputPath == outputPath);
+
+                    if (snippetTemplate?.FullPath == null)
+                    {
+                        return;
+                    }
+
+                    Process.Start(
+                        new ProcessStartInfo()
+                        {
+                            FileName = snippetTemplate?.FullPath,
+                            UseShellExecute = true,
+                            Verb = "open"
+                        });
+                });
+
+            return Task.CompletedTask;
+        }
+
         public Task GenerateAsync(SnippetTemplateGenerateInputDto input)
         {
             return Parallel.ForEachAsync(

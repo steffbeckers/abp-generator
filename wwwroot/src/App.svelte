@@ -118,6 +118,18 @@
         await fetch("/api/templates/snippets/open-folder");
     }
 
+    async function editSelectedSnippetTemplates() {
+        await fetch("/api/templates/snippets/edit", {
+            method: "POST",
+            body: JSON.stringify({
+                outputPaths: selectedSnippetTemplateOutputPaths
+            }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+    }
+
     async function generateSelectedSnippetTemplates() {
         await fetch("/api/templates/snippets/generate", {
             method: "POST",
@@ -225,10 +237,12 @@
                 <option value={snippetTemplate.outputPath}>{snippetTemplate.outputPath}</option>
                 {/each}
             </select>
+            {#if selectedSnippetTemplateOutputPaths.length > 0}
             <div style="display: flex; gap: 12px">
-                <button style="flex: 1 1" type="button">Edit template(s)</button>
-                <button style="flex: 1 1" on:click={generateSelectedSnippetTemplates} type="button">Generate snippet(s)</button>
+                <button style="flex: 1 1" on:click={editSelectedSnippetTemplates} type="button">Edit template{#if selectedSnippetTemplateOutputPaths.length > 1}s{/if}</button>
+                <button style="flex: 1 1" on:click={generateSelectedSnippetTemplates} type="button">Generate snippet{#if selectedSnippetTemplateOutputPaths.length > 1}s{/if}</button>
             </div>
+            {/if}
         </div>
         {/if}
         {#if snippetTemplate}

@@ -58,6 +58,9 @@ app.MapPost(
 app.MapGet("/api/templates/snippets", () => snippetTemplatesService.GetListAsync());
 app.MapGet("/api/templates/snippets/open-folder", () => snippetTemplatesService.OpenFolderAsync());
 app.MapPost(
+    "/api/templates/snippets/edit",
+    (SnippetTemplateEditInputDto input) => snippetTemplatesService.EditAsync(input));
+app.MapPost(
     "/api/templates/snippets/generate",
     (SnippetTemplateGenerateInputDto input) => snippetTemplatesService.GenerateAsync(input));
 
