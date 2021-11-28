@@ -1,4 +1,4 @@
-﻿namespace MyCompany.MyProduct.Settings
+namespace MyCompany.MyProduct.Settings
 {
     public static class MyProductSettings
     {

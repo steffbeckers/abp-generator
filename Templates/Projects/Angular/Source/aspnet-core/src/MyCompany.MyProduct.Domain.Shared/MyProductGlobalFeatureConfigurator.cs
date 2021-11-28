@@ -1,4 +1,4 @@
-﻿using Volo.Abp.Threading;
+using Volo.Abp.Threading;
 
 namespace MyCompany.MyProduct
 {

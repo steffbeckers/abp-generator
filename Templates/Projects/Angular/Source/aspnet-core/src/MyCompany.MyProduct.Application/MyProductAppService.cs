@@ -1,4 +1,4 @@
-﻿using MyCompany.MyProduct.Localization;
+using MyCompany.MyProduct.Localization;
 using Volo.Abp.Application.Services;
 
 namespace MyCompany.MyProduct

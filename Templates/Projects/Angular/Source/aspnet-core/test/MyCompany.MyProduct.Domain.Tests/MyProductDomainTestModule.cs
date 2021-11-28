@@ -1,4 +1,4 @@
-﻿using MyCompany.MyProduct.EntityFrameworkCore;
+using MyCompany.MyProduct.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 
 namespace MyCompany.MyProduct

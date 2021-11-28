@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace MyCompany.MyProduct.Models.Test
 {

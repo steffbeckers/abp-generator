@@ -1,4 +1,4 @@
-﻿namespace MyCompany.MyProduct.Permissions
+namespace MyCompany.MyProduct.Permissions
 {
     public static class MyProductPermissions
     {

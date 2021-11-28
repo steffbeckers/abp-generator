@@ -1,4 +1,4 @@
-﻿using Volo.Abp.DependencyInjection;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Ui.Branding;
 
 namespace MyCompany.MyProduct

@@ -1,2 +1,2 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 [assembly:InternalsVisibleToAttribute("MyCompany.MyProduct.EntityFrameworkCore.Tests")]

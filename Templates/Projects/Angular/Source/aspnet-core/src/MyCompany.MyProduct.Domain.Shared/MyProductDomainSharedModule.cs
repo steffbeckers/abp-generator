@@ -1,4 +1,4 @@
-﻿using MyCompany.MyProduct.Localization;
+using MyCompany.MyProduct.Localization;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.FeatureManagement;

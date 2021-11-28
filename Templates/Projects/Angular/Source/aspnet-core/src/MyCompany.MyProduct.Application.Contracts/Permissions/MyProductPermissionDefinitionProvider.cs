@@ -1,4 +1,4 @@
-﻿using MyCompany.MyProduct.Localization;
+using MyCompany.MyProduct.Localization;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
 

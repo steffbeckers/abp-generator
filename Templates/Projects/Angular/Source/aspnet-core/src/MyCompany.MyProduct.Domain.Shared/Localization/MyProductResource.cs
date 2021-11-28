@@ -1,4 +1,4 @@
-﻿using Volo.Abp.Localization;
+using Volo.Abp.Localization;
 
 namespace MyCompany.MyProduct.Localization
 {

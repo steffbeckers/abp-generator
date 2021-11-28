@@ -1,4 +1,4 @@
-﻿namespace MyCompany.MyProduct.MultiTenancy
+namespace MyCompany.MyProduct.MultiTenancy
 {
     public static class MultiTenancyConsts
     {
