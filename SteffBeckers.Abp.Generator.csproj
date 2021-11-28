@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AssemblyName>sbabpgen</AssemblyName>
-    <Version>1.0.27</Version>
+    <Version>1.0.28</Version>
     <PackAsTool>true</PackAsTool>
     <IsPackable>true</IsPackable>
     <Authors>Steff Beckers</Authors>
@@ -22,10 +22,10 @@
     <PackageReference Include="NuGet.Protocol" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
-	<Compile Remove="Templates\Projects\**;" />
-	<None Include="wwwroot\public\**;Templates\Projects\**;Templates\Snippets\**">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-	</None>
+    <Compile Remove="Templates\Projects\**;" />
+    <None Include="wwwroot\public\**;Templates\Projects\**;Templates\Snippets\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
   </ItemGroup>
 </Project>
