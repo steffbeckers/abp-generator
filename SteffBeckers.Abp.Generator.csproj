@@ -22,16 +22,10 @@
     <PackageReference Include="NuGet.Protocol" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="wwwroot\public\**\*">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </None>
-    <Content Include="Templates\Snippets\**\*.hbs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Templates\Projects\**" />
+	<Compile Remove="Templates\Projects\**;" />
+	<None Include="wwwroot\public\**;Templates\Projects\**;Templates\Snippets\**">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	</None>
   </ItemGroup>
 </Project>
