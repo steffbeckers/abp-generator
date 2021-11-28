@@ -31,12 +31,16 @@ namespace SteffBeckers.Abp.Generator.Updates;
             IPackageSearchMetadata? latestPackage = packages.OrderByDescending(x => x.Identity.Version).FirstOrDefault();
 
             if (latestPackage == null)
+            {
                 return;
+            }
 
             string latestVersion = latestPackage.Identity.Version.Version.ToString(3);
 
             if (Version == latestVersion)
+            {
                 return;
+            }
 
             Console.WriteLine();
             Console.WriteLine($"New update available! Use following command to update:");

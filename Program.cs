@@ -47,19 +47,22 @@ app.MapGet("/api/version", () => updateService.Version);
 app.MapGet("/api/settings", () => settingsService.GetAsync());
 app.MapPut("/api/settings", (GeneratorSettings input) => settingsService.UpdateAsync(input));
 app.MapGet("/api/settings/open-json", () => settingsService.OpenJsonAsync());
+app.MapGet("/api/settings/open-project-folder", () => settingsService.OpenProjectFolderAsync());
 
 app.MapGet("/api/templates/projects", () => projectTemplatesService.GetListAsync());
-app.MapPost("/api/templates/projects/generate", (ProjectTemplateGenerateInputDto input) => projectTemplatesService.GenerateAsync(input));
+app.MapGet("/api/templates/projects/open-folder", () => projectTemplatesService.OpenFolderAsync());
+app.MapPost(
+    "/api/templates/projects/generate",
+    (ProjectTemplateGenerateInputDto input) => projectTemplatesService.GenerateAsync(input));
+
 app.MapGet("/api/templates/snippets", () => snippetTemplatesService.GetListAsync());
 app.MapGet("/api/templates/snippets/open-folder", () => snippetTemplatesService.OpenFolderAsync());
-app.MapPost("/api/templates/snippets/generate", (SnippetTemplateGenerateInputDto input) => snippetTemplatesService.GenerateAsync(input));
+app.MapPost(
+    "/api/templates/snippets/generate",
+    (SnippetTemplateGenerateInputDto input) => snippetTemplatesService.GenerateAsync(input));
 
 app.UseRouting();
-app.UseEndpoints(
-    endpoints =>
-    {
-        endpoints.MapHub<RealtimeHub>("/signalr-hubs/realtime");
-    });
+app.UseEndpoints(endpoints => endpoints.MapHub<RealtimeHub>("/signalr-hubs/realtime"));
 
 Task run = app.RunAsync();
 

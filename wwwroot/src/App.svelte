@@ -110,6 +110,10 @@
         await fetch("/api/settings/open-json");
     }
 
+    async function openProjectPathFolder() {
+        await fetch("/api/settings/open-project-folder");
+    }
+
     async function openSnippetTemplatesFolder() {
         await fetch("/api/templates/snippets/open-folder");
     }
@@ -136,6 +140,10 @@
         if (selectedSnippetTemplateIndex > -1) {
             snippetTemplate = snippetTemplates[selectedSnippetTemplateIndex];
         }
+    }
+
+    async function openProjectTemplatesFolder() {
+        await fetch("/api/templates/projects/open-folder");
     }
 
     async function generateSelectedProjectTemplate() {
@@ -174,8 +182,7 @@
                 <label for="projectPathSetting">Project path</label>
                 <div style="display: flex; gap: 12px">
                     <input style="flex: 3 1" bind:value={settings.projectPath} on:blur={updateSettings} type="text" id="projectPathSetting" />
-                    <!-- TODO -->
-                    <!-- <button style="flex: 1 1" on:click={openProjectPathFolder} type="button">Open folder</button> -->
+                    <button style="flex: 1 1" on:click={openProjectPathFolder} type="button">Open folder</button>
                 </div>
             </div>
             <div style="display: flex; gap: 12px">
@@ -219,9 +226,8 @@
                 {/each}
             </select>
             <div style="display: flex; gap: 12px">
-                <!-- TODO -->
-                <!-- <button style="flex: 1 1" type="button">Edit template(s)</button> -->
-                <button style="flex: 1 1" on:click={generateSelectedSnippetTemplates} type="button">Generate</button>
+                <button style="flex: 1 1" type="button">Edit template(s)</button>
+                <button style="flex: 1 1" on:click={generateSelectedSnippetTemplates} type="button">Generate snippet(s)</button>
             </div>
         </div>
         {/if}
@@ -240,10 +246,9 @@
     </div>
     <div>
         <h2>Project templates</h2>
-        <!-- TODO -->
-        <!-- <div>
+        <div>
             <button on:click={openProjectTemplatesFolder} type="button">Open folder</button>
-        </div> -->
+        </div>
         {#if projectTemplates}
         <div style="display: flex; flex-direction: column">
             <select bind:value={selectedProjectTemplateName}>
@@ -252,9 +257,7 @@
                 {/each}
             </select>
             <div style="display: flex; gap: 12px">
-                <!-- TODO -->
-                <!-- <button style="flex: 1 1" type="button">Edit template</button> -->
-                <button style="flex: 1 1" on:click={generateSelectedProjectTemplate} type="button">Generate</button>
+                <button style="flex: 1 1" on:click={generateSelectedProjectTemplate} type="button">Generate project</button>
             </div>
         </div>
         {/if}
