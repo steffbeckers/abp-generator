@@ -1,9 +1,11 @@
-<svelte:head>
+<!-- <svelte:head>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/github.min.css">
-</svelte:head>
+</svelte:head> -->
 
 <script>
-    import LibLoader from './LibLoader.svelte';
+    // TODO
+    // import LibLoader from './LibLoader.svelte';
+
     import { onMount } from "svelte";
     import * as signalR from "@microsoft/signalr";
     
@@ -101,9 +103,10 @@
         await realtimeConnection.start();
     })
 
-    function highlightJsLoaded() {
-        hljs.highlightAll();
-    }
+    // TODO
+    // function highlightJsLoaded() {
+    //     hljs.highlightAll();
+    // }
 
     async function updateSettings() {
         await fetch("/api/settings", {
@@ -160,6 +163,10 @@
         let selectedSnippetTemplateIndex = snippetTemplates.map(x => x.outputPath).indexOf(selectedSnippetTemplateOutputPaths[0]);
         if (selectedSnippetTemplateIndex > -1) {
             snippetTemplate = snippetTemplates[selectedSnippetTemplateIndex];
+
+            // TODO
+            // hljs.initHighlighting.called = false;
+            // hljs.initHighlighting();
         }
     }
 
@@ -180,8 +187,8 @@
     }
 </script>
 
-<LibLoader url="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"
-on:loaded="{highlightJsLoaded}" />
+<!-- <LibLoader url="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"
+on:loaded="{highlightJsLoaded}" /> -->
 
 <div class="container">
     <h1>ABP.io Generator</h1>
