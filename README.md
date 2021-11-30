@@ -1,5 +1,6 @@
 # Code generator for ABP.io projects
 
+![Screenshot](.docs/screenshots/main.png)
 
 ## Usage
 
