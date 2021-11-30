@@ -1,5 +1,7 @@
 # Code generator for ABP.io projects
 
+![Nuget](https://img.shields.io/nuget/v/SteffBeckers.Abp.Generator?style=for-the-badge)
+
 ## Usage
 
 ```powershell
