@@ -1,6 +1,5 @@
 # Code generator for ABP.io projects
 
-![Nuget](https://img.shields.io/nuget/v/SteffBeckers.Abp.Generator?style=for-the-badge)
 
 ## Usage
 
@@ -9,6 +8,8 @@ sbabpgen
 ```
 
 ## dotnet tool NuGet package
+
+![Nuget](https://img.shields.io/nuget/v/SteffBeckers.Abp.Generator?style=for-the-badge)
 
 https://www.nuget.org/packages/SteffBeckers.Abp.Generator
 
