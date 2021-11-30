@@ -22,16 +22,14 @@ dotnet tool install -g SteffBeckers.Abp.Generator
 ### Updates
 
 ```powershell
-dotnet tool update -g SteffBeckers.Abp.Generator
+dotnet tool update -g SteffBeckers.Abp.Generator --no-cache
 ```
 
 ### Release
 
 ```powershell
 dotnet pack -c Release
-```
-
-```powershell
+cd bin/Release/
 dotnet nuget push SteffBeckers.Abp.Generator.x.x.x.nupkg --api-key <API key here> --source https://api.nuget.org/v3/index.json
 ```
 
