@@ -1,6 +1,12 @@
 # Code generator for ABP.io projects
 
-## NuGet
+## Usage
+
+```powershell
+sbabpgen
+```
+
+## dotnet tool NuGet package
 
 https://www.nuget.org/packages/SteffBeckers.Abp.Generator
 
@@ -24,4 +30,10 @@ dotnet pack -c Release
 
 ```powershell
 dotnet nuget push SteffBeckers.Abp.Generator.x.x.x.nupkg --api-key <API key here> --source https://api.nuget.org/v3/index.json
+```
+
+OR
+
+```powershell
+publish.ps1 <API key here>
 ```
