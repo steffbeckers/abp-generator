@@ -1,4 +1,9 @@
+<svelte:head>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/github.min.css">
+</svelte:head>
+
 <script>
+    import LibLoader from './LibLoader.svelte';
     import { onMount } from "svelte";
     import * as signalR from "@microsoft/signalr";
     
@@ -96,6 +101,10 @@
         await realtimeConnection.start();
     })
 
+    function highlightJsLoaded() {
+        hljs.highlightAll();
+    }
+
     async function updateSettings() {
         await fetch("/api/settings", {
             method: "PUT",
@@ -171,6 +180,9 @@
     }
 </script>
 
+<LibLoader url="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"
+on:loaded="{highlightJsLoaded}" />
+
 <div class="container">
     <h1>ABP.io Generator</h1>
     {#if version}<div>Version: {version}</div>{/if}
@@ -221,7 +233,7 @@
                     <input bind:value={settings.context.aggregateRoot.namePlural} on:blur={updateSettings} type="text" id="aggregateRootNamePluralSetting" />
                 </div>
             </div>
-            <!-- TODO: Add other context based settings -->
+            <div>TODO: Add other context based settings like list of entities.</div>
         </div>
         {/if}
     </div>
@@ -250,10 +262,11 @@
             <h3>Preview</h3>
             <div style="height: 450px; overflow-y: scroll; border: 1px solid #000000; padding: 8px 12px">
                 <div style="margin-bottom: 12px; font-size: 12px">// {snippetTemplate.fullPath}</div>
-                <!-- TODO: Preview syntax highlighting? -->
-                <div style="white-space: pre; font-family: Consolas">
-                    {snippetTemplate.output}
-                </div>
+                <pre>
+                    <code class="language-csharp" style="font-size: 14px">
+                        {snippetTemplate.output}
+                    </code>
+                </pre>
             </div>
         </div>
         {/if}
