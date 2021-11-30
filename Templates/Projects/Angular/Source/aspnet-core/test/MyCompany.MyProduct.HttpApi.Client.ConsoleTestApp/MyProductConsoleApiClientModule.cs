@@ -8,9 +8,8 @@ using Volo.Abp.Modularity;
 namespace MyCompany.MyProduct.HttpApi.Client.ConsoleTestApp
 {
     [DependsOn(
-        typeof(MyProductHttpApiClientModule),
-        typeof(AbpHttpClientIdentityModelModule)
-        )]
+        typeof(AbpHttpClientIdentityModelModule),
+        typeof(MyProductHttpApiClientModule))]
     public class MyProductConsoleApiClientModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -20,8 +19,7 @@ namespace MyCompany.MyProduct.HttpApi.Client.ConsoleTestApp
                 options.ProxyClientBuildActions.Add((remoteServiceName, clientBuilder) =>
                 {
                     clientBuilder.AddTransientHttpErrorPolicy(
-                        policyBuilder => policyBuilder.WaitAndRetryAsync(3, i => TimeSpan.FromSeconds(Math.Pow(2, i)))
-                    );
+                        policyBuilder => policyBuilder.WaitAndRetryAsync(3, i => TimeSpan.FromSeconds(Math.Pow(2, i))));
                 });
             });
         }

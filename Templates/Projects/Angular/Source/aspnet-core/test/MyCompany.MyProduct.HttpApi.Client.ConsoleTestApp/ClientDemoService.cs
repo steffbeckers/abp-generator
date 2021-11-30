@@ -16,7 +16,7 @@ namespace MyCompany.MyProduct.HttpApi.Client.ConsoleTestApp
 
         public async Task RunAsync()
         {
-            var output = await _profileAppService.GetAsync();
+            ProfileDto output = await _profileAppService.GetAsync();
             Console.WriteLine($"UserName : {output.UserName}");
             Console.WriteLine($"Email    : {output.Email}");
             Console.WriteLine($"Name     : {output.Name}");

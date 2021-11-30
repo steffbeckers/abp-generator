@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using Volo.Abp;
 using Volo.Abp.Authorization;
 using Volo.Abp.Autofac;
@@ -11,32 +12,15 @@ using Volo.Abp.Threading;
 namespace MyCompany.MyProduct
 {
     [DependsOn(
+        typeof(AbpAuthorizationModule),
         typeof(AbpAutofacModule),
         typeof(AbpTestBaseModule),
-        typeof(AbpAuthorizationModule),
-        typeof(MyProductDomainModule)
-        )]
+        typeof(MyProductDomainModule))]
     public class MyProductTestBaseModule : AbpModule
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
-        {
-            PreConfigure<AbpIdentityServerBuilderOptions>(options =>
-            {
-                options.AddDeveloperSigningCredential = false;
-            });
-
-            PreConfigure<IIdentityServerBuilder>(identityServerBuilder =>
-            {
-                identityServerBuilder.AddDeveloperSigningCredential(false, System.Guid.NewGuid().ToString());
-            });
-        }
-
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<AbpBackgroundJobOptions>(options =>
-            {
-                options.IsJobExecutionEnabled = false;
-            });
+            Configure<AbpBackgroundJobOptions>(options => options.IsJobExecutionEnabled = false);
 
             context.Services.AddAlwaysAllowAuthorization();
         }
@@ -46,17 +30,25 @@ namespace MyCompany.MyProduct
             SeedTestData(context);
         }
 
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            PreConfigure<AbpIdentityServerBuilderOptions>(options => options.AddDeveloperSigningCredential = false);
+
+            PreConfigure<IIdentityServerBuilder>(
+                identityServerBuilder => identityServerBuilder.AddDeveloperSigningCredential(
+                    false, Guid.NewGuid().ToString()));
+        }
+
         private static void SeedTestData(ApplicationInitializationContext context)
         {
-            AsyncHelper.RunSync(async () =>
-            {
-                using (var scope = context.ServiceProvider.CreateScope())
+            AsyncHelper.RunSync(
+                async () =>
                 {
-                    await scope.ServiceProvider
-                        .GetRequiredService<IDataSeeder>()
-                        .SeedAsync();
-                }
-            });
+                    using (IServiceScope scope = context.ServiceProvider.CreateScope())
+                    {
+                        await scope.ServiceProvider.GetRequiredService<IDataSeeder>().SeedAsync();
+                    }
+                });
         }
     }
 }

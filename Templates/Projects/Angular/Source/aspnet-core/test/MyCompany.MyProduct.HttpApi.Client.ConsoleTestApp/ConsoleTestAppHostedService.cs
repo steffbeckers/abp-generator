@@ -1,8 +1,8 @@
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 
 namespace MyCompany.MyProduct.HttpApi.Client.ConsoleTestApp
@@ -18,20 +18,21 @@ namespace MyCompany.MyProduct.HttpApi.Client.ConsoleTestApp
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            using (var application = AbpApplicationFactory.Create<MyProductConsoleApiClientModule>(options =>
-            {
-                options.Services.ReplaceConfiguration(_configuration);
-            }))
+            using (IAbpApplicationWithInternalServiceProvider application = AbpApplicationFactory.Create<MyProductConsoleApiClientModule>(
+                options => options.Services.ReplaceConfiguration(_configuration)))
             {
                 application.Initialize();
 
-                var demo = application.ServiceProvider.GetRequiredService<ClientDemoService>();
+                ClientDemoService demo = application.ServiceProvider.GetRequiredService<ClientDemoService>();
                 await demo.RunAsync();
 
                 application.Shutdown();
             }
         }
 
-        public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

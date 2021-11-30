@@ -11,52 +11,50 @@ using Volo.Abp.Modularity;
 namespace MyCompany.MyProduct.EntityFrameworkCore
 {
     [DependsOn(
+        typeof(AbpEntityFrameworkCoreSqliteModule),
         typeof(MyProductEntityFrameworkCoreModule),
-        typeof(MyProductTestBaseModule),
-        typeof(AbpEntityFrameworkCoreSqliteModule)
-        )]
+        typeof(MyProductTestBaseModule))]
     public class MyProductEntityFrameworkCoreTestModule : AbpModule
     {
         private SqliteConnection _sqliteConnection;
+
+        private void ConfigureInMemorySqlite(IServiceCollection services)
+        {
+            _sqliteConnection = CreateDatabaseAndGetConnection();
+
+            services.Configure<AbpDbContextOptions>(
+                options => options.Configure(
+                    context =>
+                    {
+                        context.DbContextOptions.UseSqlite(_sqliteConnection);
+                    }));
+        }
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             ConfigureInMemorySqlite(context.Services);
         }
 
-        private void ConfigureInMemorySqlite(IServiceCollection services)
-        {
-            _sqliteConnection = CreateDatabaseAndGetConnection();
-
-            services.Configure<AbpDbContextOptions>(options =>
-            {
-                options.Configure(context =>
-                {
-                    context.DbContextOptions.UseSqlite(_sqliteConnection);
-                });
-            });
-        }
-
-        public override void OnApplicationShutdown(ApplicationShutdownContext context)
-        {
-            _sqliteConnection.Dispose();
-        }
-
         private static SqliteConnection CreateDatabaseAndGetConnection()
         {
-            var connection = new SqliteConnection("Data Source=:memory:");
+            SqliteConnection connection = new SqliteConnection("Data Source=:memory:");
             connection.Open();
 
-            var options = new DbContextOptionsBuilder<MyProductDbContext>()
+            DbContextOptions<MyProductDbContext> options = new DbContextOptionsBuilder<MyProductDbContext>()
                 .UseSqlite(connection)
                 .Options;
 
-            using (var context = new MyProductDbContext(options))
+            using (MyProductDbContext context = new MyProductDbContext(options))
             {
                 context.GetService<IRelationalDatabaseCreator>().CreateTables();
             }
 
             return connection;
+        }
+
+        public override void OnApplicationShutdown(ApplicationShutdownContext context)
+        {
+            _sqliteConnection.Dispose();
         }
     }
 }
