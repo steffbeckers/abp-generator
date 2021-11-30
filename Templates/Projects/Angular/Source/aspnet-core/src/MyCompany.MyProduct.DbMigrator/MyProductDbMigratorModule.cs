@@ -7,8 +7,8 @@ namespace MyCompany.MyProduct.DbMigrator
 {
     [DependsOn(
         typeof(AbpAutofacModule),
-        typeof(MyProductEntityFrameworkCoreModule),
-        typeof(MyProductApplicationContractsModule))]
+        typeof(MyProductApplicationContractsModule),
+        typeof(MyProductEntityFrameworkCoreModule))]
     public class MyProductDbMigratorModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

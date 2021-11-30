@@ -1,10 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>MyCompany.MyProduct</RootNamespace>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,12 +17,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.Account.HttpApi" Version="4.4.4" />
-    <PackageReference Include="Volo.Abp.Identity.HttpApi" Version="4.4.4" />
-    <PackageReference Include="Volo.Abp.PermissionManagement.HttpApi" Version="4.4.4" />
-    <PackageReference Include="Volo.Abp.TenantManagement.HttpApi" Version="4.4.4" />
-    <PackageReference Include="Volo.Abp.FeatureManagement.HttpApi" Version="4.4.4" />
-    <PackageReference Include="Volo.Abp.SettingManagement.HttpApi" Version="4.4.4" />
+	<PackageReference Include="Volo.Abp.Account.HttpApi" Version="4.4.4" />
+	<PackageReference Include="Volo.Abp.FeatureManagement.HttpApi" Version="4.4.4" />
+	<PackageReference Include="Volo.Abp.Identity.HttpApi" Version="4.4.4" />
+	<PackageReference Include="Volo.Abp.PermissionManagement.HttpApi" Version="4.4.4" />
+	<PackageReference Include="Volo.Abp.SettingManagement.HttpApi" Version="4.4.4" />
+	<PackageReference Include="Volo.Abp.TenantManagement.HttpApi" Version="4.4.4" />
   </ItemGroup>
 
 </Project>

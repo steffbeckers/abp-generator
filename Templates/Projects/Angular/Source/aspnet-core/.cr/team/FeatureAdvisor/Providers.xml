@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Root Type="DevExpress.CodeRush.Foundation.FeatureAdvisor.Options.FeatureAdvisorOptions">
+  <Options Language="Neutral">
+    <Providers>
+      <Item Id="{8094b9a2-bddc-40ea-8f0f-31ee157265a8}">
+        <AdvisorName>Template: Case statement declaration</AdvisorName>
+        <Enabled>True</Enabled>
+      </Item>
+      <Item Id="{b52a490f-e137-41bc-911a-8bd8b968c474}">
+        <AdvisorName>Template: Type declaration</AdvisorName>
+        <Enabled>True</Enabled>
+      </Item>
+      <Item Id="{0c291c12-5f60-4b61-bf31-7982040fe4a6}">
+        <AdvisorName>Template: Field declaration</AdvisorName>
+        <Enabled>True</Enabled>
+      </Item>
+      <Item Id="{7c7f4c6c-77ab-408f-842d-61d7d1f48617}">
+        <AdvisorName>Template: For statement declaration</AdvisorName>
+        <Enabled>True</Enabled>
+      </Item>
+      <Item Id="{b898e079-cb5d-4cf3-b06f-8b81881694df}">
+        <AdvisorName>Template: Method declaration</AdvisorName>
+        <Enabled>True</Enabled>
+      </Item>
+      <Item Id="{fac84cbd-8a9d-4767-bcc2-73a35a1cd224}">
+        <AdvisorName>Template: Property declaration</AdvisorName>
+        <Enabled>True</Enabled>
+      </Item>
+      <Item Id="{c7c69743-dd5c-4ca0-86f0-bcd1ae43573b}">
+        <AdvisorName>Template: Switch\Select statement declaration</AdvisorName>
+        <Enabled>True</Enabled>
+      </Item>
+      <Item Id="{57d00d6d-34ba-421d-af3c-6df9a1f5db2b}">
+        <AdvisorName>Template: Using statement declaration</AdvisorName>
+        <Enabled>True</Enabled>
+      </Item>
+      <Item Id="{e59966d1-8675-4666-a2d7-cf029994798c}">
+        <AdvisorName>Clipboard History</AdvisorName>
+        <Enabled>True</Enabled>
+      </Item>
+      <Item Id="{8178a191-82f2-4e96-b96c-881099d841b2}">
+        <AdvisorName>Code Cleanup</AdvisorName>
+        <Enabled>True</Enabled>
+      </Item>
+      <Item Id="{1a667a51-3fef-427d-b7bb-79fa6cd8dd01}">
+        <AdvisorName>Comment Selection</AdvisorName>
+        <Enabled>True</Enabled>
+      </Item>
+      <Item Id="{66696242-8408-4d44-bed5-04a848faec84}">
+        <AdvisorName>Smart Duplicate Line</AdvisorName>
+        <Enabled>True</Enabled>
+      </Item>
+      <Item Id="{45efbb03-d23f-4267-8ac7-f456bec2f993}">
+        <AdvisorName>Improve performance with Ngen</AdvisorName>
+        <Enabled>True</Enabled>
+      </Item>
+    </Providers>
+  </Options>
+</Root>

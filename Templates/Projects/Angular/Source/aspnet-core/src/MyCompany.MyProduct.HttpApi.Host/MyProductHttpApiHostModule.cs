@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -32,23 +33,22 @@ using Volo.Abp.VirtualFileSystem;
 namespace MyCompany.MyProduct
 {
     [DependsOn(
-        typeof(MyProductHttpApiModule),
-        typeof(AbpAutofacModule),
+        typeof(AbpAccountWebIdentityServerModule),
+        typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpAspNetCoreMultiTenancyModule),
+        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+        typeof(AbpAspNetCoreSerilogModule),
+        typeof(AbpAutofacModule),
+        typeof(AbpSwashbuckleModule),
         typeof(MyProductApplicationModule),
         typeof(MyProductEntityFrameworkCoreModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-        typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
-        typeof(AbpAccountWebIdentityServerModule),
-        typeof(AbpAspNetCoreSerilogModule),
-        typeof(AbpSwashbuckleModule)
-    )]
+        typeof(MyProductHttpApiModule))]
     public class MyProductHttpApiHostModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            var configuration = context.Services.GetConfiguration();
-            var hostingEnvironment = context.Services.GetHostingEnvironment();
+            IConfiguration configuration = context.Services.GetConfiguration();
+            IWebHostEnvironment hostingEnvironment = context.Services.GetHostingEnvironment();
 
             ConfigureBundles();
             ConfigureUrls(configuration);
@@ -85,7 +85,7 @@ namespace MyCompany.MyProduct
 
         private void ConfigureVirtualFileSystem(ServiceConfigurationContext context)
         {
-            var hostingEnvironment = context.Services.GetHostingEnvironment();
+            IWebHostEnvironment hostingEnvironment = context.Services.GetHostingEnvironment();
 
             if (hostingEnvironment.IsDevelopment())
             {
@@ -137,13 +137,26 @@ namespace MyCompany.MyProduct
                 configuration["AuthServer:Authority"],
                 new Dictionary<string, string>
                 {
-                    {"MyProduct", "MyProduct API"}
+                    { "MyProduct", "MyProduct API" }
                 },
                 options =>
                 {
                     options.SwaggerDoc("v1", new OpenApiInfo {Title = "MyProduct API", Version = "v1"});
+                    
                     options.DocInclusionPredicate((docName, description) => true);
                     options.CustomSchemaIds(type => type.FullName);
+
+                    // Set the comments path for the Swagger JSON and UI.
+                    List<string> xmlFileNames = new List<string>()
+                    {
+                        "MyCompany.MyProduct.HttpApi.Host.xml",
+                        "MyCompany.MyProduct.HttpApi.xml"
+                    };
+                    foreach (string xmlFileName in xmlFileNames)
+                    {
+                        string xmlFilePath = Path.Combine(AppContext.BaseDirectory, xmlFileName);
+                        options.IncludeXmlComments(xmlFilePath);
+                    }
                 });
         }
 
@@ -151,23 +164,8 @@ namespace MyCompany.MyProduct
         {
             Configure<AbpLocalizationOptions>(options =>
             {
-                options.Languages.Add(new LanguageInfo("ar", "ar", "العربية"));
-                options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
-                options.Languages.Add(new LanguageInfo("en", "en", "English"));
-                options.Languages.Add(new LanguageInfo("en-GB", "en-GB", "English (UK)"));
-                options.Languages.Add(new LanguageInfo("fi", "fi", "Finnish"));
-                options.Languages.Add(new LanguageInfo("fr", "fr", "Français"));
-                options.Languages.Add(new LanguageInfo("hi", "hi", "Hindi", "in"));
-                options.Languages.Add(new LanguageInfo("it", "it", "Italian", "it"));
-                options.Languages.Add(new LanguageInfo("hu", "hu", "Magyar"));
-                options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
-                options.Languages.Add(new LanguageInfo("ru", "ru", "Русский"));
-                options.Languages.Add(new LanguageInfo("sk", "sk", "Slovak"));
-                options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
-                options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
-                options.Languages.Add(new LanguageInfo("zh-Hant", "zh-Hant", "繁體中文"));
-                options.Languages.Add(new LanguageInfo("de-DE", "de-DE", "Deutsch", "de"));
-                options.Languages.Add(new LanguageInfo("es", "es", "Español", "es"));
+                options.Languages.Add(new LanguageInfo("en", "en", "English", "gb"));
+                options.Languages.Add(new LanguageInfo("nl", "nl", "Nederlands", "nl"));
             });
         }
 
@@ -182,8 +180,7 @@ namespace MyCompany.MyProduct
                             configuration["App:CorsOrigins"]
                                 .Split(",", StringSplitOptions.RemoveEmptyEntries)
                                 .Select(o => o.RemovePostFix("/"))
-                                .ToArray()
-                        )
+                                .ToArray())
                         .WithAbpExposedHeaders()
                         .SetIsOriginAllowedToAllowWildcardSubdomains()
                         .AllowAnyHeader()
@@ -195,8 +192,8 @@ namespace MyCompany.MyProduct
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            var app = context.GetApplicationBuilder();
-            var env = context.GetEnvironment();
+            IApplicationBuilder app = context.GetApplicationBuilder();
+            IWebHostEnvironment env = context.GetEnvironment();
 
             if (env.IsDevelopment())
             {
@@ -231,7 +228,7 @@ namespace MyCompany.MyProduct
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProduct API");
 
-                var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
+                IConfiguration configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
                 c.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
                 c.OAuthClientSecret(configuration["AuthServer:SwaggerClientSecret"]);
                 c.OAuthScopes("MyProduct");

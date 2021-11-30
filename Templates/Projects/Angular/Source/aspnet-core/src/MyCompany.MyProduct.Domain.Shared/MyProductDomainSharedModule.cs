@@ -23,37 +23,35 @@ namespace MyCompany.MyProduct
         typeof(AbpIdentityServerDomainSharedModule),
         typeof(AbpPermissionManagementDomainSharedModule),
         typeof(AbpSettingManagementDomainSharedModule),
-        typeof(AbpTenantManagementDomainSharedModule)
-        )]
+        typeof(AbpTenantManagementDomainSharedModule))]
     public class MyProductDomainSharedModule : AbpModule
     {
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<AbpVirtualFileSystemOptions>(
+                options => options.FileSets.AddEmbedded<MyProductDomainSharedModule>());
+
+            Configure<AbpLocalizationOptions>(
+                options =>
+                {
+                    options.Resources
+                        .Add<MyProductResource>("en")
+                        .AddBaseTypes(typeof(AbpValidationResource))
+                        .AddVirtualJson("/Localization/MyProduct");
+
+                    options.DefaultResourceType = typeof(MyProductResource);
+                });
+
+            // You can map your business exception error code prefixes here. Example:
+            // options.MapCodeNamespace(nameof(MyProductDomainErrorCodes.Samples), typeof(MyProductResource));
+            Configure<AbpExceptionLocalizationOptions>(
+                options => options.MapCodeNamespace("MyProduct", typeof(MyProductResource)));
+        }
+
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             MyProductGlobalFeatureConfigurator.Configure();
             MyProductModuleExtensionConfigurator.Configure();
-        }
-
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            Configure<AbpVirtualFileSystemOptions>(options =>
-            {
-                options.FileSets.AddEmbedded<MyProductDomainSharedModule>();
-            });
-
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Add<MyProductResource>("en")
-                    .AddBaseTypes(typeof(AbpValidationResource))
-                    .AddVirtualJson("/Localization/MyProduct");
-
-                options.DefaultResourceType = typeof(MyProductResource);
-            });
-
-            Configure<AbpExceptionLocalizationOptions>(options =>
-            {
-                options.MapCodeNamespace("MyProduct", typeof(MyProductResource));
-            });
         }
     }
 }

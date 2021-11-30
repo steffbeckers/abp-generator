@@ -3,8 +3,7 @@ using Volo.Abp.AspNetCore.Mvc;
 
 namespace MyCompany.MyProduct.Controllers
 {
-    /* Inherit your controllers from this class.
-     */
+    // Inherit your controllers from this class.
     public abstract class MyProductController : AbpController
     {
         protected MyProductController()

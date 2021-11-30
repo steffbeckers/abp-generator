@@ -6,17 +6,17 @@ namespace MyCompany.MyProduct.Permissions
 {
     public class MyProductPermissionDefinitionProvider : PermissionDefinitionProvider
     {
+        public override void Define(IPermissionDefinitionContext context)
+        {
+            PermissionGroupDefinition myProductGroup = context.AddGroup(MyProductPermissions.GroupName);
+
+            // Define your own permissions here. Example:
+            // myProductGroup.AddPermission(MyProductPermissions.MyPermission1, L("Permission:MyPermission1"));
+        }
+
         private static LocalizableString L(string name)
         {
             return LocalizableString.Create<MyProductResource>(name);
-        }
-
-        public override void Define(IPermissionDefinitionContext context)
-        {
-            PermissionGroupDefinition myGroup = context.AddGroup(MyProductPermissions.GroupName);
-
-            // Define your own permissions here. Example:
-            // myGroup.AddPermission(MyProductPermissions.MyPermission1, L("Permission:MyPermission1"));
         }
     }
 }

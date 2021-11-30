@@ -1,6 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using Volo.Abp.Identity;
-using Volo.Abp.ObjectExtending;
 using Volo.Abp.Threading;
 
 namespace MyCompany.MyProduct.EntityFrameworkCore
@@ -14,9 +11,10 @@ namespace MyCompany.MyProduct.EntityFrameworkCore
             MyProductGlobalFeatureConfigurator.Configure();
             MyProductModuleExtensionConfigurator.Configure();
 
-            OneTimeRunner.Run(() =>
-            {
-                /* You can configure extra properties for the
+            OneTimeRunner.Run(
+                () =>
+                {
+                    /* You can configure extra properties for the
                  * entities defined in the modules used by your application.
                  *
                  * This class can be used to map these extra properties to table fields in the database.
@@ -39,7 +37,7 @@ namespace MyCompany.MyProduct.EntityFrameworkCore
                  * See the documentation for more:
                  * https://docs.abp.io/en/abp/latest/Customizing-Application-Modules-Extending-Entities
                  */
-            });
+                });
         }
     }
 }

@@ -14,39 +14,30 @@ using Volo.Abp.TenantManagement.EntityFrameworkCore;
 namespace MyCompany.MyProduct.EntityFrameworkCore
 {
     [DependsOn(
-        typeof(MyProductDomainModule),
+        typeof(AbpAuditLoggingEntityFrameworkCoreModule),
+        typeof(AbpBackgroundJobsEntityFrameworkCoreModule),
+        typeof(AbpEntityFrameworkCoreSqlServerModule),
+        typeof(AbpFeatureManagementEntityFrameworkCoreModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpIdentityServerEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
-        typeof(AbpEntityFrameworkCoreSqlServerModule),
-        typeof(AbpBackgroundJobsEntityFrameworkCoreModule),
-        typeof(AbpAuditLoggingEntityFrameworkCoreModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
-        typeof(AbpFeatureManagementEntityFrameworkCoreModule)
-        )]
+        typeof(MyProductDomainModule))]
     public class MyProductEntityFrameworkCoreModule : AbpModule
     {
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            // Add custom repositories for your aggregate root entities to options. Example:
+            // options.AddRepository<Sample, EfCoreSampleRepository>();
+            context.Services.AddAbpDbContext<MyProductDbContext>(options => options.AddDefaultRepositories());
+
+            Configure<AbpDbContextOptions>(options => options.UseSqlServer());
+        }
+
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             MyProductEfCoreEntityExtensionMappings.Configure();
-        }
-
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddAbpDbContext<MyProductDbContext>(options =>
-            {
-                /* Remove "includeAllEntities: true" to create
-                 * default repositories only for aggregate roots */
-                options.AddDefaultRepositories(includeAllEntities: true);
-            });
-
-            Configure<AbpDbContextOptions>(options =>
-            {
-                /* The main point to change your DBMS.
-                 * See also MyProductMigrationsDbContextFactory for EF Core tooling. */
-                options.UseSqlServer();
-            });
         }
     }
 }

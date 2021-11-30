@@ -8,9 +8,17 @@ using System.Threading.Tasks;
 
 namespace MyCompany.MyProduct.DbMigrator
 {
-    class Program
+    public class Program
     {
-        static async Task Main(string[] args)
+        public static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration(build => build.AddJsonFile("appsettings.secrets.json", optional: true))
+                .ConfigureLogging((context, logging) => logging.ClearProviders())
+                .ConfigureServices((hostContext, services) => services.AddHostedService<DbMigratorHostedService>());
+        }
+
+        public static async Task Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel
@@ -35,14 +43,6 @@ namespace MyCompany.MyProduct.DbMigrator
                 .CreateLogger();
 
             await CreateHostBuilder(args).RunConsoleAsync();
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args)
-        {
-            return Host.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration(build => build.AddJsonFile("appsettings.secrets.json", optional: true))
-                .ConfigureLogging((context, logging) => logging.ClearProviders())
-                .ConfigureServices((hostContext, services) => services.AddHostedService<DbMigratorHostedService>());
         }
     }
 }

@@ -12,31 +12,24 @@ using Volo.Abp.TenantManagement;
 namespace MyCompany.MyProduct
 {
     [DependsOn(
-        typeof(MyProductApplicationContractsModule),
         typeof(AbpAccountHttpApiModule),
+        typeof(AbpFeatureManagementHttpApiModule),
         typeof(AbpIdentityHttpApiModule),
         typeof(AbpPermissionManagementHttpApiModule),
+        typeof(AbpSettingManagementHttpApiModule),
         typeof(AbpTenantManagementHttpApiModule),
-        typeof(AbpFeatureManagementHttpApiModule),
-        typeof(AbpSettingManagementHttpApiModule)
-        )]
+        typeof(MyProductApplicationContractsModule))]
     public class MyProductHttpApiModule : AbpModule
     {
+        private void ConfigureLocalization()
+        {
+            Configure<AbpLocalizationOptions>(
+                options => options.Resources.Get<MyProductResource>().AddBaseTypes(typeof(AbpUiResource)));
+        }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             ConfigureLocalization();
-        }
-
-        private void ConfigureLocalization()
-        {
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<MyProductResource>()
-                    .AddBaseTypes(
-                        typeof(AbpUiResource)
-                    );
-            });
         }
     }
 }

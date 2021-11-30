@@ -14,10 +14,10 @@ namespace MyCompany.MyProduct.DbMigrator
         private readonly IConfiguration _configuration;
         private readonly IHostApplicationLifetime _hostApplicationLifetime;
 
-        public DbMigratorHostedService(IHostApplicationLifetime hostApplicationLifetime, IConfiguration configuration)
+        public DbMigratorHostedService(IConfiguration configuration, IHostApplicationLifetime hostApplicationLifetime)
         {
-            _hostApplicationLifetime = hostApplicationLifetime;
             _configuration = configuration;
+            _hostApplicationLifetime = hostApplicationLifetime;
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
@@ -32,10 +32,7 @@ namespace MyCompany.MyProduct.DbMigrator
             {
                 application.Initialize();
 
-                await application
-                    .ServiceProvider
-                    .GetRequiredService<MyProductDbMigrationService>()
-                    .MigrateAsync();
+                await application.ServiceProvider.GetRequiredService<MyProductDbMigrationService>().MigrateAsync();
 
                 application.Shutdown();
 

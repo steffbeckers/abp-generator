@@ -10,14 +10,14 @@ using Volo.Abp.TenantManagement;
 namespace MyCompany.MyProduct
 {
     [DependsOn(
-        typeof(MyProductDomainModule),
         typeof(AbpAccountApplicationModule),
-        typeof(MyProductApplicationContractsModule),
+        typeof(AbpFeatureManagementApplicationModule),
         typeof(AbpIdentityApplicationModule),
         typeof(AbpPermissionManagementApplicationModule),
+        typeof(AbpSettingManagementApplicationModule),
         typeof(AbpTenantManagementApplicationModule),
-        typeof(AbpFeatureManagementApplicationModule),
-        typeof(AbpSettingManagementApplicationModule))]
+        typeof(MyProductApplicationContractsModule),
+        typeof(MyProductDomainModule))]
     public class MyProductApplicationModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

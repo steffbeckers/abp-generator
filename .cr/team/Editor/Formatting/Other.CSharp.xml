@@ -8,7 +8,10 @@
         <CatchOnNewLine>True</CatchOnNewLine>
         <FinallyOnNewLine>True</FinallyOnNewLine>
       </Item>
-      <Item Id="{84e7d791-613d-4018-bf31-9a9f43264480}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.XmlDocCommentsOtherOption" />
+      <Item Id="{84e7d791-613d-4018-bf31-9a9f43264480}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.XmlDocCommentsOtherOption">
+        <WrapComments>False</WrapComments>
+        <BeforeClosingTag>True</BeforeClosingTag>
+      </Item>
       <Item Id="{8921dd1e-bb6c-4fa8-b4d5-58e6edcea04f}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.OtherIndentOption" />
     </Options>
   </Options>

@@ -4,30 +4,27 @@ using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
-using Volo.Abp.TenantManagement;
 using Volo.Abp.SettingManagement;
+using Volo.Abp.TenantManagement;
 
 namespace MyCompany.MyProduct
 {
     [DependsOn(
-        typeof(MyProductApplicationContractsModule),
         typeof(AbpAccountHttpApiClientModule),
+        typeof(AbpFeatureManagementHttpApiClientModule),
         typeof(AbpIdentityHttpApiClientModule),
         typeof(AbpPermissionManagementHttpApiClientModule),
+        typeof(AbpSettingManagementHttpApiClientModule),
         typeof(AbpTenantManagementHttpApiClientModule),
-        typeof(AbpFeatureManagementHttpApiClientModule),
-        typeof(AbpSettingManagementHttpApiClientModule)
-    )]
+        typeof(MyProductApplicationContractsModule))]
     public class MyProductHttpApiClientModule : AbpModule
     {
-        public const string RemoteServiceName = "Default";
+        public const string RemoteServiceName = nameof(MyProduct);
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddHttpClientProxies(
-                typeof(MyProductApplicationContractsModule).Assembly,
-                RemoteServiceName
-            );
+            context.Services
+                .AddHttpClientProxies(typeof(MyProductApplicationContractsModule).Assembly, RemoteServiceName);
         }
     }
 }

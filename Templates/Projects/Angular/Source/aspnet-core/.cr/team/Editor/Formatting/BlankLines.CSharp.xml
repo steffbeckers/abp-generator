@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Root Type="DevExpress.CodeRush.Formatting.UI.Options.BlankLinesOptionsContainer">
   <Options Language="C#">
     <Options>
       <Item Id="{d9ff8757-a6ef-4339-8b3e-59bf54f00734}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.KeepBlankLinesOption">
+        <KeepMaxLinesCode>1</KeepMaxLinesCode>
         <KeepMaxLinesDeclarations>1</KeepMaxLinesDeclarations>
       </Item>
       <Item Id="{2472bf47-25d5-4ee5-b32e-a449368f4f54}" Type="DevExpress.CodeRush.Formatting.UI.Options.Conversion.RegionBlankLinesOption">
