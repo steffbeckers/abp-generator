@@ -29,6 +29,19 @@ insert_final_newline = false
 
 #### .NET Coding Conventions ####
 
+dotnet_diagnostic.SA0001.severity = none
+dotnet_diagnostic.SA1101.severity = none
+dotnet_diagnostic.SA1111.severity = warning
+dotnet_diagnostic.SA1200.severity = none
+dotnet_diagnostic.SA1208.severity = none
+dotnet_diagnostic.SA1309.severity = none
+dotnet_diagnostic.SA1310.severity = none
+dotnet_diagnostic.SA1413.severity = none
+dotnet_diagnostic.SA1600.severity = none
+dotnet_diagnostic.SA1601.severity = none
+dotnet_diagnostic.SA1633.severity = none
+dotnet_diagnostic.CA1822.severity = none
+
 # Organize usings
 dotnet_separate_import_directive_groups = false
 dotnet_sort_system_directives_first = false
@@ -117,7 +130,7 @@ csharp_preferred_modifier_order = public,private,protected,internal,static,exter
 
 # Code-block preferences
 csharp_prefer_braces = true
-csharp_prefer_simple_using_statement = true
+csharp_prefer_simple_using_statement = false
 
 # Expression-level preferences
 csharp_prefer_simple_default_expression = true
