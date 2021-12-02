@@ -1,23 +1,52 @@
 ﻿using System;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
-using Volo.Abp.MultiTenancy;
 
 namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
 {
     public class {{AggregateRoot.Name}} : FullAuditedAggregateRoot<Guid>
     {
-        {{#each AggregateRoot.Properties}}
+        {{#each AggregateRoot.PropertiesOrderByName}}
+        {{#if StringAsFullProperty}}
+        public {{Type}} {{Name}}
+        {
+            get => _{{String.Camelcase Name}};
+            set
+            {
+                {{#if Required}}
+                Check.NotNull(value, nameof({{Name}}));
+                {{/if}}
+                {{#if MaxLength}}
+                Check.Length(value, nameof({{Name}}), {{../AggregateRoot.Name}}Consts.{{Name}}MaxLength, 0);
+                {{/if}}
+                _{{String.Camelcase Name}} = value;
+            }
+        }
+        private {{Type}} _{{String.Camelcase Name}};
+        {{else}}
         public {{Type}} {{Name}} { get; set; }
-        
+        {{/if}}
+
         {{/each}}
         {{#each AggregateRoot.Entities}}
         public IList<{{Name}}> {{AggregateRootPropertyName}} { get; private set; } = new List<{{Name}}>();
         
         {{/each}}
-        public {{AggregateRoot.Name}}(Guid id)
+        public {{AggregateRoot.Name}}(
+            Guid id,
+            {{#each AggregateRoot.Properties}}
+            {{#if Required}}
+            {{Type}} {{String.Camelcase Name}},
+            {{/if}}
+            {{/each}}
+        )
         {
             Id = id;
+            {{#each AggregateRoot.Properties}}
+            {{#if Required}}
+            {{Name}} = {{String.Camelcase Name}};
+            {{/if}}
+            {{/each}}
         }
 
         private {{AggregateRoot.Name}}()

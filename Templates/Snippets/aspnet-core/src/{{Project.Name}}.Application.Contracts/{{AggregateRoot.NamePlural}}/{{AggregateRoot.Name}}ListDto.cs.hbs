@@ -5,9 +5,9 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
 {
     public class {{AggregateRoot.Name}}ListDto : EntityDto<Guid>
     {
-        {{#each AggregateRoot.Properties}}
+        {{#each AggregateRoot.PropertiesOrderByName}}
         public {{Type}} {{Name}} { get; set; }
-        
+
         {{/each}}
     }
 }

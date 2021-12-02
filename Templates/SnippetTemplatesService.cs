@@ -170,8 +170,6 @@ public class SnippetTemplatesService
                 throw new Exception("Handlebars templating context could not be loaded.");
             }
 
-            _templates.RemoveAll(x => x.FullPath == fullPath);
-
             string outputPath = fullPath
             .Replace($"{FileHelpers.UserBasedSnippetTemplatesPath}{Path.DirectorySeparatorChar}", string.Empty)
                 .Replace(Path.DirectorySeparatorChar, '/')
@@ -207,6 +205,8 @@ public class SnippetTemplatesService
                 .ToList();
             */
 
+            List<SnippetTemplate> generatedTemplates = new List<SnippetTemplate>();
+
             if (templateContext.RunForEachEntity)
             {
                 foreach (Entity entity in _settingsService.Settings.Context.AggregateRoot.Entities)
@@ -225,7 +225,7 @@ public class SnippetTemplatesService
                         templateSource);
                     templateOutput = handlebarsTemplate(generatorContext);
 
-                    _templates.Add(
+                    generatedTemplates.Add(
                         new SnippetTemplate()
                         {
                             FullPath = fullPath,
@@ -243,7 +243,7 @@ public class SnippetTemplatesService
                 HandlebarsTemplate<object, object>? handlebarsTemplate = _handlebarsContext.Compile(templateSource);
                 templateOutput = handlebarsTemplate(generatorContext);
 
-                _templates.Add(
+                generatedTemplates.Add(
                     new SnippetTemplate()
                     {
                         FullPath = fullPath,
@@ -253,6 +253,8 @@ public class SnippetTemplatesService
                     });
             }
 
+            _templates.RemoveAll(x => x.FullPath == fullPath);
+            _templates.AddRange(generatedTemplates);
             _templates = _templates.OrderBy(x => x.OutputPath).ToList();
         }
         catch (Exception ex)

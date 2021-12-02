@@ -12,15 +12,7 @@ namespace SteffBeckers.Abp.Generator.Settings
 
         public IList<Property> Properties { get; set; } = new List<Property>();
 
-        public List<Property> PropertiesOrderBy(string field)
-        {
-            return Properties.OrderBy(x => field).ToList();
-        }
-
-        public List<Property> PropertiesOrderByDescending(string field)
-        {
-            return Properties.OrderByDescending(x => field).ToList();
-        }
+        public List<Property> PropertiesOrderByName => Properties.OrderBy(x => x.Name).ToList();
     }
 
     public class Entity
@@ -33,15 +25,7 @@ namespace SteffBeckers.Abp.Generator.Settings
 
         public IList<Property> Properties { get; set; } = new List<Property>();
 
-        public List<Property> PropertiesOrderBy(string field)
-        {
-            return Properties.OrderBy(x => field).ToList();
-        }
-
-        public List<Property> PropertiesOrderByDescending(string field)
-        {
-            return Properties.OrderByDescending(x => field).ToList();
-        }
+        public List<Property> PropertiesOrderByName => Properties.OrderBy(x => x.Name).ToList();
     }
 
     public class GeneratorContext
@@ -72,5 +56,9 @@ namespace SteffBeckers.Abp.Generator.Settings
         public bool Required { get; set; }
 
         public string Type { get; set; } = string.Empty;
+
+        public bool IsString => Type.Equals("string");
+
+        public bool StringAsFullProperty => IsString && (Required || MaxLength != null);
     }
 }
