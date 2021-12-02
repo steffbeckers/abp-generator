@@ -36,6 +36,51 @@ namespace MyCompany.MyProduct.Data
             _tenantRepository = tenantRepository;
         }
 
+        public async Task MigrateAsync()
+        {
+            bool initialMigrationAdded = AddInitialMigrationIfNotExist();
+
+            if (initialMigrationAdded)
+            {
+                return;
+            }
+
+            _logger.LogInformation("Started database migrations...");
+
+            await MigrateDatabaseSchemaAsync();
+            await SeedDataAsync();
+
+            _logger.LogInformation($"Successfully completed host database migrations.");
+
+            List<Tenant> tenants = await _tenantRepository.GetListAsync(includeDetails: true);
+
+            HashSet<string> migratedDatabaseSchemas = new HashSet<string>();
+            foreach (Tenant tenant in tenants)
+            {
+                using (_currentTenant.Change(tenant.Id))
+                {
+                    if (tenant.ConnectionStrings.Any())
+                    {
+                        List<string> tenantConnectionStrings = tenant.ConnectionStrings.Select(x => x.Value).ToList();
+
+                        if (!migratedDatabaseSchemas.IsSupersetOf(tenantConnectionStrings))
+                        {
+                            await MigrateDatabaseSchemaAsync(tenant);
+
+                            migratedDatabaseSchemas.AddIfNotContains(tenantConnectionStrings);
+                        }
+                    }
+
+                    await SeedDataAsync(tenant);
+                }
+
+                _logger.LogInformation($"Successfully completed {tenant.Name} tenant database migrations.");
+            }
+
+            _logger.LogInformation("Successfully completed all database migrations.");
+            _logger.LogInformation("You can safely end this process...");
+        }
+
         private void AddInitialMigration()
         {
             _logger.LogInformation("Creating initial migration...");
@@ -137,51 +182,6 @@ namespace MyCompany.MyProduct.Data
             }
 
             return null;
-        }
-
-        public async Task MigrateAsync()
-        {
-            bool initialMigrationAdded = AddInitialMigrationIfNotExist();
-
-            if (initialMigrationAdded)
-            {
-                return;
-            }
-
-            _logger.LogInformation("Started database migrations...");
-
-            await MigrateDatabaseSchemaAsync();
-            await SeedDataAsync();
-
-            _logger.LogInformation($"Successfully completed host database migrations.");
-
-            List<Tenant> tenants = await _tenantRepository.GetListAsync(includeDetails: true);
-
-            HashSet<string> migratedDatabaseSchemas = new HashSet<string>();
-            foreach (Tenant tenant in tenants)
-            {
-                using (_currentTenant.Change(tenant.Id))
-                {
-                    if (tenant.ConnectionStrings.Any())
-                    {
-                        List<string> tenantConnectionStrings = tenant.ConnectionStrings.Select(x => x.Value).ToList();
-
-                        if (!migratedDatabaseSchemas.IsSupersetOf(tenantConnectionStrings))
-                        {
-                            await MigrateDatabaseSchemaAsync(tenant);
-
-                            migratedDatabaseSchemas.AddIfNotContains(tenantConnectionStrings);
-                        }
-                    }
-
-                    await SeedDataAsync(tenant);
-                }
-
-                _logger.LogInformation($"Successfully completed {tenant.Name} tenant database migrations.");
-            }
-
-            _logger.LogInformation("Successfully completed all database migrations.");
-            _logger.LogInformation("You can safely end this process...");
         }
 
         private async Task MigrateDatabaseSchemaAsync(Tenant tenant = null)

@@ -51,6 +51,18 @@ namespace MyCompany.MyProduct.Data.Seeding.Contributors
             _permissionDataSeeder = permissionDataSeeder;
         }
 
+        [UnitOfWork]
+        public async Task SeedAsync(DataSeedContext context)
+        {
+            using (_currentTenant.Change(context?.TenantId))
+            {
+                await _identityResourceDataSeeder.CreateStandardResourcesAsync();
+                await CreateApiResourcesAsync();
+                await CreateApiScopesAsync();
+                await CreateClientsAsync();
+            }
+        }
+
         private async Task<ApiResource> CreateApiResourceAsync(string name, IEnumerable<string> claims)
         {
             ApiResource apiResource = await _apiResourceRepository.FindByNameAsync(name);
@@ -127,8 +139,8 @@ namespace MyCompany.MyProduct.Data.Seeding.Contributors
                         Description = name,
                         AlwaysIncludeUserClaimsInIdToken = true,
                         AllowOfflineAccess = true,
-                        AbsoluteRefreshTokenLifetime = 31536000, //365 days
-                        AccessTokenLifetime = 31536000, //365 days
+                        AbsoluteRefreshTokenLifetime = 31536000, // 365 days
+                        AccessTokenLifetime = 31536000, // 365 days
                         AuthorizationCodeLifetime = 300,
                         IdentityTokenLifetime = 300,
                         RequireConsent = false,
@@ -211,10 +223,13 @@ namespace MyCompany.MyProduct.Data.Seeding.Contributors
                 string webClientRootUrl = configurationSection["MyProduct_App:RootUrl"]?.TrimEnd('/');
 
                 await CreateClientAsync(
-                    name: consoleAndAngularClientId, scopes: commonScopes,
+                    name: consoleAndAngularClientId,
+                    scopes: commonScopes,
                     grantTypes: new[] { "password", "client_credentials", "authorization_code" },
                     secret: (configurationSection["MyProduct_App:ClientSecret"] ?? "1q2w3e*").Sha256(),
-                    requireClientSecret: false, redirectUri: webClientRootUrl, postLogoutRedirectUri: webClientRootUrl,
+                    requireClientSecret: false,
+                    redirectUri: webClientRootUrl,
+                    postLogoutRedirectUri: webClientRootUrl,
                     corsOrigins: new[] { webClientRootUrl.RemovePostFix("/") });
             }
 
@@ -225,9 +240,12 @@ namespace MyCompany.MyProduct.Data.Seeding.Contributors
                 string postmanRootUrl = configurationSection["MyProduct_Postman:RootUrl"].TrimEnd('/');
 
                 await CreateClientAsync(
-                    name: postmanClientId, scopes: commonScopes, grantTypes: new[] { "authorization_code" },
+                    name: postmanClientId,
+                    scopes: commonScopes,
+                    grantTypes: new[] { "authorization_code" },
                     secret: configurationSection["MyProduct_Postman:ClientSecret"]?.Sha256(),
-                    requireClientSecret: false, redirectUri: $"https://oauth.pstmn.io/v1/callback",
+                    requireClientSecret: false,
+                    redirectUri: $"https://oauth.pstmn.io/v1/callback",
                     corsOrigins: new[] { postmanRootUrl.RemovePostFix("/") });
             }
 
@@ -238,22 +256,13 @@ namespace MyCompany.MyProduct.Data.Seeding.Contributors
                 string swaggerRootUrl = configurationSection["MyProduct_Swagger:RootUrl"].TrimEnd('/');
 
                 await CreateClientAsync(
-                    name: swaggerClientId, scopes: commonScopes, grantTypes: new[] { "authorization_code" },
+                    name: swaggerClientId,
+                    scopes: commonScopes,
+                    grantTypes: new[] { "authorization_code" },
                     secret: configurationSection["MyProduct_Swagger:ClientSecret"]?.Sha256(),
-                    requireClientSecret: false, redirectUri: $"{swaggerRootUrl}/swagger/oauth2-redirect.html",
+                    requireClientSecret: false,
+                    redirectUri: $"{swaggerRootUrl}/swagger/oauth2-redirect.html",
                     corsOrigins: new[] { swaggerRootUrl.RemovePostFix("/") });
-            }
-        }
-
-        [UnitOfWork]
-        public async Task SeedAsync(DataSeedContext context)
-        {
-            using (_currentTenant.Change(context?.TenantId))
-            {
-                await _identityResourceDataSeeder.CreateStandardResourcesAsync();
-                await CreateApiResourcesAsync();
-                await CreateApiScopesAsync();
-                await CreateClientsAsync();
             }
         }
     }

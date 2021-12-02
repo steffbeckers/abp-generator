@@ -14,7 +14,9 @@ namespace MyCompany.MyProduct.Data.Seeding
             IOptions<AbpDataSeedOptions> dataSeedOptions,
             IServiceScopeFactory serviceScopeFactory,
             IUnitOfWorkManager unitOfWorkManager)
-            : base(dataSeedOptions, serviceScopeFactory, unitOfWorkManager) { }
+            : base(dataSeedOptions, serviceScopeFactory, unitOfWorkManager)
+        {
+        }
 
         public override DataSeedContributorList GetContributors()
         {

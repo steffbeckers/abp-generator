@@ -9,15 +9,6 @@ namespace MyCompany.MyProduct
 {
     public class Program
     {
-        internal static IHostBuilder CreateHostBuilder(string[] args)
-        {
-            return Host.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration(build => build.AddJsonFile("appsettings.secrets.json", optional: true))
-                .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>())
-                .UseAutofac()
-                .UseSerilog();
-        }
-
         public static int Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
@@ -57,6 +48,15 @@ namespace MyCompany.MyProduct
             {
                 Log.CloseAndFlush();
             }
+        }
+
+        internal static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration(build => build.AddJsonFile("appsettings.secrets.json", optional: true))
+                .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>())
+                .UseAutofac()
+                .UseSerilog();
         }
     }
 }

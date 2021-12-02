@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Root Type="DevExpress.CodeRush.CodeCompletion.NamingSuggestions.Options.NamingSuggestionsOptions">
   <Options Language="C#">
     <Enabled>True</Enabled>

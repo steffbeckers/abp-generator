@@ -21,15 +21,15 @@ namespace MyCompany.MyProduct
         typeof(MyProductApplicationContractsModule))]
     public class MyProductHttpApiModule : AbpModule
     {
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            ConfigureLocalization();
+        }
+
         private void ConfigureLocalization()
         {
             Configure<AbpLocalizationOptions>(
                 options => options.Resources.Get<MyProductResource>().AddBaseTypes(typeof(AbpUiResource)));
-        }
-
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            ConfigureLocalization();
         }
     }
 }

@@ -13,7 +13,9 @@ namespace MyCompany.MyProduct.Data.Seeding
             IOptions<AbpDataSeedOptions> dataSeedOptions,
             IServiceScopeFactory serviceScopeFactory,
             IUnitOfWorkManager unitOfWorkManager)
-            : base(dataSeedOptions, serviceScopeFactory, unitOfWorkManager) { }
+            : base(dataSeedOptions, serviceScopeFactory, unitOfWorkManager)
+        {
+        }
 
         public override DataSeedContributorList GetContributors()
         {
@@ -21,7 +23,6 @@ namespace MyCompany.MyProduct.Data.Seeding
 
             // Add our own unit test data seed contributors here in correct order. Example:
             // contributors.Add(typeof(SamplesUnitTestDataSeedContributor));
-
             return contributors;
         }
     }

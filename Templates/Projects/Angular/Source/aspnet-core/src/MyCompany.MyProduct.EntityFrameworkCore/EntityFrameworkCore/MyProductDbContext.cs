@@ -21,34 +21,11 @@ namespace MyCompany.MyProduct.EntityFrameworkCore
     public class MyProductDbContext : AbpDbContext<MyProductDbContext>, IIdentityDbContext, ITenantManagementDbContext
     {
         public MyProductDbContext(DbContextOptions<MyProductDbContext> options)
-            : base(options) { }
-
-        protected override void OnModelCreating(ModelBuilder builder)
+            : base(options)
         {
-            base.OnModelCreating(builder);
-
-            // Include modules to your migration db context.
-            builder.ConfigurePermissionManagement();
-            builder.ConfigureSettingManagement();
-            builder.ConfigureBackgroundJobs();
-            builder.ConfigureAuditLogging();
-            builder.ConfigureIdentity();
-            builder.ConfigureIdentityServer();
-            builder.ConfigureFeatureManagement();
-            builder.ConfigureTenantManagement();
-
-            /* Configure your own tables/entities inside here:
-               builder.Entity<Sample>(b =>
-               {
-                   b.ToTable(MyProductConsts.DbTablePrefix + "Samples", MyProductConsts.DbSchema);
-                   b.ConfigureByConvention();
-               });
-            */
         }
 
         // Add DbSet properties for your Aggregate Roots / Entities here.
-
-        #region Entities from the modules
 
         /* Notice: We only implemented IIdentityDbContext and ITenantManagementDbContext
          * and replaced them for this DbContext. This allows you to perform JOIN
@@ -79,6 +56,27 @@ namespace MyCompany.MyProduct.EntityFrameworkCore
 
         public DbSet<TenantConnectionString> TenantConnectionStrings { get; set; }
 
-        #endregion
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            // Include modules to your migration db context.
+            builder.ConfigurePermissionManagement();
+            builder.ConfigureSettingManagement();
+            builder.ConfigureBackgroundJobs();
+            builder.ConfigureAuditLogging();
+            builder.ConfigureIdentity();
+            builder.ConfigureIdentityServer();
+            builder.ConfigureFeatureManagement();
+            builder.ConfigureTenantManagement();
+
+            /* Configure your own tables/entities inside here:
+               builder.Entity<Sample>(b =>
+               {
+                   b.ToTable(MyProductConsts.DbTablePrefix + "Samples", MyProductConsts.DbSchema);
+                   b.ConfigureByConvention();
+               });
+            */
+        }
     }
 }

@@ -18,21 +18,14 @@ namespace MyCompany.MyProduct.EntityFrameworkCore
     {
         private SqliteConnection _sqliteConnection;
 
-        private void ConfigureInMemorySqlite(IServiceCollection services)
-        {
-            _sqliteConnection = CreateDatabaseAndGetConnection();
-
-            services.Configure<AbpDbContextOptions>(
-                options => options.Configure(
-                    context =>
-                    {
-                        context.DbContextOptions.UseSqlite(_sqliteConnection);
-                    }));
-        }
-
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             ConfigureInMemorySqlite(context.Services);
+        }
+
+        public override void OnApplicationShutdown(ApplicationShutdownContext context)
+        {
+            _sqliteConnection.Dispose();
         }
 
         private static SqliteConnection CreateDatabaseAndGetConnection()
@@ -52,9 +45,16 @@ namespace MyCompany.MyProduct.EntityFrameworkCore
             return connection;
         }
 
-        public override void OnApplicationShutdown(ApplicationShutdownContext context)
+        private void ConfigureInMemorySqlite(IServiceCollection services)
         {
-            _sqliteConnection.Dispose();
+            _sqliteConnection = CreateDatabaseAndGetConnection();
+
+            services.Configure<AbpDbContextOptions>(
+                options => options.Configure(
+                    context =>
+                    {
+                        context.DbContextOptions.UseSqlite(_sqliteConnection);
+                    }));
         }
     }
 }

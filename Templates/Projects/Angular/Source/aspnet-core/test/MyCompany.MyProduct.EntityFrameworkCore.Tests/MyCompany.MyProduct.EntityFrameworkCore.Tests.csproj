@@ -10,6 +10,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\MyCompany.MyProduct.EntityFrameworkCore\MyCompany.MyProduct.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\MyCompany.MyProduct.TestBase\MyCompany.MyProduct.TestBase.csproj" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Volo.Abp.EntityFrameworkCore.Sqlite" Version="4.4.4" />
   </ItemGroup>
 

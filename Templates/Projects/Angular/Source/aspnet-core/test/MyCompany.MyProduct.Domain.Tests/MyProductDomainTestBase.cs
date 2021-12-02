@@ -1,4 +1,7 @@
 namespace MyCompany.MyProduct
 {
-    public abstract class MyProductDomainTestBase : MyProductTestBase<MyProductDomainTestModule> { }
+    public abstract class MyProductDomainTestBase
+        : MyProductTestBase<MyProductDomainTestModule>
+    {
+    }
 }
