@@ -43,9 +43,12 @@ namespace MyCompany.MyProduct
                 });
 
             // You can map your business exception error code prefixes here. Example:
-            // options.MapCodeNamespace(nameof(MyProductDomainErrorCodes.Samples), typeof(MyProductResource));
             Configure<AbpExceptionLocalizationOptions>(
-                options => options.MapCodeNamespace("MyProduct", typeof(MyProductResource)));
+                options =>
+                {
+                    options.MapCodeNamespace(nameof(MyProduct), typeof(MyProductResource));
+                    options.MapCodeNamespace(nameof(MyProductDomainErrorCodes.Samples), typeof(MyProductResource));
+                });
         }
 
         public override void PreConfigureServices(ServiceConfigurationContext context)

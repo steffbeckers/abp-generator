@@ -12,6 +12,10 @@ namespace MyCompany.MyProduct.Permissions
 
             // Define your own permissions here. Example:
             // myProductGroup.AddPermission(MyProductPermissions.MyPermission1, L("Permission:MyPermission1"));
+            PermissionDefinition samplesPermission = myProductGroup.AddPermission(MyProductPermissions.Samples.Default, L($"{nameof(MyProductPermissions.Permission)}:{nameof(MyProductPermissions.Samples)}"));
+            samplesPermission.AddChild(MyProductPermissions.Samples.Create, L($"{nameof(MyProductPermissions.Permission)}:{nameof(MyProductPermissions.Samples.Create)}"));
+            samplesPermission.AddChild(MyProductPermissions.Samples.Update, L($"{nameof(MyProductPermissions.Permission)}:{nameof(MyProductPermissions.Samples.Update)}"));
+            samplesPermission.AddChild(MyProductPermissions.Samples.Delete, L($"{nameof(MyProductPermissions.Permission)}:{nameof(MyProductPermissions.Samples.Delete)}"));
         }
 
         private static LocalizableString L(string name)

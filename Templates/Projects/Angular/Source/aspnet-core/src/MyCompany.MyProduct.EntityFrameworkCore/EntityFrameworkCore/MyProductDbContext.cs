@@ -1,9 +1,11 @@
 using Microsoft.EntityFrameworkCore;
+using MyCompany.MyProduct.Samples;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
@@ -26,6 +28,7 @@ namespace MyCompany.MyProduct.EntityFrameworkCore
         }
 
         // Add DbSet properties for your Aggregate Roots / Entities here.
+        public DbSet<Sample> Samples { get; set; }
 
         /* Notice: We only implemented IIdentityDbContext and ITenantManagementDbContext
          * and replaced them for this DbContext. This allows you to perform JOIN
@@ -70,13 +73,14 @@ namespace MyCompany.MyProduct.EntityFrameworkCore
             builder.ConfigureFeatureManagement();
             builder.ConfigureTenantManagement();
 
-            /* Configure your own tables/entities inside here:
-               builder.Entity<Sample>(b =>
-               {
-                   b.ToTable(MyProductConsts.DbTablePrefix + "Samples", MyProductConsts.DbSchema);
-                   b.ConfigureByConvention();
-               });
-            */
+            // Configure your own tables/entities inside here:
+            builder.Entity<Sample>(b =>
+            {
+                b.ToTable(MyProductConsts.DbTablePrefix + "Samples", MyProductConsts.DbSchema);
+                b.ConfigureByConvention();
+                b.Property(x => x.Name).HasColumnName(nameof(Sample.Name)).IsRequired().HasMaxLength(SampleConsts.NameMaxLength);
+                b.Property(x => x.Description).HasColumnName(nameof(Sample.Description)).HasMaxLength(SampleConsts.DescriptionMaxLength);
+            });
         }
     }
 }

@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using MyCompany.MyProduct.Data.Seeding.Contributors;
 using System;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
@@ -24,10 +25,10 @@ namespace MyCompany.MyProduct.Data.Seeding
 
             // Only seed test data in Development or Test environment
             string environmentName = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
-            if ((environmentName == "Development") || (environmentName == "Test"))
+            if (environmentName == "Development" || environmentName == "Test")
             {
                 // Add our own test data seed contributors here in correct order
-                // contributors.Add(typeof(SamplesTestDataSeedContributor));
+                contributors.Add(typeof(SamplesTestDataSeedContributor));
             }
 
             return contributors;

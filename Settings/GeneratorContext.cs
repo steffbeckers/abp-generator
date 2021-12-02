@@ -11,6 +11,16 @@ namespace SteffBeckers.Abp.Generator.Settings
         public string NamePlural { get; set; } = string.Empty;
 
         public IList<Property> Properties { get; set; } = new List<Property>();
+
+        public List<Property> PropertiesOrderBy(string field)
+        {
+            return Properties.OrderBy(x => field).ToList();
+        }
+
+        public List<Property> PropertiesOrderByDescending(string field)
+        {
+            return Properties.OrderByDescending(x => field).ToList();
+        }
     }
 
     public class Entity
@@ -22,6 +32,16 @@ namespace SteffBeckers.Abp.Generator.Settings
         public string NamePlural { get; set; } = string.Empty;
 
         public IList<Property> Properties { get; set; } = new List<Property>();
+
+        public List<Property> PropertiesOrderBy(string field)
+        {
+            return Properties.OrderBy(x => field).ToList();
+        }
+
+        public List<Property> PropertiesOrderByDescending(string field)
+        {
+            return Properties.OrderByDescending(x => field).ToList();
+        }
     }
 
     public class GeneratorContext

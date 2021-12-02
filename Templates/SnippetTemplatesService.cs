@@ -201,9 +201,11 @@ public class SnippetTemplatesService
 
             GeneratorContext generatorContext = _settingsService.Settings.Context;
 
+            /* TODO: Use PropertiesOrderBy in templates
             generatorContext.AggregateRoot.Properties = generatorContext.AggregateRoot.Properties
                 .OrderBy(x => x.Name)
                 .ToList();
+            */
 
             if (templateContext.RunForEachEntity)
             {

@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "MyCompany.MyProduct.DbMigrator": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

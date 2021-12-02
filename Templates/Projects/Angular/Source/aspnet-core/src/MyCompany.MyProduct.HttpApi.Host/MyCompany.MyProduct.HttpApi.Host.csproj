@@ -43,8 +43,4 @@
     <None Remove="Logs\**" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="dotnet format $(SolutionPath)" />
-  </Target>
-
 </Project>

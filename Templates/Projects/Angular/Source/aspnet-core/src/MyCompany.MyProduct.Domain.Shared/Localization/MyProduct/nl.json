@@ -3,6 +3,7 @@
   "Texts": {
     "LongWelcomeMessage": "Welkom bij de applicatie. Dit is een startup-project gebaseerd op het ABP-framework. Bezoek abp.io voor meer informatie.",
     "Menu:Home": "Home",
+    "Samples:NotFound": "Voorbeeld kon niet gevonden worden.",
     "Welcome": "Welkom"
   }
 }
