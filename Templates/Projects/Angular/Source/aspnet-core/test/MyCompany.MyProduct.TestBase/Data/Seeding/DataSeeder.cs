@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using MyCompany.MyProduct.Data.Seeding.Contributors;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Uow;
@@ -22,7 +23,8 @@ namespace MyCompany.MyProduct.Data.Seeding
             DataSeedContributorList contributors = base.GetContributors();
 
             // Add our own unit test data seed contributors here in correct order. Example:
-            // contributors.Add(typeof(SamplesUnitTestDataSeedContributor));
+            contributors.Add(typeof(SamplesUnitTestDataSeedContributor));
+
             return contributors;
         }
     }

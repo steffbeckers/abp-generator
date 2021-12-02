@@ -23,11 +23,11 @@ namespace MyCompany.MyProduct.Data.Seeding
         {
             DataSeedContributorList contributors = base.GetContributors();
 
-            // Only seed test data in Development or Test environment
+            // Only seed test data in Development or Test environment.
             string environmentName = Environment.GetEnvironmentVariable("DOTNET_ENVIRONMENT");
             if (environmentName == "Development" || environmentName == "Test")
             {
-                // Add our own test data seed contributors here in correct order
+                // Add our own test data seed contributors here in correct order:
                 contributors.Add(typeof(SamplesTestDataSeedContributor));
             }
 

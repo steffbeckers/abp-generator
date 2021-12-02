@@ -28,18 +28,21 @@ namespace MyCompany.MyProduct.Data.Seeding
 
         public virtual DataSeedContributorList GetContributors()
         {
-            // Add our own data seed contributors here in correct order
-            return new DataSeedContributorList { typeof(IdentityServerDataSeedContributor) };
+            // Add our own data seed contributors here in correct order:
+            return new DataSeedContributorList
+            {
+                typeof(IdentityServerDataSeedContributor)
+            };
         }
 
         [UnitOfWork]
         public async Task SeedAsync(DataSeedContext context)
         {
-            // Filter to only get the framework's data seed contributors
+            // Filter to only get the framework's data seed contributors.
             IEnumerable<Type> dataSeedContributors = _dataSeedOptions.Contributors
                 .Where(x => !x.FullName.StartsWith("MyCompany.MyProduct.Data.Seeding"));
 
-            // Append our own data seed contributors
+            // Append our own data seed contributors.
             dataSeedContributors = dataSeedContributors.Concat(GetContributors());
 
             using (IServiceScope scope = _serviceScopeFactory.CreateScope())
