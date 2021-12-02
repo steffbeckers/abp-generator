@@ -1,4 +1,4 @@
-﻿namespace SteffBeckers.Abp.Generator.Templates
+namespace SteffBeckers.Abp.Generator.Templates
 {
     public class ProjectTemplate
     {

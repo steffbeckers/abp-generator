@@ -36,10 +36,13 @@ dotnet_diagnostic.SA1200.severity = none
 dotnet_diagnostic.SA1208.severity = none
 dotnet_diagnostic.SA1309.severity = none
 dotnet_diagnostic.SA1310.severity = none
+dotnet_diagnostic.SA1402.severity = none
 dotnet_diagnostic.SA1413.severity = none
+dotnet_diagnostic.SA1516.severity = none
 dotnet_diagnostic.SA1600.severity = none
 dotnet_diagnostic.SA1601.severity = none
 dotnet_diagnostic.SA1633.severity = none
+dotnet_diagnostic.SA1649.severity = none
 dotnet_diagnostic.CA1822.severity = none
 
 # Organize usings

@@ -1,4 +1,4 @@
-﻿using SteffBeckers.Abp.Generator.Helpers;
+using SteffBeckers.Abp.Generator.Helpers;
 using SteffBeckers.Abp.Generator.Realtime;
 using SteffBeckers.Abp.Generator.Settings;
 using SteffBeckers.Abp.Generator.Templates;

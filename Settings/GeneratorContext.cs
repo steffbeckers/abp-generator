@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 
 namespace SteffBeckers.Abp.Generator.Settings
 {
@@ -36,11 +36,11 @@ namespace SteffBeckers.Abp.Generator.Settings
 
     public class Project
     {
-        public string? CompanyName => Name.Contains(".") ? Name.Split(".").First() : null;
+        public string? CompanyName => Name.Contains('.') ? Name.Split('.').First() : null;
 
         public string Name { get; set; } = string.Empty;
 
-        public string? ProductName => Name.Contains(".") ? string.Join(".", Name.Split(".").Skip(1)) : Name;
+        public string? ProductName => Name.Contains('.') ? string.Join('.', Name.Split('.').Skip(1)) : Name;
     }
 
     public class Property
