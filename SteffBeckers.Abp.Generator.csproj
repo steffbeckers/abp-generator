@@ -14,6 +14,7 @@
     <PackageTags>abp, cli</PackageTags>
     <Product>ABP.io Generator</Product>
     <PackageId>SteffBeckers.Abp.Generator</PackageId>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Handlebars.Net" Version="2.0.9" />
