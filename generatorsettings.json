@@ -4,8 +4,10 @@
     "Context": {
       "AggregateRoot": {
         "Entities": [],
+        "LookupPropertyName": "Name",
         "Name": "Sample",
         "NamePlural": "Samples",
+        "OrderByPropertyName": "Name",
         "Properties": [
           {
             "MaxLength": 100,
