@@ -1,0 +1,22 @@
+using {{Project.Name}}.Shared;
+using System;
+using System.Threading.Tasks;
+using Volo.Abp.Application.Services;
+
+namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
+{
+    public interface I{{AggregateRoot.NamePlural}}AppService : IApplicationService
+    {
+        Task<{{AggregateRoot.Name}}Dto> CreateAsync({{AggregateRoot.Name}}CreateInputDto input);
+
+        Task DeleteAsync(Guid id);
+
+        Task<{{AggregateRoot.Name}}Dto> GetAsync(Guid id);
+
+        Task<{{AggregateRoot.Name}}Dto> UpdateAsync(Guid id, {{AggregateRoot.Name}}UpdateInputDto input);
+
+        Task<PagedListDto<{{AggregateRoot.Name}}ListDto>> GetListAsync({{AggregateRoot.Name}}ListInputDto input);
+
+        Task<PagedListDto<LookupDto<Guid>>> GetLookupAsync(LookupInputDto input);
+    }
+}

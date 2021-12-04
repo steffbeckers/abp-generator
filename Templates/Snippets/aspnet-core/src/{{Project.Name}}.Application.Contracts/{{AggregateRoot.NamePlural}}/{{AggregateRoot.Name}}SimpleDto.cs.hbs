@@ -1,0 +1,10 @@
+namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
+{
+    public class {{AggregateRoot.Name}}SimpleDto : EntityDto<Guid>
+    {
+        {{#each AggregateRoot.PropertiesOrderByName}}
+        public {{Type}} {{Name}} { get; set; }
+
+        {{/each}}
+    }
+}

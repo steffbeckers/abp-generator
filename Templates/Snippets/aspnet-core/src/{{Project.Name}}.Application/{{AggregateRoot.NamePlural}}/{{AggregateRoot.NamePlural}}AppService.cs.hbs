@@ -1,6 +1,148 @@
-﻿namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
+using {{Project.Name}}.Permissions;
+using {{Project.Name}}.Shared;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Volo.Abp;
+using Volo.Abp.ObjectMapping;
+
+namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
 {
-    public class {{AggregateRoot.NamePlural}}AppService
+    [RemoteService(IsEnabled = false)]
+    [Authorize({{Project.ProductName}}Permissions.{{AggregateRoot.NamePlural}}.Default)]
+    public class {{AggregateRoot.NamePlural}}AppService : {{Project.ProductName}}AppService, I{{AggregateRoot.NamePlural}}AppService
     {
+        private readonly I{{AggregateRoot.Name}}Repository _{{String.Camelcase AggregateRoot.Name}}Repository;
+
+        public {{AggregateRoot.NamePlural}}AppService(I{{AggregateRoot.Name}}Repository {{String.Camelcase AggregateRoot.Name}}Repository)
+        {
+            _{{String.Camelcase AggregateRoot.Name}}Repository = {{String.Camelcase AggregateRoot.Name}}Repository;
+        }
+
+        [Authorize({{Project.ProductName}}Permissions.{{AggregateRoot.NamePlural}}.Create)]
+        public async Task<{{AggregateRoot.Name}}Dto> CreateAsync({{AggregateRoot.Name}}CreateInputDto input)
+        {
+            {{AggregateRoot.Name}} {{String.Camelcase AggregateRoot.Name}} = new {{AggregateRoot.Name}}(
+                GuidGenerator.Create(),
+                {{#each AggregateRoot.RequiredProperties}}
+                input.{{Name}},
+                {{/each}}
+            )
+            {
+                {{#each AggregateRoot.OptionalProperties}}
+                {{Name}} = input.{{Name}},
+                {{/each}}
+            };
+
+            {{String.Camelcase AggregateRoot.Name}} = await _{{String.Camelcase AggregateRoot.Name}}Repository.InsertAsync({{String.Camelcase AggregateRoot.Name}});
+
+            await CurrentUnitOfWork.SaveChangesAsync();
+
+            return await GetAsync({{String.Camelcase AggregateRoot.Name}}.Id);
+        }
+
+        [Authorize({{Project.ProductName}}Permissions.{{AggregateRoot.NamePlural}}.Delete)]
+        public async Task DeleteAsync(Guid id)
+        {
+            await _{{String.Camelcase AggregateRoot.Name}}Repository.DeleteAsync(id);
+        }
+
+        public async Task<{{AggregateRoot.Name}}Dto> GetAsync(Guid id)
+        {
+            IQueryable<{{AggregateRoot.Name}}> {{String.Camelcase AggregateRoot.Name}}Queryable = await _{{String.Camelcase AggregateRoot.Name}}Repository.GetQueryableAsync();
+
+            {{AggregateRoot.Name}}Dto {{String.Camelcase AggregateRoot.Name}}Dto = await ObjectMapper.GetMapper()
+                .ProjectTo<{{AggregateRoot.Name}}Dto>({{String.Camelcase AggregateRoot.Name}}Queryable.AsSingleQuery())
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            if ({{String.Camelcase AggregateRoot.Name}}Dto == null)
+            {
+                throw new BusinessException({{Project.ProductName}}DomainErrorCodes.{{AggregateRoot.NamePlural}}.NotFound)
+                    .WithData("Id", id);
+            }
+
+            return {{String.Camelcase AggregateRoot.Name}}Dto;
+        }
+
+        public async Task<PagedListDto<{{AggregateRoot.Name}}ListDto>> GetListAsync({{AggregateRoot.Name}}ListInputDto input)
+        {
+            IQueryable<{{AggregateRoot.Name}}> {{String.Camelcase AggregateRoot.Name}}Queryable = await _{{String.Camelcase AggregateRoot.Name}}Repository.GetQueryableAsync();
+
+            {{String.Camelcase AggregateRoot.Name}}Queryable = {{String.Camelcase AggregateRoot.Name}}Queryable.WhereIf(
+                !string.IsNullOrWhiteSpace(input.FilterText),
+                x =>
+                    {{#each AggregateRoot.Properties}}
+                    {{#if IsString}}
+                    x.{{Name}}.Contains(input.FilterText) ||
+                    {{/if}}
+                    {{/each}}
+                );
+
+            long totalCount = await {{String.Camelcase AggregateRoot.Name}}Queryable.LongCountAsync();
+
+            if (string.IsNullOrEmpty(input.Sorting))
+            {
+                {{String.Camelcase AggregateRoot.Name}}Queryable = {{String.Camelcase AggregateRoot.Name}}Queryable.OrderBy(x => x.{{AggregateRoot.OrderByPropertyName}});
+            }
+            else
+            {
+                {{String.Camelcase AggregateRoot.Name}}Queryable = {{String.Camelcase AggregateRoot.Name}}Queryable.OrderBy(x => input.Sorting);
+            }
+
+            {{String.Camelcase AggregateRoot.Name}}Queryable = {{String.Camelcase AggregateRoot.Name}}Queryable.PageBy(input.SkipCount, input.MaxResultCount);
+
+            return new PagedListDto<{{AggregateRoot.Name}}ListDto>()
+            {
+                TotalCount = totalCount,
+                Items = await ObjectMapper.GetMapper()
+                    .ProjectTo<{{AggregateRoot.Name}}ListDto>({{String.Camelcase AggregateRoot.Name}}Queryable)
+                    .AsNoTracking()
+                    .ToListAsync()
+            };
+        }
+
+        public async Task<PagedListDto<LookupDto<Guid>>> GetLookupAsync(LookupInputDto input)
+        {
+            IQueryable<{{AggregateRoot.Name}}> {{String.Camelcase AggregateRoot.Name}}Queryable = await _{{String.Camelcase AggregateRoot.Name}}Repository.GetQueryableAsync();
+
+            {{String.Camelcase AggregateRoot.Name}}Queryable = {{String.Camelcase AggregateRoot.Name}}Queryable
+                .WhereIf(
+                    !string.IsNullOrWhiteSpace(input.FilterText),
+                    x => x.{{AggregateRoot.LookupPropertyName}}.Contains(input.FilterText))
+                .WhereIf(input.Id.HasValue, x => x.Id == input.Id);
+
+            long totalCount = await {{String.Camelcase AggregateRoot.Name}}Queryable.LongCountAsync();
+
+            {{String.Camelcase AggregateRoot.Name}}Queryable = {{String.Camelcase AggregateRoot.Name}}Queryable.OrderBy(x => x.{{AggregateRoot.LookupPropertyName}})
+                .PageBy(input.SkipCount, input.MaxResultCount);
+
+            return new PagedListDto<LookupDto<Guid>>()
+            {
+                TotalCount = totalCount,
+                Items = await ObjectMapper.GetMapper()
+                    .ProjectTo<LookupDto<Guid>>({{String.Camelcase AggregateRoot.Name}}Queryable)
+                    .AsNoTracking()
+                    .ToListAsync()
+            };
+        }
+
+        [Authorize({{Project.ProductName}}Permissions.{{AggregateRoot.NamePlural}}.Update)]
+        public async Task<{{AggregateRoot.Name}}Dto> UpdateAsync(Guid id, {{AggregateRoot.Name}}UpdateInputDto input)
+        {
+            {{AggregateRoot.Name}} {{String.Camelcase AggregateRoot.Name}} = await _{{String.Camelcase AggregateRoot.Name}}Repository.GetAsync(id);
+
+            {{#each AggregateRoot.Properties}}
+            {{String.Camelcase ../AggregateRoot.Name}}.{{Name}} = input.{{Name}};
+            {{/each}}
+
+            {{String.Camelcase AggregateRoot.Name}} = await _{{String.Camelcase AggregateRoot.Name}}Repository.UpdateAsync({{String.Camelcase AggregateRoot.Name}});
+
+            await CurrentUnitOfWork.SaveChangesAsync();
+
+            return await GetAsync({{String.Camelcase AggregateRoot.Name}}.Id);
+        }
     }
 }

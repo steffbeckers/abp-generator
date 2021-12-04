@@ -251,7 +251,7 @@ on:loaded="{highlightJsLoaded}" /> -->
         </div>
         {#if snippetTemplates}
         <div style="display: flex; flex-direction: column">
-            <select bind:value={selectedSnippetTemplateOutputPaths} on:change={setSnippetTemplate} style="flex: 1 1 200px" multiple>
+            <select bind:value={selectedSnippetTemplateOutputPaths} on:change={setSnippetTemplate} style="flex: 1 1 300px" multiple>
                 {#each snippetTemplates as snippetTemplate}
                 <option value={snippetTemplate.outputPath}>{snippetTemplate.outputPath}</option>
                 {/each}
