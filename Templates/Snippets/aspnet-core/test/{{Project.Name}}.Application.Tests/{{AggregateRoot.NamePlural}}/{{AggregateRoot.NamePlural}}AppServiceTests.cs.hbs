@@ -1,0 +1,158 @@
+using {{Project.Name}}.Shared;
+using Shouldly;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Xunit;
+
+namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
+{
+    public class {{AggregateRoot.NamePlural}}AppServiceTests : {{Project.ProductName}}ApplicationTestBase
+    {
+        private readonly I{{AggregateRoot.Name}}Repository _{{String.Camelcase AggregateRoot.Name}}Repository;
+        private readonly I{{AggregateRoot.NamePlural}}AppService _{{String.Camelcase AggregateRoot.NamePlural}}AppService;
+
+        public {{AggregateRoot.NamePlural}}AppServiceTests()
+        {
+            _{{String.Camelcase AggregateRoot.Name}}Repository = GetRequiredService<I{{AggregateRoot.Name}}Repository>();
+            _{{String.Camelcase AggregateRoot.NamePlural}}AppService = GetRequiredService<I{{AggregateRoot.NamePlural}}AppService>();
+        }
+
+        [Fact]
+        public async Task Should_Create_{{AggregateRoot.Name}}()
+        {
+            // Arrange
+            {{AggregateRoot.Name}}CreateInputDto input = new {{AggregateRoot.Name}}CreateInputDto()
+            {
+                Name = "{{AggregateRoot.Name}} name",
+                Description = "{{AggregateRoot.Name}} description"
+            };
+
+            // Act
+            {{AggregateRoot.Name}}Dto {{String.Camelcase AggregateRoot.Name}}Dto = await _{{String.Camelcase AggregateRoot.NamePlural}}AppService.CreateAsync(input);
+
+            // Assert
+            {{AggregateRoot.Name}} {{String.Camelcase AggregateRoot.Name}} = await _{{String.Camelcase AggregateRoot.Name}}Repository.FindAsync(x => x.Id == {{String.Camelcase AggregateRoot.Name}}Dto.Id);
+
+            {{String.Camelcase AggregateRoot.Name}}.ShouldNotBe(null);
+            {{String.Camelcase AggregateRoot.Name}}.Name.ShouldBe("{{AggregateRoot.Name}} name");
+            {{String.Camelcase AggregateRoot.Name}}.Description.ShouldBe("{{AggregateRoot.Name}} description");
+        }
+
+        [Fact]
+        public async Task Should_Delete_{{AggregateRoot.Name}}()
+        {
+            // Arrange
+            Guid {{String.Camelcase AggregateRoot.Name}}Id = Guid.Parse("8a39344b-832a-4169-8105-a649e311cc17");
+
+            // Act
+            await _{{String.Camelcase AggregateRoot.NamePlural}}AppService.DeleteAsync({{String.Camelcase AggregateRoot.Name}}Id);
+
+            // Assert
+            {{AggregateRoot.Name}} {{String.Camelcase AggregateRoot.Name}} = await _{{String.Camelcase AggregateRoot.Name}}Repository.FindAsync({{String.Camelcase AggregateRoot.Name}}Id);
+
+            {{String.Camelcase AggregateRoot.Name}}.ShouldBe(null);
+        }
+
+        [Fact]
+        public async Task Should_Get_List_Of_{{AggregateRoot.NamePlural}}()
+        {
+            // Arrange
+            {{AggregateRoot.Name}}ListInputDto input = new {{AggregateRoot.Name}}ListInputDto();
+
+            // Act
+            PagedListDto<{{AggregateRoot.Name}}ListDto> listDto = await _{{String.Camelcase AggregateRoot.NamePlural}}AppService.GetListAsync(input);
+
+            // Assert
+            listDto.TotalCount.ShouldBe(2);
+            listDto.Items.Count.ShouldBe(2);
+            listDto.Items.Any(x => x.Id == Guid.Parse("8a39344b-832a-4169-8105-a649e311cc17")).ShouldBe(true);
+            listDto.Items.Any(x => x.Id == Guid.Parse("2084de4b-3e9c-4179-8269-674c97cbef28")).ShouldBe(true);
+
+            {{AggregateRoot.Name}}ListDto {{String.Camelcase AggregateRoot.Name}}Dto1 = listDto.Items.FirstOrDefault(x => x.Id == Guid.Parse("8a39344b-832a-4169-8105-a649e311cc17"));
+            {{String.Camelcase AggregateRoot.Name}}Dto1.ShouldNotBe(null);
+            {{String.Camelcase AggregateRoot.Name}}Dto1.Name.ShouldBe("{{AggregateRoot.Name}} 1 name");
+            {{String.Camelcase AggregateRoot.Name}}Dto1.Description.ShouldBe("{{AggregateRoot.Name}} 1 description");
+        }
+
+        [Fact]
+        public async Task Should_Get_Lookup_List_Of_{{AggregateRoot.NamePlural}}()
+        {
+            // Arrange
+            LookupInputDto input = new LookupInputDto()
+            {
+                FilterText = "{{AggregateRoot.Name}} 1"
+            };
+
+            // Act
+            PagedListDto<LookupDto<Guid>> lookupDto = await _{{String.Camelcase AggregateRoot.NamePlural}}AppService.GetLookupAsync(input);
+
+            // Assert
+            lookupDto.TotalCount.ShouldBe(1);
+            lookupDto.Items.Count.ShouldBe(1);
+
+            LookupDto<Guid> {{String.Camelcase AggregateRoot.Name}}Dto1 = lookupDto.Items.FirstOrDefault(x => x.Id == Guid.Parse("8a39344b-832a-4169-8105-a649e311cc17"));
+            {{String.Camelcase AggregateRoot.Name}}Dto1.ShouldNotBe(null);
+            {{String.Camelcase AggregateRoot.Name}}Dto1.Name.ShouldBe("{{AggregateRoot.Name}} 1 name");
+        }
+
+        [Fact]
+        public async Task Should_Get_Lookup_List_Of_{{AggregateRoot.NamePlural}}_Based_On_Id()
+        {
+            // Arrange
+            LookupInputDto input = new LookupInputDto()
+            {
+                Id = Guid.Parse("8a39344b-832a-4169-8105-a649e311cc17")
+            };
+
+            // Act
+            PagedListDto<LookupDto<Guid>> lookupDto = await _{{String.Camelcase AggregateRoot.NamePlural}}AppService.GetLookupAsync(input);
+
+            // Assert
+            lookupDto.TotalCount.ShouldBe(1);
+            lookupDto.Items.Count.ShouldBe(1);
+
+            LookupDto<Guid> {{String.Camelcase AggregateRoot.Name}}Dto1 = lookupDto.Items.FirstOrDefault(x => x.Id == Guid.Parse("8a39344b-832a-4169-8105-a649e311cc17"));
+            {{String.Camelcase AggregateRoot.Name}}Dto1.ShouldNotBe(null);
+            {{String.Camelcase AggregateRoot.Name}}Dto1.Name.ShouldBe("{{AggregateRoot.Name}} 1 name");
+        }
+
+        [Fact]
+        public async Task Should_Get_{{AggregateRoot.Name}}()
+        {
+            // Arrange
+            Guid {{String.Camelcase AggregateRoot.Name}}Id = Guid.Parse("8a39344b-832a-4169-8105-a649e311cc17");
+
+            // Act
+            {{AggregateRoot.Name}}Dto {{String.Camelcase AggregateRoot.Name}}Dto = await _{{String.Camelcase AggregateRoot.NamePlural}}AppService.GetAsync({{String.Camelcase AggregateRoot.Name}}Id);
+
+            // Assert
+            {{String.Camelcase AggregateRoot.Name}}Dto.ShouldNotBe(null);
+            {{String.Camelcase AggregateRoot.Name}}Dto.Id.ShouldBe({{String.Camelcase AggregateRoot.Name}}Id);
+            {{String.Camelcase AggregateRoot.Name}}Dto.Name.ShouldBe("{{AggregateRoot.Name}} 1 name");
+            {{String.Camelcase AggregateRoot.Name}}Dto.Description.ShouldBe("{{AggregateRoot.Name}} 1 description");
+        }
+
+        [Fact]
+        public async Task Should_Update_{{AggregateRoot.Name}}()
+        {
+            // Arrange
+            Guid {{String.Camelcase AggregateRoot.Name}}Id = Guid.Parse("8a39344b-832a-4169-8105-a649e311cc17");
+            {{AggregateRoot.Name}}UpdateInputDto input = new {{AggregateRoot.Name}}UpdateInputDto()
+            {
+                Name = "{{AggregateRoot.Name}} name update",
+                Description = "{{AggregateRoot.Name}} description update"
+            };
+
+            // Act
+            {{AggregateRoot.Name}}Dto {{String.Camelcase AggregateRoot.Name}}Dto = await _{{String.Camelcase AggregateRoot.NamePlural}}AppService.UpdateAsync({{String.Camelcase AggregateRoot.Name}}Id, input);
+
+            // Assert
+            {{AggregateRoot.Name}} {{String.Camelcase AggregateRoot.Name}} = await _{{String.Camelcase AggregateRoot.Name}}Repository.FindAsync({{String.Camelcase AggregateRoot.Name}}Dto.Id);
+
+            {{String.Camelcase AggregateRoot.Name}}.ShouldNotBe(null);
+            {{String.Camelcase AggregateRoot.Name}}.Name.ShouldBe("{{AggregateRoot.Name}} name update");
+            {{String.Camelcase AggregateRoot.Name}}.Description.ShouldBe("{{AggregateRoot.Name}} description update");
+        }
+    }
+}
