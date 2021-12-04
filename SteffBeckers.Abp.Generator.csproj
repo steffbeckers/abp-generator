@@ -28,12 +28,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Templates\Projects\**;" />
-    <None Include="wwwroot\public\**;Templates\Projects\**;Templates\Snippets\**">
+    <None Include="LICENSE;wwwroot\public\**;Templates\Projects\**;Templates\Snippets\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </None>
-    <None Update="LICENSE">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 </Project>
