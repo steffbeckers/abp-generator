@@ -14,7 +14,6 @@
     <PackageTags>abp, cli</PackageTags>
     <Product>ABP.io Generator</Product>
     <PackageId>SteffBeckers.Abp.Generator</PackageId>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Handlebars.Net" Version="2.0.9" />
@@ -28,7 +27,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Templates\Projects\**;" />
-    <None Include="LICENSE;wwwroot\public\**;Templates\Projects\**;Templates\Snippets\**">
+    <None Include="wwwroot\public\**;Templates\Projects\**;Templates\Snippets\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
