@@ -58,20 +58,21 @@ public class SnippetTemplatesService
             async (outputPath, cancellationToken) =>
             {
                 SnippetTemplate? snippetTemplate = _templates.FirstOrDefault(x => x.OutputPath == outputPath);
+
                 if (snippetTemplate?.OutputPath == null)
                 {
                     return;
                 }
 
-                string fullOutputPath = Path.Combine(
-                    _settingsService.Settings.ProjectPath,
-                    snippetTemplate.OutputPath);
+                string fullOutputPath = Path.Combine(_settingsService.Settings.ProjectPath, snippetTemplate.OutputPath);
+
                 if (fullOutputPath == null)
                 {
                     return;
                 }
 
                 string? fullOutputDirectoryPath = Path.GetDirectoryName(fullOutputPath);
+
                 if (fullOutputDirectoryPath == null)
                 {
                     return;
@@ -97,9 +98,8 @@ public class SnippetTemplatesService
         if (!Directory.Exists(FileHelpers.UserBasedSnippetTemplatesPath))
         {
             Directory.CreateDirectory(FileHelpers.UserBasedSnippetTemplatesPath);
-            FileHelpers.CopyFilesRecursively(
-                FileHelpers.SnippetTemplatesPath,
-                FileHelpers.UserBasedSnippetTemplatesPath);
+
+            FileHelpers.CopyFilesRecursively(FileHelpers.SnippetTemplatesPath, FileHelpers.UserBasedSnippetTemplatesPath);
         }
 
         // Load all snippet templates on startup.
@@ -164,22 +164,12 @@ public class SnippetTemplatesService
     {
         try
         {
-            if (_handlebarsContext == null)
-            {
-                throw new Exception("Handlebars templating context could not be loaded.");
-            }
-
-            string outputPath = fullPath
-            .Replace($"{FileHelpers.UserBasedSnippetTemplatesPath}{Path.DirectorySeparatorChar}", string.Empty)
-                .Replace(Path.DirectorySeparatorChar, '/')
-                .Replace(".hbs", string.Empty);
-
             string templateText;
             SnippetTemplateContext templateContext = new SnippetTemplateContext();
             string templateOutput = string.Empty;
 
-            using (StreamReader? templateTextStreamReader = new StreamReader(
-                File.Open(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+            using (StreamReader? templateTextStreamReader =
+                new StreamReader(File.Open(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
             {
                 templateText = await templateTextStreamReader.ReadToEndAsync();
             }
@@ -187,62 +177,30 @@ public class SnippetTemplatesService
             string templateSource = templateText;
 
             int templateConfigDelimiterIndex = templateText.IndexOf(_templateConfigDelimiter);
+
             if (templateConfigDelimiterIndex > -1)
             {
                 templateContext = JsonConvert.DeserializeObject<SnippetTemplateContext>(
-                        templateText.Substring(0, templateConfigDelimiterIndex)) ??
-                    templateContext;
-                templateSource = templateText.Substring(
+                    templateText.Substring(0, templateConfigDelimiterIndex)) ?? templateContext;
+
+                templateSource = templateSource.Substring(
                     templateConfigDelimiterIndex + _templateConfigDelimiter.Length + Environment.NewLine.Length);
             }
 
-            GeneratorContext generatorContext = _settingsService.Settings.Context;
             List<SnippetTemplate> generatedTemplates = new List<SnippetTemplate>();
 
             if (templateContext.RunForEachEntity)
             {
                 foreach (Entity entity in _settingsService.Settings.Context.AggregateRoot.Entities)
                 {
-                    entity.Properties = entity.Properties.OrderBy(x => x.Name).ToList();
+                    _settingsService.Settings.Context.Entity = entity;
 
-                    generatorContext.Entity = entity;
-
-                    string entityOutputPath = outputPath;
-
-                    HandlebarsTemplate<object, object>? handlebarsOutputPath = _handlebarsContext.Compile(
-                        entityOutputPath);
-                    entityOutputPath = handlebarsOutputPath(generatorContext);
-
-                    HandlebarsTemplate<object, object>? handlebarsTemplate = _handlebarsContext.Compile(
-                        templateSource);
-                    templateOutput = handlebarsTemplate(generatorContext);
-
-                    generatedTemplates.Add(
-                        new SnippetTemplate()
-                        {
-                            FullPath = fullPath,
-                            OutputPath = entityOutputPath,
-                            Context = templateContext,
-                            Output = templateOutput
-                        });
+                    generatedTemplates.Add(GenerateTemplate(fullPath, templateContext, templateSource));
                 }
             }
             else
             {
-                HandlebarsTemplate<object, object>? handlebarsOutputPath = _handlebarsContext.Compile(outputPath);
-                outputPath = handlebarsOutputPath(generatorContext);
-
-                HandlebarsTemplate<object, object>? handlebarsTemplate = _handlebarsContext.Compile(templateSource);
-                templateOutput = handlebarsTemplate(generatorContext);
-
-                generatedTemplates.Add(
-                    new SnippetTemplate()
-                    {
-                        FullPath = fullPath,
-                        OutputPath = outputPath,
-                        Context = templateContext,
-                        Output = templateOutput
-                    });
+                generatedTemplates.Add(GenerateTemplate(fullPath, templateContext, templateSource));
             }
 
             _templates.RemoveAll(x => x.FullPath == fullPath);
@@ -253,6 +211,33 @@ public class SnippetTemplatesService
         {
             Console.Error.WriteLine(ex.Message);
         }
+    }
+
+    private SnippetTemplate GenerateTemplate(string fullPath, SnippetTemplateContext templateContext, string templateSource)
+    {
+        if (_handlebarsContext == null)
+        {
+            throw new Exception("Handlebars templating context could not be loaded.");
+        }
+
+        string outputPath = fullPath
+            .Replace($"{FileHelpers.UserBasedSnippetTemplatesPath}{Path.DirectorySeparatorChar}", string.Empty)
+            .Replace(Path.DirectorySeparatorChar, '/')
+            .Replace(".hbs", string.Empty);
+
+        HandlebarsTemplate<object, object>? handlebarsOutputPath = _handlebarsContext.Compile(outputPath);
+        outputPath = handlebarsOutputPath(_settingsService.Settings.Context);
+
+        HandlebarsTemplate<object, object>? handlebarsTemplate = _handlebarsContext.Compile(templateSource);
+        string output = handlebarsTemplate(_settingsService.Settings.Context);
+
+        return new SnippetTemplate()
+        {
+            Context = templateContext,
+            FullPath = fullPath,
+            OutputPath = outputPath,
+            Output = output
+        };
     }
 
     private async Task LoadTemplatesAsync()

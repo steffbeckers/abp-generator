@@ -51,18 +51,12 @@ app.MapGet("/api/settings/open-project-folder", () => settingsService.OpenProjec
 
 app.MapGet("/api/templates/projects", () => projectTemplatesService.GetListAsync());
 app.MapGet("/api/templates/projects/open-folder", () => projectTemplatesService.OpenFolderAsync());
-app.MapPost(
-    "/api/templates/projects/generate",
-    (ProjectTemplateGenerateInputDto input) => projectTemplatesService.GenerateAsync(input));
+app.MapPost("/api/templates/projects/generate", (ProjectTemplateGenerateInputDto input) => projectTemplatesService.GenerateAsync(input));
 
 app.MapGet("/api/templates/snippets", () => snippetTemplatesService.GetListAsync());
 app.MapGet("/api/templates/snippets/open-folder", () => snippetTemplatesService.OpenFolderAsync());
-app.MapPost(
-    "/api/templates/snippets/edit",
-    (SnippetTemplateEditInputDto input) => snippetTemplatesService.EditAsync(input));
-app.MapPost(
-    "/api/templates/snippets/generate",
-    (SnippetTemplateGenerateInputDto input) => snippetTemplatesService.GenerateAsync(input));
+app.MapPost("/api/templates/snippets/edit", (SnippetTemplateEditInputDto input) => snippetTemplatesService.EditAsync(input));
+app.MapPost("/api/templates/snippets/generate", (SnippetTemplateGenerateInputDto input) => snippetTemplatesService.GenerateAsync(input));
 
 app.UseRouting();
 app.UseEndpoints(endpoints => endpoints.MapHub<RealtimeHub>("/signalr-hubs/realtime"));
