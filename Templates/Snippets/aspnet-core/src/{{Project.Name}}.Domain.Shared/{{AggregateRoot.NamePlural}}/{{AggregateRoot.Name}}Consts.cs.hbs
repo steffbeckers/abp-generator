@@ -1,0 +1,11 @@
+namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
+{
+    public static class {{AggregateRoot.Name}}Consts
+    {
+        {{#each AggregateRoot.PropertiesOrderByName}}
+        {{#if MaxLength}}
+        public const int {{Name}}MaxLength = {{MaxLength}};
+        {{/if}}
+        {{/each}}
+    }
+}
