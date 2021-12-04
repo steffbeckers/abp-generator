@@ -126,8 +126,7 @@ public class SnippetTemplatesService
         {
             await LoadTemplateAsync(eventArgs.FullPath);
 
-            foreach (SnippetTemplate snippetTemplate in _templates.Where(x => x.FullPath == eventArgs.FullPath)
-                .ToList())
+            foreach (SnippetTemplate snippetTemplate in _templates.Where(x => x.FullPath == eventArgs.FullPath).ToList())
             {
                 await _realtimeHub.Clients.All.SendAsync("SnippetTemplateUpdated", snippetTemplate);
             }
@@ -198,13 +197,6 @@ public class SnippetTemplatesService
             }
 
             GeneratorContext generatorContext = _settingsService.Settings.Context;
-
-            /* TODO: Use PropertiesOrderBy in templates
-            generatorContext.AggregateRoot.Properties = generatorContext.AggregateRoot.Properties
-                .OrderBy(x => x.Name)
-                .ToList();
-            */
-
             List<SnippetTemplate> generatedTemplates = new List<SnippetTemplate>();
 
             if (templateContext.RunForEachEntity)
