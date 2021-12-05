@@ -7,6 +7,7 @@ using SteffBeckers.Abp.Generator.Helpers;
 using SteffBeckers.Abp.Generator.Realtime;
 using SteffBeckers.Abp.Generator.Settings;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace SteffBeckers.Abp.Generator.Templates;
 
@@ -195,12 +196,12 @@ public class SnippetTemplatesService
                 {
                     _settingsService.Settings.Context.Entity = entity;
 
-                    generatedTemplates.Add(GenerateTemplate(fullPath, templateContext, templateSource));
+                    generatedTemplates.Add(await ConvertToTemplateAsync(fullPath, templateContext, templateSource));
                 }
             }
             else
             {
-                generatedTemplates.Add(GenerateTemplate(fullPath, templateContext, templateSource));
+                generatedTemplates.Add(await ConvertToTemplateAsync(fullPath, templateContext, templateSource));
             }
 
             _templates.RemoveAll(x => x.FullPath == fullPath);
@@ -213,14 +214,14 @@ public class SnippetTemplatesService
         }
     }
 
-    private SnippetTemplate GenerateTemplate(string fullPath, SnippetTemplateContext templateContext, string templateSource)
+    private async Task<SnippetTemplate> ConvertToTemplateAsync(string fullPath, SnippetTemplateContext templateContext, string templateSource)
     {
         if (_handlebarsContext == null)
         {
             throw new Exception("Handlebars templating context could not be loaded.");
         }
 
-        string outputPath = fullPath
+        string outputPath = templateContext.OutputPath ?? fullPath
             .Replace($"{FileHelpers.UserBasedSnippetTemplatesPath}{Path.DirectorySeparatorChar}", string.Empty)
             .Replace(Path.DirectorySeparatorChar, '/')
             .Replace(".hbs", string.Empty);
@@ -230,6 +231,34 @@ public class SnippetTemplatesService
 
         HandlebarsTemplate<object, object>? handlebarsTemplate = _handlebarsContext.Compile(templateSource);
         string output = handlebarsTemplate(_settingsService.Settings.Context);
+
+        if (!string.IsNullOrEmpty(templateContext.Pattern) && !string.IsNullOrEmpty(templateContext.Replacement))
+        {
+            string fullOutputPath = Path.Combine(_settingsService.Settings.ProjectPath, outputPath);
+
+            if (File.Exists(fullOutputPath))
+            {
+                string outputFileText = string.Empty;
+
+                using (StreamReader? outputFileTextStreamReader =
+                    new StreamReader(File.Open(fullOutputPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+                {
+                    outputFileText = await outputFileTextStreamReader.ReadToEndAsync();
+                }
+
+                if (!outputFileText.Contains(output))
+                {
+                    output = Regex.Replace(
+                        outputFileText,
+                        templateContext.Pattern,
+                        string.Format(templateContext.Replacement ?? string.Empty, output));
+                }
+                else
+                {
+                    output = outputFileText;
+                }
+            }
+        }
 
         return new SnippetTemplate()
         {

@@ -1,0 +1,12 @@
+{
+  "Pattern": "(DomainErrorCodes
+    {)",
+  "Replacement": "$1\n{0}"
+}
+#-#-#
+        public static class {{AggregateRoot.NamePlural}}
+        {
+            public const string AlreadyExists = _prefix + nameof(AlreadyExists);
+            public const string NotFound = _prefix + nameof(NotFound);
+            private const string _prefix = $"{nameof({{AggregateRoot.NamePlural}})}:";
+        }
