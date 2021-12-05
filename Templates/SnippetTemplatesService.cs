@@ -181,8 +181,15 @@ public class SnippetTemplatesService
 
             if (templateConfigDelimiterIndex > -1)
             {
-                templateContext = JsonConvert.DeserializeObject<SnippetTemplateContext>(
-                    templateText.Substring(0, templateConfigDelimiterIndex)) ?? templateContext;
+                string templateContextText = templateText.Substring(0, templateConfigDelimiterIndex);
+
+                if (_handlebarsContext != null)
+                {
+                    HandlebarsTemplate<object, object>? handlebarsTemplateContextText = _handlebarsContext.Compile(templateContextText);
+                    templateContextText = handlebarsTemplateContextText(_settingsService.Settings.Context);
+                }
+
+                templateContext = JsonConvert.DeserializeObject<SnippetTemplateContext>(templateContextText) ?? templateContext;
 
                 templateSource = templateSource.Substring(
                     templateConfigDelimiterIndex + _templateConfigDelimiter.Length + Environment.NewLine.Length);
@@ -233,7 +240,8 @@ public class SnippetTemplatesService
         HandlebarsTemplate<object, object>? handlebarsTemplate = _handlebarsContext.Compile(templateSource);
         string output = handlebarsTemplate(_settingsService.Settings.Context);
 
-        if (!string.IsNullOrEmpty(templateContext.Pattern) && !string.IsNullOrEmpty(templateContext.Replacement))
+        if (!string.IsNullOrEmpty(templateContext.RegexPattern) &&
+            !string.IsNullOrEmpty(templateContext.RegexReplacement))
         {
             string fullOutputPath = Path.Combine(_settingsService.Settings.ProjectPath, outputPath);
 
@@ -251,8 +259,9 @@ public class SnippetTemplatesService
                 {
                     output = Regex.Replace(
                         outputFileText,
-                        templateContext.Pattern,
-                        string.Format(templateContext.Replacement ?? string.Empty, output));
+                        templateContext.RegexPattern,
+                        string.Format(templateContext.RegexReplacement ?? string.Empty, output),
+                        templateContext.RegexOptions);
                 }
                 else
                 {
