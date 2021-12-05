@@ -214,6 +214,7 @@ public class SnippetTemplatesService
         }
     }
 
+    // TODO: Better name for this method?
     private async Task<SnippetTemplate> ConvertToTemplateAsync(string fullPath, SnippetTemplateContext templateContext, string templateSource)
     {
         if (_handlebarsContext == null)
