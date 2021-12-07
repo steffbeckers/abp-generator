@@ -18,11 +18,6 @@
                 "NamePlural": "SampleTranslations",
                 "Properties": [
                   {
-                    "Name": "SampleId",
-                    "Required": true,
-                    "Type": "Guid"
-                  },
-                  {
                     "MaxLength": 10,
                     "Name": "CultureName",
                     "Required": true,
@@ -97,11 +92,6 @@
                   "NamePlural": "SampleTranslations",
                   "Properties": [
                     {
-                      "Name": "SampleId",
-                      "Required": true,
-                      "Type": "Guid"
-                    },
-                    {
                       "MaxLength": 10,
                       "Name": "CultureName",
                       "Required": true,
@@ -164,11 +154,6 @@
                     "NamePlural": "SampleTranslations",
                     "Properties": [
                       {
-                        "Name": "SampleId",
-                        "Required": true,
-                        "Type": "Guid"
-                      },
-                      {
                         "MaxLength": 10,
                         "Name": "CultureName",
                         "Required": true,
@@ -228,11 +213,6 @@
                       "NamePlural": "SampleTranslations",
                       "Properties": [
                         {
-                          "Name": "SampleId",
-                          "Required": true,
-                          "Type": "Guid"
-                        },
-                        {
                           "MaxLength": 10,
                           "Name": "CultureName",
                           "Required": true,
@@ -289,11 +269,6 @@
                         "NamePlural": "SampleTranslations",
                         "Properties": [
                           {
-                            "Name": "SampleId",
-                            "Required": true,
-                            "Type": "Guid"
-                          },
-                          {
                             "MaxLength": 10,
                             "Name": "CultureName",
                             "Required": true,
@@ -324,11 +299,6 @@
                             "Name": "SampleTranslation",
                             "NamePlural": "SampleTranslations",
                             "Properties": [
-                              {
-                                "Name": "SampleId",
-                                "Required": true,
-                                "Type": "Guid"
-                              },
                               {
                                 "MaxLength": 10,
                                 "Name": "CultureName",
@@ -389,14 +359,14 @@
                             "examples": [
                               [
                                 {
-                                  "Name": "SampleId",
-                                  "Required": true,
-                                  "Type": "Guid"
-                                },
-                                {
                                   "MaxLength": 10,
                                   "Name": "CultureName",
                                   "Required": true,
+                                  "Type": "string"
+                                },
+                                {
+                                  "MaxLength": 500,
+                                  "Name": "TranslatedFieldName",
                                   "Type": "string"
                                 }
                               ]
@@ -413,17 +383,29 @@
                                   "default": {},
                                   "examples": [
                                     {
-                                      "Name": "SampleId",
+                                      "MaxLength": 10,
+                                      "Name": "CultureName",
                                       "Required": true,
-                                      "Type": "Guid"
+                                      "Type": "string"
                                     }
                                   ],
                                   "required": [
+                                    "MaxLength",
                                     "Name",
                                     "Required",
                                     "Type"
                                   ],
                                   "properties": {
+                                    "MaxLength": {
+                                      "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0/properties/Properties/items/anyOf/0/properties/MaxLength",
+                                      "type": "integer",
+                                      "title": "The MaxLength schema",
+                                      "description": "An explanation about the purpose of this instance.",
+                                      "default": 0,
+                                      "examples": [
+                                        10
+                                      ]
+                                    },
                                     "Name": {
                                       "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0/properties/Properties/items/anyOf/0/properties/Name",
                                       "type": "string",
@@ -431,7 +413,7 @@
                                       "description": "An explanation about the purpose of this instance.",
                                       "default": "",
                                       "examples": [
-                                        "SampleId"
+                                        "CultureName"
                                       ]
                                     },
                                     "Required": {
@@ -451,7 +433,7 @@
                                       "description": "An explanation about the purpose of this instance.",
                                       "default": "",
                                       "examples": [
-                                        "Guid"
+                                        "string"
                                       ]
                                     }
                                   },
@@ -461,70 +443,6 @@
                                   "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0/properties/Properties/items/anyOf/1",
                                   "type": "object",
                                   "title": "The second anyOf schema",
-                                  "description": "An explanation about the purpose of this instance.",
-                                  "default": {},
-                                  "examples": [
-                                    {
-                                      "MaxLength": 10,
-                                      "Name": "CultureName",
-                                      "Required": true,
-                                      "Type": "string"
-                                    }
-                                  ],
-                                  "required": [
-                                    "MaxLength",
-                                    "Name",
-                                    "Required",
-                                    "Type"
-                                  ],
-                                  "properties": {
-                                    "MaxLength": {
-                                      "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0/properties/Properties/items/anyOf/1/properties/MaxLength",
-                                      "type": "integer",
-                                      "title": "The MaxLength schema",
-                                      "description": "An explanation about the purpose of this instance.",
-                                      "default": 0,
-                                      "examples": [
-                                        10
-                                      ]
-                                    },
-                                    "Name": {
-                                      "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0/properties/Properties/items/anyOf/1/properties/Name",
-                                      "type": "string",
-                                      "title": "The Name schema",
-                                      "description": "An explanation about the purpose of this instance.",
-                                      "default": "",
-                                      "examples": [
-                                        "CultureName"
-                                      ]
-                                    },
-                                    "Required": {
-                                      "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0/properties/Properties/items/anyOf/1/properties/Required",
-                                      "type": "boolean",
-                                      "title": "The Required schema",
-                                      "description": "An explanation about the purpose of this instance.",
-                                      "default": false,
-                                      "examples": [
-                                        true
-                                      ]
-                                    },
-                                    "Type": {
-                                      "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0/properties/Properties/items/anyOf/1/properties/Type",
-                                      "type": "string",
-                                      "title": "The Type schema",
-                                      "description": "An explanation about the purpose of this instance.",
-                                      "default": "",
-                                      "examples": [
-                                        "string"
-                                      ]
-                                    }
-                                  },
-                                  "additionalProperties": true
-                                },
-                                {
-                                  "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0/properties/Properties/items/anyOf/2",
-                                  "type": "object",
-                                  "title": "The third anyOf schema",
                                   "description": "An explanation about the purpose of this instance.",
                                   "default": {},
                                   "examples": [
@@ -541,7 +459,7 @@
                                   ],
                                   "properties": {
                                     "MaxLength": {
-                                      "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0/properties/Properties/items/anyOf/2/properties/MaxLength",
+                                      "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0/properties/Properties/items/anyOf/1/properties/MaxLength",
                                       "type": "integer",
                                       "title": "The MaxLength schema",
                                       "description": "An explanation about the purpose of this instance.",
@@ -551,7 +469,7 @@
                                       ]
                                     },
                                     "Name": {
-                                      "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0/properties/Properties/items/anyOf/2/properties/Name",
+                                      "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0/properties/Properties/items/anyOf/1/properties/Name",
                                       "type": "string",
                                       "title": "The Name schema",
                                       "description": "An explanation about the purpose of this instance.",
@@ -561,7 +479,7 @@
                                       ]
                                     },
                                     "Type": {
-                                      "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0/properties/Properties/items/anyOf/2/properties/Type",
+                                      "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0/properties/Properties/items/anyOf/1/properties/Type",
                                       "type": "string",
                                       "title": "The Type schema",
                                       "description": "An explanation about the purpose of this instance.",

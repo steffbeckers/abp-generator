@@ -10,11 +10,6 @@
             "NamePlural": "SampleTranslations",
             "Properties": [
               {
-                "Name": "SampleId",
-                "Required": true,
-                "Type": "Guid"
-              },
-              {
                 "MaxLength": 10,
                 "Name": "CultureName",
                 "Required": true,
