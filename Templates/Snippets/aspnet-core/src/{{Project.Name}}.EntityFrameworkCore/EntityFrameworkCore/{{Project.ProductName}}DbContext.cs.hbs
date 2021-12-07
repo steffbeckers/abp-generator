@@ -6,3 +6,16 @@
 }
 #-#-#
         public DbSet<{{AggregateRoot.Name}}> {{AggregateRoot.NamePlural}} { get; set; }
+
+#-#-#
+{
+  "OutputPath": "aspnet-core/src/{{Project.Name}}.EntityFrameworkCore/EntityFrameworkCore/{{Project.ProductName}}DbContext.cs",
+  "RegexPattern": "(builder.Entity<)",
+  "RegexReplacement": "{0}\n$1"
+}
+#-#-#
+            builder.Entity<{{AggregateRoot.Name}}>(b =>
+            {
+                b.ToTable({{Project.ProductName}}Consts.DbTablePrefix + "{{AggregateRoot.NamePlural}}", {{Project.ProductName}}Consts.DbSchema);
+                b.ConfigureByConvention();
+            });
