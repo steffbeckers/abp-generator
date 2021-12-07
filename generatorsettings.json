@@ -3,7 +3,31 @@
   "Generator": {
     "Context": {
       "AggregateRoot": {
-        "Entities": [],
+        "Entities": [
+          {
+            "AggregateRootPropertyName": "Translations",
+            "Name": "SampleTranslation",
+            "NamePlural": "SampleTranslations",
+            "Properties": [
+              {
+                "Name": "SampleId",
+                "Required": true,
+                "Type": "Guid"
+              },
+              {
+                "MaxLength": 10,
+                "Name": "CultureName",
+                "Required": true,
+                "Type": "string"
+              },
+              {
+                "MaxLength": 500,
+                "Name": "TranslatedFieldName",
+                "Type": "string"
+              }
+            ]
+          }
+        ],
         "LookupPropertyName": "Name",
         "Name": "Sample",
         "NamePlural": "Samples",
