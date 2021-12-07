@@ -22,7 +22,7 @@ namespace MyCompany.MyProduct.Data.Seeding
         {
             DataSeedContributorList contributors = base.GetContributors();
 
-            // Add our own unit test data seed contributors here in correct order. Example:
+            // Add our own unit test data seed contributors here in correct order:
             contributors.Add(typeof(SamplesUnitTestDataSeedContributor));
 
             return contributors;
