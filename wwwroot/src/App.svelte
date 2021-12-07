@@ -107,6 +107,10 @@
     // function highlightJsLoaded() {
     //     hljs.highlightAll();
     // }
+    
+    async function openSettingsJson() {
+        await fetch("/api/settings/open-json");
+    }
 
     async function updateSettings() {
         await fetch("/api/settings", {
@@ -117,9 +121,9 @@
             }
         });
     }
-
-    async function openSettingsJson() {
-        await fetch("/api/settings/open-json");
+    
+    function aggregateRootNameChanged() {
+        settings.context.aggregateRoot.namePlural = settings.context.aggregateRoot.name + 's';
     }
 
     async function openProjectPathFolder() {
@@ -212,14 +216,14 @@ on:loaded="{highlightJsLoaded}" /> -->
             <div style="flex: 1 1">
                 <label for="projectPathSetting">Project path</label>
                 <div style="display: flex; gap: 12px">
-                    <input style="flex: 3 1" bind:value={settings.projectPath} on:blur={updateSettings} type="text" id="projectPathSetting" />
+                    <input style="flex: 3 1" bind:value={settings.projectPath} type="text" id="projectPathSetting" />
                     <button style="flex: 1 1" on:click={openProjectPathFolder} type="button">Open folder</button>
                 </div>
             </div>
             <div style="display: flex; gap: 12px">
                 <div style="flex: 1 1">
                     <label for="projectNameSetting">Project.Name</label>
-                    <input bind:value={settings.context.project.name} on:blur={updateSettings} type="text" id="projectNameSetting" />
+                    <input bind:value={settings.context.project.name} type="text" id="projectNameSetting" />
                 </div>
                 <div style="flex: 1 1">
                     <label for="companyNameSetting">Project.CompanyName</label>
@@ -233,14 +237,17 @@ on:loaded="{highlightJsLoaded}" /> -->
             <div style="display: flex; gap: 12px">
                 <div style="flex: 1 1">
                     <label for="aggregateRootNameSetting">AggregateRoot.Name</label>
-                    <input bind:value={settings.context.aggregateRoot.name} on:blur={updateSettings} type="text" id="aggregateRootNameSetting" />
+                    <input bind:value={settings.context.aggregateRoot.name} on:blur={aggregateRootNameChanged} type="text" id="aggregateRootNameSetting" />
                 </div>
                 <div style="flex: 1 1">
                     <label for="aggregateRootNamePluralSetting">AggregateRoot.NamePlural</label>
-                    <input bind:value={settings.context.aggregateRoot.namePlural} on:blur={updateSettings} type="text" id="aggregateRootNamePluralSetting" />
+                    <input bind:value={settings.context.aggregateRoot.namePlural} type="text" id="aggregateRootNamePluralSetting" />
                 </div>
             </div>
             <div>TODO: Add other context based settings like list of entities.</div>
+        </div>
+        <div>
+            <button on:click={updateSettings} type="button">Save</button>
         </div>
         {/if}
     </div>

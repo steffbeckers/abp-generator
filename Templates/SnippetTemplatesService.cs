@@ -174,12 +174,9 @@ public class SnippetTemplatesService
                 .Replace($"{FileHelpers.UserBasedSnippetTemplatesPath}{Path.DirectorySeparatorChar}", string.Empty)
                 .Replace(Path.DirectorySeparatorChar, '/')
                 .Replace(".hbs", string.Empty);
+
+            string fullOutputPath = Path.Combine(_settingsService.Settings.ProjectPath, ReplaceVariables(outputPath));
             string outputFileText = string.Empty;
-
-            outputPath = ReplaceVariables(outputPath);
-
-            string fullOutputPath = Path.Combine(_settingsService.Settings.ProjectPath, outputPath);
-
             if (!string.IsNullOrEmpty(fullOutputPath) && File.Exists(fullOutputPath))
             {
                 using (StreamReader? outputFileTextStreamReader =
@@ -200,14 +197,13 @@ public class SnippetTemplatesService
             if (templateParts.Length == 1)
             {
                 templateSource = templateParts[0];
-                output = ReplaceVariables(templateSource);
 
                 generatedTemplates.Add(new SnippetTemplate()
                 {
                     Context = templateContext,
                     FullPath = fullPath,
-                    Output = output,
-                    OutputPath = outputPath
+                    Output = ReplaceVariables(templateSource),
+                    OutputPath = ReplaceVariables(outputPath)
                 });
             }
             else if (templateParts.Length > 1)
@@ -222,19 +218,21 @@ public class SnippetTemplatesService
 
                     if (templateContext.RunForEachEntity)
                     {
+                        if (_settingsService.Settings.Context.AggregateRoot.Entities.Count == 0)
+                        {
+                            return;
+                        }
+
                         foreach (Entity entity in _settingsService.Settings.Context.AggregateRoot.Entities)
                         {
                             _settingsService.Settings.Context.Entity = entity;
-
-                            outputPath = ReplaceVariables(outputPath);
-                            output = ReplaceVariables(templateSource);
 
                             generatedTemplates.Add(new SnippetTemplate()
                             {
                                 Context = templateContext,
                                 FullPath = fullPath,
-                                Output = output,
-                                OutputPath = outputPath
+                                Output = ReplaceVariables(templateSource),
+                                OutputPath = ReplaceVariables(outputPath)
                             });
                         }
                     }
@@ -259,13 +257,16 @@ public class SnippetTemplatesService
                     }
                 }
 
-                generatedTemplates.Add(new SnippetTemplate()
+                if (generatedTemplates.Count == 0)
                 {
-                    Context = templateContext,
-                    FullPath = fullPath,
-                    Output = output,
-                    OutputPath = outputPath
-                });
+                    generatedTemplates.Add(new SnippetTemplate()
+                    {
+                        Context = templateContext,
+                        FullPath = fullPath,
+                        Output = output,
+                        OutputPath = ReplaceVariables(outputPath)
+                    });
+                }
             }
 
             _templates.RemoveAll(x => x.FullPath == fullPath);
