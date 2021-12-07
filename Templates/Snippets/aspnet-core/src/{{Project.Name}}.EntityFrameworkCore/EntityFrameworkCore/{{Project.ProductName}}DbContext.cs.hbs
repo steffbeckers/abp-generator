@@ -2,16 +2,15 @@
   "OutputPath": "aspnet-core/src/{{Project.Name}}.EntityFrameworkCore/EntityFrameworkCore/{{Project.ProductName}}DbContext.cs",
   "RegexPattern": "({{Project.ProductName}}DbContext :.*
     {)",
-  "RegexReplacement": "$1\n{0}"
+  "RegexReplacement": "$1{0}"
 }
 #-#-#
         public DbSet<{{AggregateRoot.Name}}> {{AggregateRoot.NamePlural}} { get; set; }
-
 #-#-#
 {
   "OutputPath": "aspnet-core/src/{{Project.Name}}.EntityFrameworkCore/EntityFrameworkCore/{{Project.ProductName}}DbContext.cs",
-  "RegexPattern": "(builder.Entity<)",
-  "RegexReplacement": "{0}\n$1"
+  "RegexPattern": "(base.OnModelCreating\\\\(builder\\\\);)",
+  "RegexReplacement": "$1\n{0}"
 }
 #-#-#
             builder.Entity<{{AggregateRoot.Name}}>(b =>
