@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Root Type="DevExpress.CodeAnalysis.Refactorings.MoveTypeToFile.MoveTypesToFilesOptions">
-  <Options Language="Neutral">
-    <MoveClass>False</MoveClass>
-  </Options>
-</Root>

@@ -1,6 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Root Type="DevExpress.CodeAnalysis.Diagnostics.DuplicateCode.DuplicateCodeOptions">
-  <Options Language="Neutral">
-    <AnalysisBlockLevel>Level1</AnalysisBlockLevel>
-  </Options>
-</Root>
