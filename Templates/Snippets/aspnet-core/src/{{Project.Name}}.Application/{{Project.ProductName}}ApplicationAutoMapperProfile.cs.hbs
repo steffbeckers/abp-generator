@@ -1,4 +1,11 @@
 {
+  "RegexPattern": "(using AutoMapper;)",
+  "RegexReplacement": "$1{0}"
+}
+#-#-#
+using {{Project.Name}}.{{AggregateRoot.NamePlural}};
+#-#-#
+{
   "RegexPattern": "({{Project.ProductName}}ApplicationAutoMapperProfile\\\\(\\\\)
         {)",
   "RegexReplacement": "$1{0}"

@@ -7,11 +7,11 @@ using Volo.Abp.Domain.Repositories;
 
 namespace {{Project.Name}}.Data.Seeding.Contributors
 {
-    public class {{AggregateRoot.NamePlural}}TestDataSeedContributor : IDataSeedContributor, ITransientDependency
+    public class {{AggregateRoot.NamePlural}}UnitTestDataSeedContributor : IDataSeedContributor, ITransientDependency
     {
         private readonly I{{AggregateRoot.Name}}Repository _{{String.Camelcase AggregateRoot.Name}}Repository;
 
-        public {{AggregateRoot.NamePlural}}TestDataSeedContributor(I{{AggregateRoot.Name}}Repository {{String.Camelcase AggregateRoot.Name}}Repository)
+        public {{AggregateRoot.NamePlural}}UnitTestDataSeedContributor(I{{AggregateRoot.Name}}Repository {{String.Camelcase AggregateRoot.Name}}Repository)
         {
             _{{String.Camelcase AggregateRoot.Name}}Repository = {{String.Camelcase AggregateRoot.Name}}Repository;
         }
@@ -48,7 +48,7 @@ namespace {{Project.Name}}.Data.Seeding.Contributors
             await _{{String.Camelcase AggregateRoot.Name}}Repository.InsertAsync({{String.Camelcase AggregateRoot.Name}}1);
 
             {{AggregateRoot.Name}} {{String.Camelcase AggregateRoot.Name}}2 = new {{AggregateRoot.Name}}(
-                id: Guid.Parse("8a39344b-832a-4169-8105-a649e311cc17"),
+                id: Guid.Parse("1d53f062-08e5-443e-8eb5-298fc07ce4f9"),
                 {{#each AggregateRoot.RequiredProperties}}
                 {{#if IsString}}
                 {{String.Camelcase Name}}: "{{../AggregateRoot.Name}} 2 {{String.Lowercase Name}}",

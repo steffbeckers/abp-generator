@@ -67,7 +67,7 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
             listDto.TotalCount.ShouldBe(2);
             listDto.Items.Count.ShouldBe(2);
             listDto.Items.Any(x => x.Id == Guid.Parse("8a39344b-832a-4169-8105-a649e311cc17")).ShouldBe(true);
-            listDto.Items.Any(x => x.Id == Guid.Parse("2084de4b-3e9c-4179-8269-674c97cbef28")).ShouldBe(true);
+            listDto.Items.Any(x => x.Id == Guid.Parse("1d53f062-08e5-443e-8eb5-298fc07ce4f9")).ShouldBe(true);
 
             {{AggregateRoot.Name}}ListDto {{String.Camelcase AggregateRoot.Name}}Dto1 = listDto.Items.FirstOrDefault(x => x.Id == Guid.Parse("8a39344b-832a-4169-8105-a649e311cc17"));
             {{String.Camelcase AggregateRoot.Name}}Dto1.ShouldNotBe(null);

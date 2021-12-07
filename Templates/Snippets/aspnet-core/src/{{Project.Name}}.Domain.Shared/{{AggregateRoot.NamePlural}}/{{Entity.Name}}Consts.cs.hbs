@@ -1,0 +1,15 @@
+{
+  "RunForEachEntity": true
+}
+#-#-#
+namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
+{
+    public static class {{Entity.Name}}Consts
+    {
+        {{#each Entity.PropertiesOrderByName}}
+        {{#if MaxLength}}
+        public const int {{Name}}MaxLength = {{MaxLength}};
+        {{/if}}
+        {{/each}}
+    }
+}
