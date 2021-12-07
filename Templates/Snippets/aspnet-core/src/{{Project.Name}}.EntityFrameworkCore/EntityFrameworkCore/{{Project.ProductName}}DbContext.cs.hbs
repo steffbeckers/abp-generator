@@ -1,5 +1,4 @@
 {
-  "OutputPath": "aspnet-core/src/{{Project.Name}}.EntityFrameworkCore/EntityFrameworkCore/{{Project.ProductName}}DbContext.cs",
   "RegexPattern": "({{Project.ProductName}}DbContext :.*
     {)",
   "RegexReplacement": "$1{0}"
@@ -8,7 +7,6 @@
         public DbSet<{{AggregateRoot.Name}}> {{AggregateRoot.NamePlural}} { get; set; }
 #-#-#
 {
-  "OutputPath": "aspnet-core/src/{{Project.Name}}.EntityFrameworkCore/EntityFrameworkCore/{{Project.ProductName}}DbContext.cs",
   "RegexPattern": "(base.OnModelCreating\\\\(builder\\\\);)",
   "RegexReplacement": "$1\n{0}"
 }
