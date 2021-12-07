@@ -7,6 +7,7 @@ using SteffBeckers.Abp.Generator.Helpers;
 using SteffBeckers.Abp.Generator.Realtime;
 using SteffBeckers.Abp.Generator.Settings;
 using System.Diagnostics;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace SteffBeckers.Abp.Generator.Templates;
@@ -24,7 +25,14 @@ public class SnippetTemplatesService
         _realtimeHub = realtimeHub;
         _settingsService = settingsService;
 
+        // Loading in helpers from https://github.com/Handlebars-Net/Handlebars.Net.Helpers.
         HandlebarsHelpers.Register(_handlebarsContext);
+
+        // Override String.Camelcase helper.
+        _handlebarsContext.RegisterHelper("String.Camelcase", (output, context, arguments) =>
+        {
+            output.Write(JsonNamingPolicy.CamelCase.ConvertName(arguments[0].ToString() ?? string.Empty));
+        });
     }
 
     public Task EditAsync(SnippetTemplateEditInputDto input)

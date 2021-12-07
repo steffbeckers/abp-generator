@@ -1,0 +1,13 @@
+{
+  "RegexPattern": "({{Project.ProductName}}Permissions
+    {)",
+  "RegexReplacement": "$1{0}"
+}
+#-#-#
+        public class {{AggregateRoot.NamePlural}}
+        {
+            public const string Create = Default + $".{nameof(Create)}";
+            public const string Default = GroupName + $".{nameof({{AggregateRoot.NamePlural}})}";
+            public const string Delete = Default + $".{nameof(Delete)}";
+            public const string Update = Default + $".{nameof(Update)}";
+        }

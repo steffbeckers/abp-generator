@@ -17,4 +17,21 @@
             {
                 b.ToTable({{Project.ProductName}}Consts.DbTablePrefix + "{{AggregateRoot.NamePlural}}", {{Project.ProductName}}Consts.DbSchema);
                 b.ConfigureByConvention();
+                {{#each AggregateRoot.Properties}}
+                b.Property(x => x.{{Name}}).HasColumnName(nameof({{../AggregateRoot.Name}}.{{Name}})){{#if Required}}.IsRequired(){{/if}}{{#if MaxLength}}.HasMaxLength({{../AggregateRoot.Name}}Consts.{{Name}}MaxLength){{/if}};
+                {{/each}}
             });
+            {{#each AggregateRoot.Entities}}
+
+            builder.Entity<{{Name}}>(b =>
+            {
+                b.ToTable({{Project.ProductName}}Consts.DbTablePrefix + "{{NamePlural}}", {{Project.ProductName}}Consts.DbSchema);
+                b.ConfigureByConvention();
+                {{#each Properties}}
+                b.Property(x => x.{{Name}}).HasColumnName(nameof({{../Name}}.{{Name}})){{#if Required}}.IsRequired(){{/if}}{{#if MaxLength}}.HasMaxLength({{../Name}}Consts.{{Name}}MaxLength){{/if}};
+                {{#if IsGuid}}
+                b.HasOne(x => x.{{../../AggregateRoot.Name}}).WithMany(x => x.{{../AggregateRootPropertyName}}).HasForeignKey(x => x.{{Name}});
+                {{/if}}
+                {{/each}}
+            });
+            {{/each}}

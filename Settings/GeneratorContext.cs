@@ -67,21 +67,24 @@ namespace SteffBeckers.Abp.Generator.Settings
 
     public class Property
     {
-        public int? MaxLength { get; set; }
-
-        public string Name { get; set; } = string.Empty;
-
-        public bool Required { get; set; }
-
         [JsonIgnore]
-        public bool Optional => !Required;
-
-        public string Type { get; set; } = string.Empty;
+        public bool IsGuid => Type.Equals("Guid");
 
         [JsonIgnore]
         public bool IsString => Type.Equals("string");
 
+        public int? MaxLength { get; set; }
+
+        public string Name { get; set; } = string.Empty;
+
+        [JsonIgnore]
+        public bool Optional => !Required;
+
+        public bool Required { get; set; }
+
         [JsonIgnore]
         public bool StringAsFullProperty => IsString && (Required || MaxLength != null);
+
+        public string Type { get; set; } = string.Empty;
     }
 }
