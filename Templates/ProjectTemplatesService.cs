@@ -4,6 +4,7 @@ using SteffBeckers.Abp.Generator.Helpers;
 using SteffBeckers.Abp.Generator.Settings;
 using System.Diagnostics;
 using System.Text;
+using System.Text.Json;
 
 namespace SteffBeckers.Abp.Generator.Templates;
 
@@ -141,6 +142,7 @@ public class ProjectTemplatesService
         stringBuilder.Replace("MyCompany.MyProduct", _settingsService.Settings.Context.Project.Name);
         stringBuilder.Replace("MyCompany", _settingsService.Settings.Context.Project.CompanyName);
         stringBuilder.Replace("MyProduct", _settingsService.Settings.Context.Project.ProductName);
+        stringBuilder.Replace("myProduct", JsonNamingPolicy.CamelCase.ConvertName(_settingsService.Settings.Context.Project.ProductName ?? string.Empty));
 
         return stringBuilder.ToString();
     }
