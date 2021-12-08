@@ -5,9 +5,9 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
 {
-    public class EfCore{{AggregateRoot.Name}}Repository : EfCoreRepository<MyProductDbContext, {{AggregateRoot.Name}}, Guid>, I{{AggregateRoot.Name}}Repository
+    public class EfCore{{AggregateRoot.Name}}Repository : EfCoreRepository<{{Project.ProductName}}DbContext, {{AggregateRoot.Name}}, Guid>, I{{AggregateRoot.Name}}Repository
     {
-        public EfCore{{AggregateRoot.Name}}Repository(IDbContextProvider<MyProductDbContext> dbContextProvider)
+        public EfCore{{AggregateRoot.Name}}Repository(IDbContextProvider<{{Project.ProductName}}DbContext> dbContextProvider)
             : base(dbContextProvider)
         {
         }
