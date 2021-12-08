@@ -141,6 +141,7 @@ public class ProjectTemplatesService
 
         stringBuilder.Replace("MyCompany.MyProduct", _settingsService.Settings.Context.Project.Name);
         stringBuilder.Replace("MyCompany", _settingsService.Settings.Context.Project.CompanyName);
+        stringBuilder.Replace("myCompany", JsonNamingPolicy.CamelCase.ConvertName(_settingsService.Settings.Context.Project.CompanyName ?? string.Empty));
         stringBuilder.Replace("MyProduct", _settingsService.Settings.Context.Project.ProductName);
         stringBuilder.Replace("myProduct", JsonNamingPolicy.CamelCase.ConvertName(_settingsService.Settings.Context.Project.ProductName ?? string.Empty));
 
