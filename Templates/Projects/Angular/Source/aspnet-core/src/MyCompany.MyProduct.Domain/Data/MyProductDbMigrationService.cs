@@ -1,18 +1,3 @@
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
-using Volo.Abp.Data;
-using Volo.Abp.DependencyInjection;
-using Volo.Abp.Identity;
-using Volo.Abp.MultiTenancy;
-using Volo.Abp.TenantManagement;
-
 namespace MyCompany.MyProduct.Data
 {
     public class MyProductDbMigrationService : ITransientDependency
@@ -20,7 +5,6 @@ namespace MyCompany.MyProduct.Data
         private readonly ICurrentTenant _currentTenant;
         private readonly IDataSeeder _dataSeeder;
         private readonly IEnumerable<IMyProductDbSchemaMigrator> _dbSchemaMigrators;
-        private readonly ILogger<MyProductDbMigrationService> _logger;
         private readonly ITenantRepository _tenantRepository;
 
         public MyProductDbMigrationService(
@@ -32,9 +16,12 @@ namespace MyCompany.MyProduct.Data
             _currentTenant = currentTenant;
             _dataSeeder = dataSeeder;
             _dbSchemaMigrators = dbSchemaMigrators;
-            _logger = NullLogger<MyProductDbMigrationService>.Instance;
             _tenantRepository = tenantRepository;
+
+            Logger = NullLogger<MyProductDbMigrationService>.Instance;
         }
+
+        public ILogger<MyProductDbMigrationService> Logger { get; set; }
 
         public async Task MigrateAsync()
         {
@@ -45,12 +32,12 @@ namespace MyCompany.MyProduct.Data
                 return;
             }
 
-            _logger.LogInformation("Started database migrations...");
+            Logger.LogInformation("Started database migrations...");
 
             await MigrateDatabaseSchemaAsync();
             await SeedDataAsync();
 
-            _logger.LogInformation($"Successfully completed host database migrations.");
+            Logger.LogInformation($"Successfully completed host database migrations.");
 
             List<Tenant> tenants = await _tenantRepository.GetListAsync(includeDetails: true);
 
@@ -74,16 +61,16 @@ namespace MyCompany.MyProduct.Data
                     await SeedDataAsync(tenant);
                 }
 
-                _logger.LogInformation($"Successfully completed {tenant.Name} tenant database migrations.");
+                Logger.LogInformation($"Successfully completed {tenant.Name} tenant database migrations.");
             }
 
-            _logger.LogInformation("Successfully completed all database migrations.");
-            _logger.LogInformation("You can safely end this process...");
+            Logger.LogInformation("Successfully completed all database migrations.");
+            Logger.LogInformation("You can safely end this process...");
         }
 
         private void AddInitialMigration()
         {
-            _logger.LogInformation("Creating initial migration...");
+            Logger.LogInformation("Creating initial migration...");
 
             string argumentPrefix;
             string fileName;
@@ -141,7 +128,7 @@ namespace MyCompany.MyProduct.Data
             }
             catch (Exception e)
             {
-                _logger.LogWarning("Couldn't determinate if any migrations exist : " + e.Message);
+                Logger.LogWarning("Couldn't determinate if any migrations exist : " + e.Message);
                 return false;
             }
         }
@@ -186,7 +173,7 @@ namespace MyCompany.MyProduct.Data
 
         private async Task MigrateDatabaseSchemaAsync(Tenant tenant = null)
         {
-            _logger.LogInformation(
+            Logger.LogInformation(
                 $"Migrating schema for {(tenant == null ? "host" : tenant.Name + " tenant")} database...");
 
             foreach (IMyProductDbSchemaMigrator migrator in _dbSchemaMigrators)
@@ -204,7 +191,7 @@ namespace MyCompany.MyProduct.Data
 
         private async Task SeedDataAsync(Tenant tenant = null)
         {
-            _logger.LogInformation($"Executing {(tenant == null ? "host" : tenant.Name + " tenant")} database seed...");
+            Logger.LogInformation($"Executing {(tenant == null ? "host" : tenant.Name + " tenant")} database seed...");
 
             await _dataSeeder.SeedAsync(
                 new DataSeedContext(tenant?.Id)
