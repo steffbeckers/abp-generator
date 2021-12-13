@@ -5,7 +5,8 @@
       "AggregateRoot": {
         "Entities": [
           {
-            "AggregateRootPropertyName": "Translations",
+            "AggregateRootPropertyName": "Translation",
+            "AggregateRootPropertyNamePlural": "Translations",
             "Name": "SampleTranslation",
             "NamePlural": "SampleTranslations",
             "Properties": [
@@ -37,7 +38,6 @@
           {
             "MaxLength": 500,
             "Name": "Description",
-            "Required": false,
             "Type": "string"
           }
         ]
