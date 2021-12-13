@@ -1,0 +1,13 @@
+{
+  "RegexPattern": "(Configure<AbpEntityOptions>\\\\(options =>
+            {)",
+  "RegexReplacement": "$1{0}"
+}
+#-#-#
+                options.Entity<{{AggregateRoot.Name}}>(e =>
+                {
+                    e.DefaultWithDetailsFunc = query => query
+                        {{#each AggregateRoot.Entities}}
+                        .Include(x => x.{{AggregateRootPropertyNamePlural}})
+                        {{/each}};
+                });

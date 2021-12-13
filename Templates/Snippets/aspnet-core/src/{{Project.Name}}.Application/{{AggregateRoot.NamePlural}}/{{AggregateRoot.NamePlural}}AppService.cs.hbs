@@ -36,6 +36,24 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
                 {{/each}}
             };
 
+            {{#each AggregateRoot.Entities}}
+            foreach ({{../AggregateRoot.Name}}Create{{AggregateRootPropertyName}}InputDto {{String.Camelcase AggregateRootPropertyName}}Dto in input.{{AggregateRootPropertyNamePlural}})
+            {
+                {{Name}} {{String.Camelcase AggregateRootPropertyName}} = new {{Name}}(
+                    GuidGenerator.Create(),
+                    {{String.Camelcase ../AggregateRoot.Name}}.Id
+                )
+                {
+                    {{#each Properties}}
+                    {{Name}} = {{String.Camelcase ../AggregateRootPropertyName}}Dto.{{Name}},
+                    {{/each}}
+                };
+
+                {{String.Camelcase ../AggregateRoot.Name}}.{{AggregateRootPropertyNamePlural}}.Add({{String.Camelcase AggregateRootPropertyName}});
+            }
+
+            {{/each}}
+
             {{String.Camelcase AggregateRoot.Name}} = await _{{String.Camelcase AggregateRoot.Name}}Repository.InsertAsync({{String.Camelcase AggregateRoot.Name}});
 
             await CurrentUnitOfWork.SaveChangesAsync();
