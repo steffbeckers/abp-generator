@@ -30,6 +30,8 @@ namespace SteffBeckers.Abp.Generator.Settings
     {
         public string AggregateRootPropertyName { get; set; } = string.Empty;
 
+        public string AggregateRootPropertyNamePlural { get; set; } = string.Empty;
+
         public string Name { get; set; } = string.Empty;
 
         public string NamePlural { get; set; } = string.Empty;

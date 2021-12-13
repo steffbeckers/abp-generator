@@ -31,7 +31,7 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
 
         {{/each}}
         {{#each AggregateRoot.Entities}}
-        public virtual ICollection<{{Name}}> {{AggregateRootPropertyName}} { get; private set; } = new Collection<{{Name}}>();
+        public virtual ICollection<{{Name}}> {{AggregateRootPropertyNamePlural}} { get; private set; } = new Collection<{{Name}}>();
         
         {{/each}}
         public {{AggregateRoot.Name}}(

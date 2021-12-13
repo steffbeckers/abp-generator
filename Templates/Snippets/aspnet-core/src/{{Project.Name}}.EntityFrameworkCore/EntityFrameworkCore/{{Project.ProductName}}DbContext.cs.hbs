@@ -33,11 +33,11 @@ using {{Project.Name}}.{{AggregateRoot.NamePlural}};
                 b.ToTable({{../Project.ProductName}}Consts.DbTablePrefix + "{{NamePlural}}", {{../Project.ProductName}}Consts.DbSchema);
                 b.ConfigureByConvention();
                 b.Property(x => x.{{../AggregateRoot.Name}}Id).HasColumnName(nameof({{Name}}.{{../AggregateRoot.Name}}Id)).IsRequired();
-                b.HasOne(x => x.{{../AggregateRoot.Name}}).WithMany(x => x.{{AggregateRootPropertyName}}).HasForeignKey(x => x.{{../AggregateRoot.Name}}Id);
+                b.HasOne(x => x.{{../AggregateRoot.Name}}).WithMany(x => x.{{AggregateRootPropertyNamePlural}}).HasForeignKey(x => x.{{../AggregateRoot.Name}}Id);
                 {{#each Properties}}
                 b.Property(x => x.{{Name}}).HasColumnName(nameof({{../Name}}.{{Name}})){{#if Required}}.IsRequired(){{/if}}{{#if MaxLength}}.HasMaxLength({{../Name}}Consts.{{Name}}MaxLength){{/if}};
                 {{#if IsGuid}}
-                b.HasOne(x => x.{{../../AggregateRoot.Name}}).WithMany(x => x.{{../AggregateRootPropertyName}}).HasForeignKey(x => x.{{Name}});
+                b.HasOne(x => x.{{../../AggregateRoot.Name}}).WithMany(x => x.{{../AggregateRootPropertyNamePlural}}).HasForeignKey(x => x.{{Name}});
                 {{/if}}
                 {{/each}}
             });

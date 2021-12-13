@@ -1,7 +1,7 @@
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 using {{Project.Name}}.Localization;
-using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
@@ -16,6 +16,10 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
         [StringLength({{../AggregateRoot.Name}}Consts.{{Name}}MaxLength)]
         {{/if}}
         public {{Type}} {{Name}} { get; set; }
+
+        {{/each}}
+        {{#each AggregateRoot.Entities}}
+        public IList<{{../AggregateRoot.Name}}Create{{AggregateRootPropertyName}}InputDto> {{AggregateRootPropertyNamePlural}} { get; set; } = new List<{{../AggregateRoot.Name}}Create{{AggregateRootPropertyName}}InputDto>();
 
         {{/each}}
     }
