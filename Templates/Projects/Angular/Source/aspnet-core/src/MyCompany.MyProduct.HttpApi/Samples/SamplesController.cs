@@ -10,7 +10,7 @@ namespace MyCompany.MyProduct.Samples
     [RemoteService]
     [Area("app")]
     [ControllerName("Samples")]
-    [Route("api/samples")]
+    [Route("api/app/samples")]
     public class SamplesController : MyProductController, ISamplesAppService
     {
         private readonly ISamplesAppService _samplesAppService;

@@ -96,7 +96,7 @@ namespace MyCompany.MyProduct
             app.UseSwagger();
             app.UseAbpSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProduct API");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "MyCompany MyProduct API");
 
                 IConfiguration configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
                 c.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
@@ -119,7 +119,7 @@ namespace MyCompany.MyProduct
                 },
                 options =>
                 {
-                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyProduct API", Version = "v1" });
+                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyCompany MyProduct API", Version = "v1" });
 
                     options.DocInclusionPredicate((docName, description) => true);
                     options.CustomSchemaIds(type => type.FullName);

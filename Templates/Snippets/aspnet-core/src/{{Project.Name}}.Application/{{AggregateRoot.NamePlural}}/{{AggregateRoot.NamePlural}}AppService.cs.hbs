@@ -159,15 +159,15 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
             {{#each AggregateRoot.Entities}}
             {{String.Camelcase ../AggregateRoot.Name}}.{{AggregateRootPropertyNamePlural}}.RemoveAll(x => !input.{{AggregateRootPropertyNamePlural}}.Any(y => y.Id == x.Id));
 
-            foreach ({{../AggregateRoot.Name}}Update{{AggregateRootPropertyName}}InputDto translationDto in input.{{AggregateRootPropertyNamePlural}}.Where(x => !{{String.Camelcase ../AggregateRoot.Name}}.{{AggregateRootPropertyNamePlural}}.Any(y => y.Id == x.Id)))
+            foreach ({{../AggregateRoot.Name}}Update{{AggregateRootPropertyName}}InputDto {{String.Camelcase AggregateRootPropertyName}}Dto in input.{{AggregateRootPropertyNamePlural}}.Where(x => !{{String.Camelcase ../AggregateRoot.Name}}.{{AggregateRootPropertyNamePlural}}.Any(y => y.Id == x.Id)))
             {
-                {{String.Camelcase ../AggregateRoot.Name}}.{{AggregateRootPropertyNamePlural}}.Add(new ContactTranslation(
+                {{String.Camelcase ../AggregateRoot.Name}}.{{AggregateRootPropertyNamePlural}}.Add(new {{Name}}(
                     GuidGenerator.Create(),
                     {{String.Camelcase ../AggregateRoot.Name}}.Id
                 )
                 {
                     {{#each Properties}}
-                    {{Name}} = translationDto.{{Name}},
+                    {{Name}} = {{String.Camelcase AggregateRootPropertyName}}Dto.{{Name}},
                     {{/each}}
                 });
             }

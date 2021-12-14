@@ -10,7 +10,7 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
     [RemoteService]
     [Area("app")]
     [ControllerName("{{AggregateRoot.NamePlural}}")]
-    [Route("api/{{String.Lowercase AggregateRoot.NamePlural}}")]
+    [Route("api/app/{{String.Lowercase AggregateRoot.NamePlural}}")]
     public class {{AggregateRoot.NamePlural}}Controller : {{Project.ProductName}}Controller, I{{AggregateRoot.NamePlural}}AppService
     {
         private readonly I{{AggregateRoot.NamePlural}}AppService _{{String.Camelcase AggregateRoot.NamePlural}}AppService;

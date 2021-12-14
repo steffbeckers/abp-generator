@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MyCompany.MyProduct.Samples;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
