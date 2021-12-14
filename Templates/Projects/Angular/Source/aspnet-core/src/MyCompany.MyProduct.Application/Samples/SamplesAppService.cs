@@ -46,7 +46,7 @@ namespace MyCompany.MyProduct.Samples
 
         public async Task<SampleDto> GetAsync(Guid id)
         {
-            IQueryable<Sample> sampleQueryable = await _sampleRepository.GetQueryableAsync();
+            IQueryable<Sample> sampleQueryable = await _sampleRepository.WithDetailsAsync();
 
             SampleDto sampleDto = await ObjectMapper.GetMapper()
                 .ProjectTo<SampleDto>(sampleQueryable.AsSingleQuery())

@@ -60,10 +60,12 @@ namespace SteffBeckers.Abp.Generator.Settings
 
     public class Project
     {
+        [JsonIgnore]
         public string? CompanyName => Name.Contains('.') ? Name.Split('.').First() : null;
 
         public string Name { get; set; } = string.Empty;
 
+        [JsonIgnore]
         public string? ProductName => Name.Contains('.') ? string.Join('.', Name.Split('.').Skip(1)) : Name;
     }
 

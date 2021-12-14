@@ -15,3 +15,7 @@ using {{Project.Name}}.{{AggregateRoot.NamePlural}};
             CreateMap<{{AggregateRoot.Name}}, {{AggregateRoot.Name}}ListDto>();
             CreateMap<{{AggregateRoot.Name}}, {{AggregateRoot.Name}}SimpleDto>();
             CreateMap<{{AggregateRoot.Name}}, LookupDto<Guid>>();
+
+            {{#each AggregateRoot.Entities}}
+            CreateMap<{{Name}}, {{Name}}Dto>();
+            {{/each}}

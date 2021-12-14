@@ -69,7 +69,7 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
 
         public async Task<{{AggregateRoot.Name}}Dto> GetAsync(Guid id)
         {
-            IQueryable<{{AggregateRoot.Name}}> {{String.Camelcase AggregateRoot.Name}}Queryable = await _{{String.Camelcase AggregateRoot.Name}}Repository.GetQueryableAsync();
+            IQueryable<{{AggregateRoot.Name}}> {{String.Camelcase AggregateRoot.Name}}Queryable = await _{{String.Camelcase AggregateRoot.Name}}Repository.WithDetailsAsync();
 
             {{AggregateRoot.Name}}Dto {{String.Camelcase AggregateRoot.Name}}Dto = await ObjectMapper.GetMapper()
                 .ProjectTo<{{AggregateRoot.Name}}Dto>({{String.Camelcase AggregateRoot.Name}}Queryable.AsSingleQuery())

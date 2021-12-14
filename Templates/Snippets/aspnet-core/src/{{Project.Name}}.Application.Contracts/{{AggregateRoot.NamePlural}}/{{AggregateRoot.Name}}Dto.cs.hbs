@@ -11,7 +11,7 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
 
         {{/each}}
         {{#each AggregateRoot.Entities}}
-        public IList<{{Name}}Dto> {{AggregateRootPropertyName}} { get; set; } = new List<{{Name}}Dto>();
+        public IList<{{Name}}Dto> {{AggregateRootPropertyNamePlural}} { get; set; } = new List<{{Name}}Dto>();
         
         {{/each}}
     }

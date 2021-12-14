@@ -16,6 +16,7 @@ public class SettingsService
     }
 
     public IOptionsMonitor<GeneratorSettings> Monitor { get; }
+
     public GeneratorSettings Settings => Monitor.CurrentValue;
 
     public Task<GeneratorSettings> GetAsync()
