@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using {{Project.Name}}.Permissions;
 using {{Project.Name}}.Shared;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -53,7 +54,6 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
             }
 
             {{/each}}
-
             {{String.Camelcase AggregateRoot.Name}} = await _{{String.Camelcase AggregateRoot.Name}}Repository.InsertAsync({{String.Camelcase AggregateRoot.Name}});
 
             await CurrentUnitOfWork.SaveChangesAsync();
@@ -156,6 +156,32 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
             {{String.Camelcase ../AggregateRoot.Name}}.{{Name}} = input.{{Name}};
             {{/each}}
 
+            {{#each AggregateRoot.Entities}}
+            {{String.Camelcase ../AggregateRoot.Name}}.{{AggregateRootPropertyNamePlural}}.RemoveAll(x => !input.{{AggregateRootPropertyNamePlural}}.Any(y => y.Id == x.Id));
+
+            foreach ({{../AggregateRoot.Name}}Update{{AggregateRootPropertyName}}InputDto translationDto in input.{{AggregateRootPropertyNamePlural}}.Where(x => !{{String.Camelcase ../AggregateRoot.Name}}.{{AggregateRootPropertyNamePlural}}.Any(y => y.Id == x.Id)))
+            {
+                {{String.Camelcase ../AggregateRoot.Name}}.{{AggregateRootPropertyNamePlural}}.Add(new ContactTranslation(
+                    GuidGenerator.Create(),
+                    {{String.Camelcase ../AggregateRoot.Name}}.Id
+                )
+                {
+                    {{#each Properties}}
+                    {{Name}} = translationDto.{{Name}},
+                    {{/each}}
+                });
+            }
+
+            foreach ({{Name}} {{String.Camelcase AggregateRootPropertyName}} in {{String.Camelcase ../AggregateRoot.Name}}.{{AggregateRootPropertyNamePlural}}.Where(x => input.{{AggregateRootPropertyNamePlural}}.Any(y => y.Id == x.Id)))
+            {
+                {{../AggregateRoot.Name}}Update{{AggregateRootPropertyName}}InputDto {{String.Camelcase AggregateRootPropertyName}}Dto = input.{{AggregateRootPropertyNamePlural}}.First(x => x.Id == {{String.Camelcase AggregateRootPropertyName}}.Id);
+
+                {{#each Properties}}
+                {{String.Camelcase ../AggregateRootPropertyName}}.{{Name}} = {{String.Camelcase ../AggregateRootPropertyName}}Dto.{{Name}};
+                {{/each}}
+            }
+
+            {{/each}}
             {{String.Camelcase AggregateRoot.Name}} = await _{{String.Camelcase AggregateRoot.Name}}Repository.UpdateAsync({{String.Camelcase AggregateRoot.Name}});
 
             await CurrentUnitOfWork.SaveChangesAsync();
