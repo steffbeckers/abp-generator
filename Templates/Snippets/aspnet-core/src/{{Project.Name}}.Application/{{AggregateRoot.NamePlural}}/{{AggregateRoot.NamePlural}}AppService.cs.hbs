@@ -167,7 +167,7 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
                 )
                 {
                     {{#each Properties}}
-                    {{Name}} = {{String.Camelcase AggregateRootPropertyName}}Dto.{{Name}},
+                    {{Name}} = {{String.Camelcase ../AggregateRootPropertyName}}Dto.{{Name}},
                     {{/each}}
                 });
             }

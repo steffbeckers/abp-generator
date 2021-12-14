@@ -24,8 +24,9 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
             // Arrange
             {{AggregateRoot.Name}}CreateInputDto input = new {{AggregateRoot.Name}}CreateInputDto()
             {
-                Name = "{{AggregateRoot.Name}} name",
-                Description = "{{AggregateRoot.Name}} description"
+                {{#each AggregateRoot.Properties}}
+                {{Name}} = "{{../AggregateRoot.Name}} {{String.Lowercase Name}}",
+                {{/each}}
             };
 
             // Act
@@ -35,8 +36,9 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
             {{AggregateRoot.Name}} {{String.Camelcase AggregateRoot.Name}} = await _{{String.Camelcase AggregateRoot.Name}}Repository.FindAsync(x => x.Id == {{String.Camelcase AggregateRoot.Name}}Dto.Id);
 
             {{String.Camelcase AggregateRoot.Name}}.ShouldNotBe(null);
-            {{String.Camelcase AggregateRoot.Name}}.Name.ShouldBe("{{AggregateRoot.Name}} name");
-            {{String.Camelcase AggregateRoot.Name}}.Description.ShouldBe("{{AggregateRoot.Name}} description");
+            {{#each AggregateRoot.Properties}}
+            {{String.Camelcase ../AggregateRoot.Name}}.{{Name}}.ShouldBe("{{../AggregateRoot.Name}} {{String.Lowercase Name}}");
+            {{/each}}
         }
 
         [Fact]
@@ -71,8 +73,9 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
 
             {{AggregateRoot.Name}}ListDto {{String.Camelcase AggregateRoot.Name}}Dto1 = listDto.Items.FirstOrDefault(x => x.Id == Guid.Parse("8a39344b-832a-4169-8105-a649e311cc17"));
             {{String.Camelcase AggregateRoot.Name}}Dto1.ShouldNotBe(null);
-            {{String.Camelcase AggregateRoot.Name}}Dto1.Name.ShouldBe("{{AggregateRoot.Name}} 1 name");
-            {{String.Camelcase AggregateRoot.Name}}Dto1.Description.ShouldBe("{{AggregateRoot.Name}} 1 description");
+            {{#each AggregateRoot.Properties}}
+            {{String.Camelcase ../AggregateRoot.Name}}Dto1.{{Name}}.ShouldBe("{{../AggregateRoot.Name}} 1 {{String.Lowercase Name}}");
+            {{/each}}
         }
 
         [Fact]
@@ -93,7 +96,7 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
 
             LookupDto<Guid> {{String.Camelcase AggregateRoot.Name}}Dto1 = lookupDto.Items.FirstOrDefault(x => x.Id == Guid.Parse("8a39344b-832a-4169-8105-a649e311cc17"));
             {{String.Camelcase AggregateRoot.Name}}Dto1.ShouldNotBe(null);
-            {{String.Camelcase AggregateRoot.Name}}Dto1.Name.ShouldBe("{{AggregateRoot.Name}} 1 name");
+            {{String.Camelcase AggregateRoot.Name}}Dto1.{{AggregateRoot.LookupPropertyName}}.ShouldBe("{{AggregateRoot.Name}} 1 {{String.Lowercase AggregateRoot.LookupPropertyName}}");
         }
 
         [Fact]
@@ -114,7 +117,7 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
 
             LookupDto<Guid> {{String.Camelcase AggregateRoot.Name}}Dto1 = lookupDto.Items.FirstOrDefault(x => x.Id == Guid.Parse("8a39344b-832a-4169-8105-a649e311cc17"));
             {{String.Camelcase AggregateRoot.Name}}Dto1.ShouldNotBe(null);
-            {{String.Camelcase AggregateRoot.Name}}Dto1.Name.ShouldBe("{{AggregateRoot.Name}} 1 name");
+            {{String.Camelcase AggregateRoot.Name}}Dto1.{{AggregateRoot.LookupPropertyName}}.ShouldBe("{{AggregateRoot.Name}} 1 {{String.Lowercase AggregateRoot.LookupPropertyName}}");
         }
 
         [Fact]
@@ -129,8 +132,9 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
             // Assert
             {{String.Camelcase AggregateRoot.Name}}Dto.ShouldNotBe(null);
             {{String.Camelcase AggregateRoot.Name}}Dto.Id.ShouldBe({{String.Camelcase AggregateRoot.Name}}Id);
-            {{String.Camelcase AggregateRoot.Name}}Dto.Name.ShouldBe("{{AggregateRoot.Name}} 1 name");
-            {{String.Camelcase AggregateRoot.Name}}Dto.Description.ShouldBe("{{AggregateRoot.Name}} 1 description");
+            {{#each AggregateRoot.Properties}}
+            {{String.Camelcase ../AggregateRoot.Name}}Dto.{{Name}}.ShouldBe("{{../AggregateRoot.Name}} 1 {{String.Lowercase Name}}");
+            {{/each}}
         }
 
         [Fact]
@@ -140,8 +144,9 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
             Guid {{String.Camelcase AggregateRoot.Name}}Id = Guid.Parse("8a39344b-832a-4169-8105-a649e311cc17");
             {{AggregateRoot.Name}}UpdateInputDto input = new {{AggregateRoot.Name}}UpdateInputDto()
             {
-                Name = "{{AggregateRoot.Name}} name update",
-                Description = "{{AggregateRoot.Name}} description update"
+                {{#each AggregateRoot.Properties}}
+                {{Name}} = "{{../AggregateRoot.Name}} {{String.Lowercase Name}} update",
+                {{/each}}
             };
 
             // Act
@@ -151,8 +156,9 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
             {{AggregateRoot.Name}} {{String.Camelcase AggregateRoot.Name}} = await _{{String.Camelcase AggregateRoot.Name}}Repository.FindAsync({{String.Camelcase AggregateRoot.Name}}Dto.Id);
 
             {{String.Camelcase AggregateRoot.Name}}.ShouldNotBe(null);
-            {{String.Camelcase AggregateRoot.Name}}.Name.ShouldBe("{{AggregateRoot.Name}} name update");
-            {{String.Camelcase AggregateRoot.Name}}.Description.ShouldBe("{{AggregateRoot.Name}} description update");
+            {{#each AggregateRoot.Properties}}
+            {{String.Camelcase ../AggregateRoot.Name}}.{{Name}}.ShouldBe("{{../AggregateRoot.Name}} {{String.Lowercase Name}} update");
+            {{/each}}
         }
     }
 }
