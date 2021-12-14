@@ -28,27 +28,27 @@ namespace MyCompany.MyProduct
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<AbpVirtualFileSystemOptions>(
-                options => options.FileSets.AddEmbedded<MyProductDomainSharedModule>());
+            Configure<AbpVirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<MyProductDomainSharedModule>();
+            });
 
-            Configure<AbpLocalizationOptions>(
-                options =>
-                {
-                    options.Resources
-                        .Add<MyProductResource>("en")
-                        .AddBaseTypes(typeof(AbpValidationResource))
-                        .AddVirtualJson("/Localization/MyProduct");
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Add<MyProductResource>("en")
+                    .AddBaseTypes(typeof(AbpValidationResource))
+                    .AddVirtualJson("/Localization/MyProduct");
 
-                    options.DefaultResourceType = typeof(MyProductResource);
-                });
+                options.DefaultResourceType = typeof(MyProductResource);
+            });
 
             // You can map your business exception error code prefixes here. Example:
-            Configure<AbpExceptionLocalizationOptions>(
-                options =>
-                {
-                    options.MapCodeNamespace(nameof(MyProduct), typeof(MyProductResource));
-                    options.MapCodeNamespace(nameof(MyProductDomainErrorCodes.Samples), typeof(MyProductResource));
-                });
+            Configure<AbpExceptionLocalizationOptions>(options =>
+            {
+                options.MapCodeNamespace(nameof(MyProduct), typeof(MyProductResource));
+                options.MapCodeNamespace(nameof(MyProductDomainErrorCodes.Samples), typeof(MyProductResource));
+            });
         }
 
         public override void PreConfigureServices(ServiceConfigurationContext context)
