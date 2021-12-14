@@ -13,6 +13,10 @@ using {{Project.Name}}.{{AggregateRoot.NamePlural}};
 #-#-#
         public DbSet<{{AggregateRoot.Name}}> {{AggregateRoot.NamePlural}} { get; set; }
 
+        {{#each AggregateRoot.Entities}}
+        public DbSet<{{Name}}> {{NamePlural}} { get; set; }
+
+        {{/each}}
 #-#-#
 {
   "RegexPattern": "(base.OnModelCreating\\\\(builder\\\\);)",
