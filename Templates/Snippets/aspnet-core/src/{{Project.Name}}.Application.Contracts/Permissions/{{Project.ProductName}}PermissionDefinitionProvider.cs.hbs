@@ -1,6 +1,6 @@
 {
   "RegexPattern": "(PermissionGroupDefinition {{String.Camelcase Project.ProductName}}Group = context.AddGroup\\\\({{Project.ProductName}}Permissions.GroupName\\\\);)",
-  "RegexReplacement": "$1\n{0}"
+  "RegexReplacement": "$1\n\n{0}"
 }
 #-#-#
             PermissionDefinition {{String.Camelcase AggregateRoot.NamePlural}}Permission = {{String.Camelcase Project.ProductName}}Group.AddPermission({{Project.ProductName}}Permissions.{{AggregateRoot.NamePlural}}.Default, L($"{nameof({{Project.ProductName}}Permissions.Permission)}:{nameof({{Project.ProductName}}Permissions.{{AggregateRoot.NamePlural}})}"));

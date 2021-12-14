@@ -1,7 +1,21 @@
 {
+  "RegexPattern": "(using Microsoft.Extensions.DependencyInjection;)",
+  "RegexReplacement": "{0}\n$1"
+}
+#-#-#
+using {{Project.Name}}.{{AggregateRoot.NamePlural}};
+#-#-#
+{
+  "RegexPattern": "(options.AddDefaultRepositories\\\\(\\\\);)",
+  "RegexReplacement": "$1\n\n{0}"
+}
+#-#-#
+                options.AddRepository<{{AggregateRoot.Name}}, EfCore{{AggregateRoot.Name}}Repository>();
+#-#-#
+{
   "RegexPattern": "(Configure<AbpEntityOptions>\\\\(options =>
             {)",
-  "RegexReplacement": "$1{0}"
+  "RegexReplacement": "$1\n{0}"
 }
 #-#-#
                 options.Entity<{{AggregateRoot.Name}}>(e =>

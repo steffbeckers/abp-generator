@@ -1,6 +1,6 @@
 {
   "RegexPattern": "(using Microsoft.EntityFrameworkCore;)",
-  "RegexReplacement": "{0}$1"
+  "RegexReplacement": "{0}\n$1"
 }
 #-#-#
 using {{Project.Name}}.{{AggregateRoot.NamePlural}};
@@ -8,14 +8,15 @@ using {{Project.Name}}.{{AggregateRoot.NamePlural}};
 {
   "RegexPattern": "({{Project.ProductName}}DbContext :.*
     {)",
-  "RegexReplacement": "$1{0}"
+  "RegexReplacement": "$1\n{0}"
 }
 #-#-#
         public DbSet<{{AggregateRoot.Name}}> {{AggregateRoot.NamePlural}} { get; set; }
+
 #-#-#
 {
   "RegexPattern": "(base.OnModelCreating\\\\(builder\\\\);)",
-  "RegexReplacement": "$1\n{0}"
+  "RegexReplacement": "$1\n\n{0}"
 }
 #-#-#
             builder.Entity<{{AggregateRoot.Name}}>(b =>
@@ -26,8 +27,8 @@ using {{Project.Name}}.{{AggregateRoot.NamePlural}};
                 b.Property(x => x.{{Name}}).HasColumnName(nameof({{../AggregateRoot.Name}}.{{Name}})){{#if Required}}.IsRequired(){{/if}}{{#if MaxLength}}.HasMaxLength({{../AggregateRoot.Name}}Consts.{{Name}}MaxLength){{/if}};
                 {{/each}}
             });
+            
             {{#each AggregateRoot.Entities}}
-
             builder.Entity<{{Name}}>(b =>
             {
                 b.ToTable({{../Project.ProductName}}Consts.DbTablePrefix + "{{NamePlural}}", {{../Project.ProductName}}Consts.DbSchema);
@@ -41,4 +42,5 @@ using {{Project.Name}}.{{AggregateRoot.NamePlural}};
                 {{/if}}
                 {{/each}}
             });
+
             {{/each}}

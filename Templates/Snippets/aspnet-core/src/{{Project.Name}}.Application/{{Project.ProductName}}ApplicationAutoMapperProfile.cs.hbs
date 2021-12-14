@@ -1,6 +1,6 @@
 {
   "RegexPattern": "(using AutoMapper;)",
-  "RegexReplacement": "$1{0}"
+  "RegexReplacement": "$1\n{0}"
 }
 #-#-#
 using {{Project.Name}}.{{AggregateRoot.NamePlural}};
@@ -8,10 +8,10 @@ using {{Project.Name}}.{{AggregateRoot.NamePlural}};
 {
   "RegexPattern": "({{Project.ProductName}}ApplicationAutoMapperProfile\\\\(\\\\)
         {)",
-  "RegexReplacement": "$1{0}"
+  "RegexReplacement": "$1\n{0}"
 }
 #-#-#
-            CreateMap<{{AggregateRoot.Name}}, LookupDto<Guid>>();
             CreateMap<{{AggregateRoot.Name}}, {{AggregateRoot.Name}}Dto>();
             CreateMap<{{AggregateRoot.Name}}, {{AggregateRoot.Name}}ListDto>();
             CreateMap<{{AggregateRoot.Name}}, {{AggregateRoot.Name}}SimpleDto>();
+            CreateMap<{{AggregateRoot.Name}}, LookupDto<Guid>>();

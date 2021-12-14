@@ -200,7 +200,7 @@ public class SnippetTemplatesService
                 templateText = await templateTextStreamReader.ReadToEndAsync();
             }
 
-            string[] templateParts = templateText.Split(_templateConfigDelimiter);
+            string[] templateParts = templateText.Split(Environment.NewLine + _templateConfigDelimiter + Environment.NewLine);
 
             if (templateParts.Length == 1)
             {
@@ -277,9 +277,12 @@ public class SnippetTemplatesService
                 }
             }
 
-            _templates.RemoveAll(x => x.FullPath == fullPath);
-            _templates.AddRange(generatedTemplates);
-            _templates = _templates.OrderBy(x => x.OutputPath).ToList();
+            lock (_templates)
+            {
+                _templates.RemoveAll(x => x.FullPath == fullPath);
+                _templates.AddRange(generatedTemplates);
+                _templates = _templates.OrderBy(x => x.OutputPath).ToList();
+            }
         }
         catch (Exception ex)
         {

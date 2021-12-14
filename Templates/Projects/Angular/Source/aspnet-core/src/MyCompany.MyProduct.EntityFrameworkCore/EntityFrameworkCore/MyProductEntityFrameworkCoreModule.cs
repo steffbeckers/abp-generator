@@ -1,7 +1,9 @@
 using Microsoft.Extensions.DependencyInjection;
+using MyCompany.MyProduct.Samples;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
@@ -28,11 +30,22 @@ namespace MyCompany.MyProduct.EntityFrameworkCore
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            // Add custom repositories for your aggregate root entities to options. Example:
-            // options.AddRepository<Sample, EfCoreSampleRepository>();
-            context.Services.AddAbpDbContext<MyProductDbContext>(options => options.AddDefaultRepositories());
+            context.Services.AddAbpDbContext<MyProductDbContext>(options =>
+            {
+                options.AddDefaultRepositories();
 
-            Configure<AbpDbContextOptions>(options => options.UseSqlServer());
+                // Add custom repositories for your aggregate root entities to options. Example:
+                options.AddRepository<Sample, EfCoreSampleRepository>();
+            });
+
+            Configure<AbpDbContextOptions>(options =>
+            {
+                options.UseSqlServer();
+            });
+
+            Configure<AbpEntityOptions>(options =>
+            {
+            });
         }
 
         public override void PreConfigureServices(ServiceConfigurationContext context)
