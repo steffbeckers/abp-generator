@@ -1,121 +1,743 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "http://example.com/root.json",
-    "type": "object",
-    "title": "The Root Schema",
-    "description": "The root schema is the schema that comprises the entire JSON document.",
-    "default": {},
-    "required": [
-        "checked",
-        "dimensions",
-        "id",
-        "name",
-        "price",
-        "tags"
-    ],
-    "properties": {
-        "checked": {
-            "$id": "#/properties/checked",
-            "type": "boolean",
-            "title": "The Checked Schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": false,
-            "examples": [
-                false
-            ]
-        },
-        "dimensions": {
-            "$id": "#/properties/dimensions",
-            "type": "object",
-            "title": "The Dimensions Schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": {},
-            "examples": [
-                {
-                    "height": 10.0,
-                    "width": 5.0
-                }
-            ],
-            "required": [
-                "width",
-                "height"
-            ],
-            "properties": {
-                "width": {
-                    "$id": "#/properties/dimensions/properties/width",
-                    "type": "integer",
-                    "title": "The Width Schema",
-                    "description": "An explanation about the purpose of this instance.",
-                    "default": 0,
-                    "examples": [
-                        5
-                    ]
-                },
-                "height": {
-                    "$id": "#/properties/dimensions/properties/height",
-                    "type": "integer",
-                    "title": "The Height Schema",
-                    "description": "An explanation about the purpose of this instance.",
-                    "default": 0,
-                    "examples": [
-                        10
-                    ]
-                }
-            }
-        },
-        "id": {
-            "$id": "#/properties/id",
-            "type": "integer",
-            "title": "The Id Schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": 0,
-            "examples": [
-                1
-            ]
-        },
-        "name": {
-            "$id": "#/properties/name",
-            "type": "string",
-            "title": "The Name Schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": "",
-            "examples": [
-                "A green door"
-            ]
-        },
-        "price": {
-            "$id": "#/properties/price",
-            "type": "number",
-            "title": "The Price Schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": 0,
-            "examples": [
-                12.5
-            ]
-        },
-        "tags": {
-            "$id": "#/properties/tags",
-            "type": "array",
-            "title": "The Tags Schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": [],
-            "examples": [
-                [
-                    "home",
-                    "green"
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "title": "The root schema",
+  "description": "The root schema comprises the entire JSON document.",
+  "default": {},
+  "examples": [
+    {
+      "$schema": "./generatorsettings.schema.json",
+      "Generator": {
+        "Context": {
+          "AggregateRoot": {
+            "Entities": [
+              {
+                "AggregateRootPropertyName": "Translation",
+                "AggregateRootPropertyNamePlural": "Translations",
+                "Name": "SampleTranslation",
+                "NamePlural": "SampleTranslations",
+                "Properties": [
+                  {
+                    "MaxLength": 10,
+                    "Name": "CultureName",
+                    "Required": true,
+                    "Type": "string"
+                  },
+                  {
+                    "MaxLength": 500,
+                    "Name": "TranslatedFieldName",
+                    "Type": "string"
+                  }
                 ]
+              }
             ],
-            "items": {
-                "$id": "#/properties/tags/items",
-                "type": "string",
-                "title": "The Items Schema",
-                "description": "An explanation about the purpose of this instance.",
-                "default": "",
-                "examples": [
-                    "home",
-                    "green"
-                ]
-            }
-        }
+            "LookupPropertyName": "Name",
+            "Name": "Sample",
+            "NamePlural": "Samples",
+            "OrderByPropertyName": "Name",
+            "Properties": [
+              {
+                "MaxLength": 100,
+                "Name": "Name",
+                "Required": true,
+                "Type": "string"
+              },
+              {
+                "MaxLength": 500,
+                "Name": "Description",
+                "Type": "string"
+              }
+            ]
+          },
+          "Project": {
+            "Name": "MyCompany.MyProduct"
+          }
+        },
+        "ProjectPath": "C:/Dev/tmp/abp-generator"
+      }
     }
+  ],
+  "required": [
+    "$schema",
+    "Generator"
+  ],
+  "properties": {
+    "$schema": {
+      "$id": "#/properties/%24schema",
+      "type": "string",
+      "title": "The $schema schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": "",
+      "examples": [
+        "./generatorsettings.schema.json"
+      ]
+    },
+    "Generator": {
+      "$id": "#/properties/Generator",
+      "type": "object",
+      "title": "The Generator schema",
+      "description": "An explanation about the purpose of this instance.",
+      "default": {},
+      "examples": [
+        {
+          "Context": {
+            "AggregateRoot": {
+              "Entities": [
+                {
+                  "AggregateRootPropertyName": "Translation",
+                  "AggregateRootPropertyNamePlural": "Translations",
+                  "Name": "SampleTranslation",
+                  "NamePlural": "SampleTranslations",
+                  "Properties": [
+                    {
+                      "MaxLength": 10,
+                      "Name": "CultureName",
+                      "Required": true,
+                      "Type": "string"
+                    },
+                    {
+                      "MaxLength": 500,
+                      "Name": "TranslatedFieldName",
+                      "Type": "string"
+                    }
+                  ]
+                }
+              ],
+              "LookupPropertyName": "Name",
+              "Name": "Sample",
+              "NamePlural": "Samples",
+              "OrderByPropertyName": "Name",
+              "Properties": [
+                {
+                  "MaxLength": 100,
+                  "Name": "Name",
+                  "Required": true,
+                  "Type": "string"
+                },
+                {
+                  "MaxLength": 500,
+                  "Name": "Description",
+                  "Type": "string"
+                }
+              ]
+            },
+            "Project": {
+              "Name": "MyCompany.MyProduct"
+            }
+          },
+          "ProjectPath": "C:/Dev/tmp/abp-generator"
+        }
+      ],
+      "required": [
+        "Context",
+        "ProjectPath"
+      ],
+      "properties": {
+        "Context": {
+          "$id": "#/properties/Generator/properties/Context",
+          "type": "object",
+          "title": "The Context schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": {},
+          "examples": [
+            {
+              "AggregateRoot": {
+                "Entities": [
+                  {
+                    "AggregateRootPropertyName": "Translation",
+                    "AggregateRootPropertyNamePlural": "Translations",
+                    "Name": "SampleTranslation",
+                    "NamePlural": "SampleTranslations",
+                    "Properties": [
+                      {
+                        "MaxLength": 10,
+                        "Name": "CultureName",
+                        "Required": true,
+                        "Type": "string"
+                      },
+                      {
+                        "MaxLength": 500,
+                        "Name": "TranslatedFieldName",
+                        "Type": "string"
+                      }
+                    ]
+                  }
+                ],
+                "LookupPropertyName": "Name",
+                "Name": "Sample",
+                "NamePlural": "Samples",
+                "OrderByPropertyName": "Name",
+                "Properties": [
+                  {
+                    "MaxLength": 100,
+                    "Name": "Name",
+                    "Required": true,
+                    "Type": "string"
+                  },
+                  {
+                    "MaxLength": 500,
+                    "Name": "Description",
+                    "Type": "string"
+                  }
+                ]
+              },
+              "Project": {
+                "Name": "MyCompany.MyProduct"
+              }
+            }
+          ],
+          "required": [
+            "AggregateRoot",
+            "Project"
+          ],
+          "properties": {
+            "AggregateRoot": {
+              "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot",
+              "type": "object",
+              "title": "The AggregateRoot schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": {},
+              "examples": [
+                {
+                  "Entities": [
+                    {
+                      "AggregateRootPropertyName": "Translation",
+                      "AggregateRootPropertyNamePlural": "Translations",
+                      "Name": "SampleTranslation",
+                      "NamePlural": "SampleTranslations",
+                      "Properties": [
+                        {
+                          "MaxLength": 10,
+                          "Name": "CultureName",
+                          "Required": true,
+                          "Type": "string"
+                        },
+                        {
+                          "MaxLength": 500,
+                          "Name": "TranslatedFieldName",
+                          "Type": "string"
+                        }
+                      ]
+                    }
+                  ],
+                  "LookupPropertyName": "Name",
+                  "Name": "Sample",
+                  "NamePlural": "Samples",
+                  "OrderByPropertyName": "Name",
+                  "Properties": [
+                    {
+                      "MaxLength": 100,
+                      "Name": "Name",
+                      "Required": true,
+                      "Type": "string"
+                    },
+                    {
+                      "MaxLength": 500,
+                      "Name": "Description",
+                      "Type": "string"
+                    }
+                  ]
+                }
+              ],
+              "required": [
+                "Entities",
+                "LookupPropertyName",
+                "Name",
+                "NamePlural",
+                "OrderByPropertyName",
+                "Properties"
+              ],
+              "properties": {
+                "Entities": {
+                  "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities",
+                  "type": "array",
+                  "title": "The Entities schema",
+                  "description": "An explanation about the purpose of this instance.",
+                  "default": [],
+                  "examples": [
+                    [
+                      {
+                        "AggregateRootPropertyName": "Translation",
+                        "AggregateRootPropertyNamePlural": "Translations",
+                        "Name": "SampleTranslation",
+                        "NamePlural": "SampleTranslations",
+                        "Properties": [
+                          {
+                            "MaxLength": 10,
+                            "Name": "CultureName",
+                            "Required": true,
+                            "Type": "string"
+                          },
+                          {
+                            "MaxLength": 500,
+                            "Name": "TranslatedFieldName",
+                            "Type": "string"
+                          }
+                        ]
+                      }
+                    ]
+                  ],
+                  "additionalItems": true,
+                  "items": {
+                    "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items",
+                    "anyOf": [
+                      {
+                        "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0",
+                        "type": "object",
+                        "title": "The first anyOf schema",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": {},
+                        "examples": [
+                          {
+                            "AggregateRootPropertyName": "Translation",
+                            "AggregateRootPropertyNamePlural": "Translations",
+                            "Name": "SampleTranslation",
+                            "NamePlural": "SampleTranslations",
+                            "Properties": [
+                              {
+                                "MaxLength": 10,
+                                "Name": "CultureName",
+                                "Required": true,
+                                "Type": "string"
+                              },
+                              {
+                                "MaxLength": 500,
+                                "Name": "TranslatedFieldName",
+                                "Type": "string"
+                              }
+                            ]
+                          }
+                        ],
+                        "required": [
+                          "AggregateRootPropertyName",
+                          "AggregateRootPropertyNamePlural",
+                          "Name",
+                          "NamePlural",
+                          "Properties"
+                        ],
+                        "properties": {
+                          "AggregateRootPropertyName": {
+                            "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0/properties/AggregateRootPropertyName",
+                            "type": "string",
+                            "title": "The AggregateRootPropertyName schema",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": "",
+                            "examples": [
+                              "Translation"
+                            ]
+                          },
+                          "AggregateRootPropertyNamePlural": {
+                            "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0/properties/AggregateRootPropertyNamePlural",
+                            "type": "string",
+                            "title": "The AggregateRootPropertyNamePlural schema",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": "",
+                            "examples": [
+                              "Translations"
+                            ]
+                          },
+                          "Name": {
+                            "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0/properties/Name",
+                            "type": "string",
+                            "title": "The Name schema",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": "",
+                            "examples": [
+                              "SampleTranslation"
+                            ]
+                          },
+                          "NamePlural": {
+                            "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0/properties/NamePlural",
+                            "type": "string",
+                            "title": "The NamePlural schema",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": "",
+                            "examples": [
+                              "SampleTranslations"
+                            ]
+                          },
+                          "Properties": {
+                            "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0/properties/Properties",
+                            "type": "array",
+                            "title": "The Properties schema",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": [],
+                            "examples": [
+                              [
+                                {
+                                  "MaxLength": 10,
+                                  "Name": "CultureName",
+                                  "Required": true,
+                                  "Type": "string"
+                                },
+                                {
+                                  "MaxLength": 500,
+                                  "Name": "TranslatedFieldName",
+                                  "Type": "string"
+                                }
+                              ]
+                            ],
+                            "additionalItems": true,
+                            "items": {
+                              "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0/properties/Properties/items",
+                              "anyOf": [
+                                {
+                                  "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0/properties/Properties/items/anyOf/0",
+                                  "type": "object",
+                                  "title": "The first anyOf schema",
+                                  "description": "An explanation about the purpose of this instance.",
+                                  "default": {},
+                                  "examples": [
+                                    {
+                                      "MaxLength": 10,
+                                      "Name": "CultureName",
+                                      "Required": true,
+                                      "Type": "string"
+                                    }
+                                  ],
+                                  "required": [
+                                    "MaxLength",
+                                    "Name",
+                                    "Required",
+                                    "Type"
+                                  ],
+                                  "properties": {
+                                    "MaxLength": {
+                                      "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0/properties/Properties/items/anyOf/0/properties/MaxLength",
+                                      "type": "integer",
+                                      "title": "The MaxLength schema",
+                                      "description": "An explanation about the purpose of this instance.",
+                                      "default": 0,
+                                      "examples": [
+                                        10
+                                      ]
+                                    },
+                                    "Name": {
+                                      "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0/properties/Properties/items/anyOf/0/properties/Name",
+                                      "type": "string",
+                                      "title": "The Name schema",
+                                      "description": "An explanation about the purpose of this instance.",
+                                      "default": "",
+                                      "examples": [
+                                        "CultureName"
+                                      ]
+                                    },
+                                    "Required": {
+                                      "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0/properties/Properties/items/anyOf/0/properties/Required",
+                                      "type": "boolean",
+                                      "title": "The Required schema",
+                                      "description": "An explanation about the purpose of this instance.",
+                                      "default": false,
+                                      "examples": [
+                                        true
+                                      ]
+                                    },
+                                    "Type": {
+                                      "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0/properties/Properties/items/anyOf/0/properties/Type",
+                                      "type": "string",
+                                      "title": "The Type schema",
+                                      "description": "An explanation about the purpose of this instance.",
+                                      "default": "",
+                                      "examples": [
+                                        "string"
+                                      ]
+                                    }
+                                  },
+                                  "additionalProperties": true
+                                },
+                                {
+                                  "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0/properties/Properties/items/anyOf/1",
+                                  "type": "object",
+                                  "title": "The second anyOf schema",
+                                  "description": "An explanation about the purpose of this instance.",
+                                  "default": {},
+                                  "examples": [
+                                    {
+                                      "MaxLength": 500,
+                                      "Name": "TranslatedFieldName",
+                                      "Type": "string"
+                                    }
+                                  ],
+                                  "required": [
+                                    "MaxLength",
+                                    "Name",
+                                    "Type"
+                                  ],
+                                  "properties": {
+                                    "MaxLength": {
+                                      "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0/properties/Properties/items/anyOf/1/properties/MaxLength",
+                                      "type": "integer",
+                                      "title": "The MaxLength schema",
+                                      "description": "An explanation about the purpose of this instance.",
+                                      "default": 0,
+                                      "examples": [
+                                        500
+                                      ]
+                                    },
+                                    "Name": {
+                                      "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0/properties/Properties/items/anyOf/1/properties/Name",
+                                      "type": "string",
+                                      "title": "The Name schema",
+                                      "description": "An explanation about the purpose of this instance.",
+                                      "default": "",
+                                      "examples": [
+                                        "TranslatedFieldName"
+                                      ]
+                                    },
+                                    "Type": {
+                                      "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Entities/items/anyOf/0/properties/Properties/items/anyOf/1/properties/Type",
+                                      "type": "string",
+                                      "title": "The Type schema",
+                                      "description": "An explanation about the purpose of this instance.",
+                                      "default": "",
+                                      "examples": [
+                                        "string"
+                                      ]
+                                    }
+                                  },
+                                  "additionalProperties": true
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    ]
+                  }
+                },
+                "LookupPropertyName": {
+                  "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/LookupPropertyName",
+                  "type": "string",
+                  "title": "The LookupPropertyName schema",
+                  "description": "An explanation about the purpose of this instance.",
+                  "default": "",
+                  "examples": [
+                    "Name"
+                  ]
+                },
+                "Name": {
+                  "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Name",
+                  "type": "string",
+                  "title": "The Name schema",
+                  "description": "An explanation about the purpose of this instance.",
+                  "default": "",
+                  "examples": [
+                    "Sample"
+                  ]
+                },
+                "NamePlural": {
+                  "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/NamePlural",
+                  "type": "string",
+                  "title": "The NamePlural schema",
+                  "description": "An explanation about the purpose of this instance.",
+                  "default": "",
+                  "examples": [
+                    "Samples"
+                  ]
+                },
+                "OrderByPropertyName": {
+                  "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/OrderByPropertyName",
+                  "type": "string",
+                  "title": "The OrderByPropertyName schema",
+                  "description": "An explanation about the purpose of this instance.",
+                  "default": "",
+                  "examples": [
+                    "Name"
+                  ]
+                },
+                "Properties": {
+                  "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Properties",
+                  "type": "array",
+                  "title": "The Properties schema",
+                  "description": "An explanation about the purpose of this instance.",
+                  "default": [],
+                  "examples": [
+                    [
+                      {
+                        "MaxLength": 100,
+                        "Name": "Name",
+                        "Required": true,
+                        "Type": "string"
+                      },
+                      {
+                        "MaxLength": 500,
+                        "Name": "Description",
+                        "Type": "string"
+                      }
+                    ]
+                  ],
+                  "additionalItems": true,
+                  "items": {
+                    "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Properties/items",
+                    "anyOf": [
+                      {
+                        "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Properties/items/anyOf/0",
+                        "type": "object",
+                        "title": "The first anyOf schema",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": {},
+                        "examples": [
+                          {
+                            "MaxLength": 100,
+                            "Name": "Name",
+                            "Required": true,
+                            "Type": "string"
+                          }
+                        ],
+                        "required": [
+                          "MaxLength",
+                          "Name",
+                          "Required",
+                          "Type"
+                        ],
+                        "properties": {
+                          "MaxLength": {
+                            "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Properties/items/anyOf/0/properties/MaxLength",
+                            "type": "integer",
+                            "title": "The MaxLength schema",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": 0,
+                            "examples": [
+                              100
+                            ]
+                          },
+                          "Name": {
+                            "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Properties/items/anyOf/0/properties/Name",
+                            "type": "string",
+                            "title": "The Name schema",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": "",
+                            "examples": [
+                              "Name"
+                            ]
+                          },
+                          "Required": {
+                            "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Properties/items/anyOf/0/properties/Required",
+                            "type": "boolean",
+                            "title": "The Required schema",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": false,
+                            "examples": [
+                              true
+                            ]
+                          },
+                          "Type": {
+                            "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Properties/items/anyOf/0/properties/Type",
+                            "type": "string",
+                            "title": "The Type schema",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": "",
+                            "examples": [
+                              "string"
+                            ]
+                          }
+                        },
+                        "additionalProperties": true
+                      },
+                      {
+                        "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Properties/items/anyOf/1",
+                        "type": "object",
+                        "title": "The second anyOf schema",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": {},
+                        "examples": [
+                          {
+                            "MaxLength": 500,
+                            "Name": "Description",
+                            "Type": "string"
+                          }
+                        ],
+                        "required": [
+                          "MaxLength",
+                          "Name",
+                          "Type"
+                        ],
+                        "properties": {
+                          "MaxLength": {
+                            "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Properties/items/anyOf/1/properties/MaxLength",
+                            "type": "integer",
+                            "title": "The MaxLength schema",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": 0,
+                            "examples": [
+                              500
+                            ]
+                          },
+                          "Name": {
+                            "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Properties/items/anyOf/1/properties/Name",
+                            "type": "string",
+                            "title": "The Name schema",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": "",
+                            "examples": [
+                              "Description"
+                            ]
+                          },
+                          "Type": {
+                            "$id": "#/properties/Generator/properties/Context/properties/AggregateRoot/properties/Properties/items/anyOf/1/properties/Type",
+                            "type": "string",
+                            "title": "The Type schema",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": "",
+                            "examples": [
+                              "string"
+                            ]
+                          }
+                        },
+                        "additionalProperties": true
+                      }
+                    ]
+                  }
+                }
+              },
+              "additionalProperties": true
+            },
+            "Project": {
+              "$id": "#/properties/Generator/properties/Context/properties/Project",
+              "type": "object",
+              "title": "The Project schema",
+              "description": "An explanation about the purpose of this instance.",
+              "default": {},
+              "examples": [
+                {
+                  "Name": "MyCompany.MyProduct"
+                }
+              ],
+              "required": [
+                "Name"
+              ],
+              "properties": {
+                "Name": {
+                  "$id": "#/properties/Generator/properties/Context/properties/Project/properties/Name",
+                  "type": "string",
+                  "title": "The Name schema",
+                  "description": "An explanation about the purpose of this instance.",
+                  "default": "",
+                  "examples": [
+                    "MyCompany.MyProduct"
+                  ]
+                }
+              },
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": true
+        },
+        "ProjectPath": {
+          "$id": "#/properties/Generator/properties/ProjectPath",
+          "type": "string",
+          "title": "The ProjectPath schema",
+          "description": "An explanation about the purpose of this instance.",
+          "default": "",
+          "examples": [
+            "C:/Dev/tmp/abp-generator"
+          ]
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
 }

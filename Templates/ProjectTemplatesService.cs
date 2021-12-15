@@ -28,16 +28,14 @@ public class ProjectTemplatesService
 
         string templateSourcePath = Path.Combine(template.FullPath, "Source");
 
-        List<string> templateSourceFilePaths = Directory
-        .GetFiles(path: templateSourcePath, searchPattern: "*", searchOption: SearchOption.AllDirectories)
-            .ToList();
+        List<string> templateSourceFilePaths = Directory.GetFiles(path: templateSourcePath, searchPattern: "*", searchOption: SearchOption.AllDirectories).ToList();
 
         return Parallel.ForEachAsync(
             templateSourceFilePaths,
             async (sourceFilePath, cancellationToken) =>
             {
                 string outputPath = sourceFilePath
-            .Replace($"{templateSourcePath}{Path.DirectorySeparatorChar}", string.Empty)
+                    .Replace($"{templateSourcePath}{Path.DirectorySeparatorChar}", string.Empty)
                     .Replace(Path.DirectorySeparatorChar, '/');
 
                 string fullOutputPath = Path.Combine(_settingsService.Settings.ProjectPath, outputPath);
@@ -78,9 +76,8 @@ public class ProjectTemplatesService
         if (!Directory.Exists(FileHelpers.UserBasedProjectTemplatesPath))
         {
             Directory.CreateDirectory(FileHelpers.UserBasedProjectTemplatesPath);
-            FileHelpers.CopyFilesRecursively(
-                FileHelpers.ProjectTemplatesPath,
-                FileHelpers.UserBasedProjectTemplatesPath);
+
+            FileHelpers.CopyFilesRecursively(FileHelpers.ProjectTemplatesPath, FileHelpers.UserBasedProjectTemplatesPath);
         }
 
         // Load all project templates on startup.

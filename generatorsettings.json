@@ -43,9 +43,7 @@
         ]
       },
       "Project": {
-        "CompanyName": "MyCompany",
-        "Name": "MyCompany.MyProduct",
-        "ProductName": "MyProduct"
+        "Name": "MyCompany.MyProduct"
       }
     },
     "ProjectPath": "C:/Dev/tmp/abp-generator"
