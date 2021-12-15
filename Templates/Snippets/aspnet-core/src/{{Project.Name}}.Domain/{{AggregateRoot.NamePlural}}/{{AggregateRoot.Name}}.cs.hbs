@@ -38,10 +38,9 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
             Guid id,
             {{#each AggregateRoot.Properties}}
             {{#if Required}}
-            {{Type}} {{String.Camelcase Name}},
+            {{Type}} {{String.Camelcase Name}}{{#if @last}},{{else}}){{/if}}
             {{/if}}
             {{/each}}
-        )
         {
             Id = id;
             {{#each AggregateRoot.Properties}}

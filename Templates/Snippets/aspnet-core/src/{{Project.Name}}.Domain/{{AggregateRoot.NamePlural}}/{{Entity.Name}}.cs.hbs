@@ -13,13 +13,15 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
     {
         public Guid {{AggregateRoot.Name}}Id { get; set; }
 
-        public {{AggregateRoot.Name}} {{AggregateRoot.Name}} { get; }
+        public virtual {{AggregateRoot.Name}} {{AggregateRoot.Name}} { get; }
 
         {{#each Entity.Properties}}
         public {{Type}} {{Name}} { get; set; }
         
         {{/each}}
-        public {{Entity.Name}}(Guid id, Guid {{String.Camelcase AggregateRoot.Name}}Id)
+        public {{Entity.Name}}(
+            Guid id,
+            Guid {{String.Camelcase AggregateRoot.Name}}Id)
         {
             Id = id;
             {{AggregateRoot.Name}}Id = {{String.Camelcase AggregateRoot.Name}}Id;

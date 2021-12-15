@@ -28,9 +28,8 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
             {{AggregateRoot.Name}} {{String.Camelcase AggregateRoot.Name}} = new {{AggregateRoot.Name}}(
                 GuidGenerator.Create(),
                 {{#each AggregateRoot.RequiredProperties}}
-                input.{{Name}},
+                input.{{Name}}{{#if @last}}){{else}},{{/if}}
                 {{/each}}
-            )
             {
                 {{#each AggregateRoot.OptionalProperties}}
                 {{Name}} = input.{{Name}},
@@ -42,8 +41,7 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
             {
                 {{Name}} {{String.Camelcase AggregateRootPropertyName}} = new {{Name}}(
                     GuidGenerator.Create(),
-                    {{String.Camelcase ../AggregateRoot.Name}}.Id
-                )
+                    {{String.Camelcase ../AggregateRoot.Name}}.Id)
                 {
                     {{#each Properties}}
                     {{Name}} = {{String.Camelcase ../AggregateRootPropertyName}}Dto.{{Name}},
@@ -94,10 +92,9 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
                 x =>
                     {{#each AggregateRoot.Properties}}
                     {{#if IsString}}
-                    x.{{Name}}.Contains(input.FilterText) ||
+                    x.{{Name}}.Contains(input.FilterText){{#if @last}});{{else}} ||{{/if}}
                     {{/if}}
                     {{/each}}
-                );
 
             long totalCount = await {{String.Camelcase AggregateRoot.Name}}Queryable.LongCountAsync();
 
@@ -167,7 +164,7 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
                 )
                 {
                     {{#each Properties}}
-                    {{Name}} = {{String.Camelcase ../AggregateRootPropertyName}}Dto.{{Name}},
+                    {{Name}} = {{String.Camelcase ../AggregateRootPropertyName}}Dto.{{Name}}{{#if @last}}{{else}},{{/if}}
                     {{/each}}
                 });
             }
