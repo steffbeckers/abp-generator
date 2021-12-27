@@ -310,7 +310,7 @@ public class SnippetTemplatesService
         }
     }
 
-    private async Task LoadTemplatesAsync()
+    private Task LoadTemplatesAsync()
     {
         string? templateFilesDirectory = Path.GetDirectoryName(FileHelpers.UserBasedSnippetTemplatesPath);
 
@@ -326,12 +326,17 @@ public class SnippetTemplatesService
                 searchOption: SearchOption.AllDirectories)
             .ToList();
 
-        _templates.Clear();
-
-        foreach (string templateFilePath in templateFilePaths)
+        lock (_templates)
         {
-            await LoadTemplateAsync(templateFilePath);
+            _templates.Clear();
+
+            foreach (string templateFilePath in templateFilePaths)
+            {
+                LoadTemplateAsync(templateFilePath).GetAwaiter().GetResult();
+            }
         }
+
+        return Task.CompletedTask;
     }
 
     private string ReplaceVariables(string text)
