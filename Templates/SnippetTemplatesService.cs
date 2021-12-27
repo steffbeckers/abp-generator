@@ -103,13 +103,7 @@ public class SnippetTemplatesService
 
     public async Task InitializeAsync()
     {
-        // Copy snippet templates from source to user based snippet templates folder.
-        if (!Directory.Exists(FileHelpers.UserBasedSnippetTemplatesPath))
-        {
-            Directory.CreateDirectory(FileHelpers.UserBasedSnippetTemplatesPath);
-
-            FileHelpers.CopyFilesRecursively(FileHelpers.SnippetTemplatesPath, FileHelpers.UserBasedSnippetTemplatesPath);
-        }
+        CopySnippetTemplates();
 
         // Load all snippet templates on startup.
         await LoadTemplatesAsync();
@@ -164,6 +158,35 @@ public class SnippetTemplatesService
         });
 
         return Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// Copy snippet templates from source to user based snippet templates folder.
+    /// </summary>
+    private static void CopySnippetTemplates()
+    {
+        if (!Directory.Exists(FileHelpers.UserBasedSnippetTemplatesPath))
+        {
+            Directory.CreateDirectory(FileHelpers.UserBasedSnippetTemplatesPath);
+        }
+        else
+        {
+            foreach (string filePath in Directory.GetFiles(
+                path: FileHelpers.UserBasedSnippetTemplatesPath,
+                searchPattern: "*",
+                searchOption: SearchOption.AllDirectories))
+            {
+                // Don't delete custom snippets
+                if (filePath.EndsWith("custom.hbs"))
+                {
+                    continue;
+                }
+
+                File.Delete(filePath);
+            }
+        }
+
+        FileHelpers.CopyFilesRecursively(FileHelpers.SnippetTemplatesPath, FileHelpers.UserBasedSnippetTemplatesPath);
     }
 
     private async Task LoadTemplateAsync(string fullPath)
@@ -277,12 +300,9 @@ public class SnippetTemplatesService
                 }
             }
 
-            lock (_templates)
-            {
-                _templates.RemoveAll(x => x.FullPath == fullPath);
-                _templates.AddRange(generatedTemplates);
-                _templates = _templates.OrderBy(x => x.OutputPath).ToList();
-            }
+            _templates.RemoveAll(x => x.FullPath == fullPath);
+            _templates.AddRange(generatedTemplates);
+            _templates = _templates.OrderBy(x => x.OutputPath).ToList();
         }
         catch (Exception ex)
         {
@@ -300,7 +320,10 @@ public class SnippetTemplatesService
         }
 
         List<string> templateFilePaths = Directory
-        .GetFiles(path: templateFilesDirectory, searchPattern: "*.hbs", searchOption: SearchOption.AllDirectories)
+            .GetFiles(
+                path: templateFilesDirectory,
+                searchPattern: "*.hbs",
+                searchOption: SearchOption.AllDirectories)
             .ToList();
 
         _templates.Clear();

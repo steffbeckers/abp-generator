@@ -1,5 +1,3 @@
-using System.Reflection;
-
 namespace SteffBeckers.Abp.Generator.Helpers;
 
 public static class FileHelpers
@@ -22,8 +20,7 @@ public static class FileHelpers
         Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
         ".steffbeckers",
         "abp",
-        "generator",
-        Assembly.GetExecutingAssembly().GetName().Version.ToString(3));
+        "generator");
 
     public static string UserBasedProjectTemplatesPath => Path.Combine(UserBasedTemplatesPath, "Projects");
 

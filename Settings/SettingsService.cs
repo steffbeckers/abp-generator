@@ -29,11 +29,17 @@ public class SettingsService
         if (!Directory.Exists(FileHelpers.UserBasedPath))
         {
             Directory.CreateDirectory(FileHelpers.UserBasedPath);
+        }
 
+        if (!File.Exists(Path.Combine(FileHelpers.UserBasedPath, FileHelpers.GeneratorSettingsFileName)))
+        {
             File.Copy(
                 Path.Combine(FileHelpers.ContentRootPath, FileHelpers.GeneratorSettingsFileName),
                 Path.Combine(FileHelpers.UserBasedPath, FileHelpers.GeneratorSettingsFileName));
+        }
 
+        if (!File.Exists(Path.Combine(FileHelpers.UserBasedPath, FileHelpers.GeneratorSettingsSchemaFileName)))
+        {
             File.Copy(
                 Path.Combine(FileHelpers.ContentRootPath, FileHelpers.GeneratorSettingsSchemaFileName),
                 Path.Combine(FileHelpers.UserBasedPath, FileHelpers.GeneratorSettingsSchemaFileName));
@@ -44,21 +50,24 @@ public class SettingsService
 
     public Task OpenJsonAsync()
     {
-        Process.Start(
-            new ProcessStartInfo()
-            {
-                FileName = FileHelpers.UserBasedGeneratorSettingsFilePath,
-                UseShellExecute = true,
-                Verb = "open"
-            });
+        Process.Start(new ProcessStartInfo()
+        {
+            FileName = FileHelpers.UserBasedGeneratorSettingsFilePath,
+            UseShellExecute = true,
+            Verb = "open"
+        });
 
         return Task.CompletedTask;
     }
 
     public Task OpenProjectFolderAsync()
     {
-        Process.Start(
-            new ProcessStartInfo() { FileName = Settings.ProjectPath, UseShellExecute = true, Verb = "open" });
+        Process.Start(new ProcessStartInfo()
+        {
+            FileName = Settings.ProjectPath,
+            UseShellExecute = true,
+            Verb = "open"
+        });
 
         return Task.CompletedTask;
     }

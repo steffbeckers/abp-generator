@@ -233,6 +233,10 @@ on:loaded="{highlightJsLoaded}" /> -->
                     <label for="productNameSetting">Project.ProductName</label>
                     <input bind:value={settings.context.project.productName} type="text" id="productNameSetting" disabled />
                 </div>
+                <div style="flex: 1 1">
+                    <label for="moduleNameSetting">Project.ModuleName</label>
+                    <input bind:value={settings.context.project.moduleName} type="text" id="moduleNameSetting" disabled />
+                </div>
             </div>
             <div style="display: flex; gap: 12px">
                 <div style="flex: 1 1">

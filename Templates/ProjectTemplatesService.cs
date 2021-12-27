@@ -21,6 +21,7 @@ public class ProjectTemplatesService
     public Task GenerateAsync(ProjectTemplateGenerateInputDto input)
     {
         ProjectTemplate? template = _templates.FirstOrDefault(x => x.Name == input.TemplateName);
+
         if (template == null || string.IsNullOrEmpty(template.FullPath))
         {
             return Task.CompletedTask;
@@ -73,12 +74,13 @@ public class ProjectTemplatesService
     public async Task InitializeAsync()
     {
         // Copy project templates from source to user based project templates folder.
-        if (!Directory.Exists(FileHelpers.UserBasedProjectTemplatesPath))
+        if (Directory.Exists(FileHelpers.UserBasedProjectTemplatesPath))
         {
-            Directory.CreateDirectory(FileHelpers.UserBasedProjectTemplatesPath);
-
-            FileHelpers.CopyFilesRecursively(FileHelpers.ProjectTemplatesPath, FileHelpers.UserBasedProjectTemplatesPath);
+            Directory.Delete(FileHelpers.UserBasedProjectTemplatesPath, true);
         }
+
+        Directory.CreateDirectory(FileHelpers.UserBasedProjectTemplatesPath);
+        FileHelpers.CopyFilesRecursively(FileHelpers.ProjectTemplatesPath, FileHelpers.UserBasedProjectTemplatesPath);
 
         // Load all project templates on startup.
         await LoadTemplatesAsync();
@@ -119,8 +121,8 @@ public class ProjectTemplatesService
         {
             string templateSettingFileText = await File.ReadAllTextAsync(templateSettingFilePath);
 
-            ProjectTemplate? projectTemplate = JsonConvert.DeserializeObject<ProjectTemplate>(
-                templateSettingFileText);
+            ProjectTemplate? projectTemplate = JsonConvert.DeserializeObject<ProjectTemplate>(templateSettingFileText);
+
             if (projectTemplate == null)
             {
                 continue;

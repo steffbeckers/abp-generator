@@ -61,12 +61,15 @@ namespace SteffBeckers.Abp.Generator.Settings
     public class Project
     {
         [JsonIgnore]
-        public string? CompanyName => Name.Contains('.') ? Name.Split('.').First() : null;
+        public string? CompanyName => Name.Contains('.') ? Name.Split('.').FirstOrDefault() : null;
+
+        [JsonIgnore]
+        public string? ModuleName => Name.Contains('.') ? Name.Split('.').Skip(2).FirstOrDefault() : null;
 
         public string Name { get; set; } = string.Empty;
 
         [JsonIgnore]
-        public string? ProductName => Name.Contains('.') ? string.Join('.', Name.Split('.').Skip(1)) : Name;
+        public string? ProductName => Name.Contains('.') ? Name.Split('.').Skip(1).FirstOrDefault() : null;
     }
 
     public class Property
