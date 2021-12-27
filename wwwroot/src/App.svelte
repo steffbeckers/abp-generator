@@ -225,6 +225,10 @@ on:loaded="{highlightJsLoaded}" /> -->
                     <label for="projectNameSetting">Project.Name</label>
                     <input bind:value={settings.context.project.name} type="text" id="projectNameSetting" />
                 </div>
+                <div style="flex: 0 0">
+                    <label for="isModuleSetting">Project.IsModule</label>
+                    <input bind:checked={settings.context.project.isModule} type="checkbox" id="isModuleSetting" />
+                </div>
                 <div style="flex: 1 1">
                     <label for="companyNameSetting">Project.CompanyName</label>
                     <input bind:value={settings.context.project.companyName} type="text" id="companyNameSetting" disabled />
@@ -271,7 +275,7 @@ on:loaded="{highlightJsLoaded}" /> -->
             {/if}
         </div>
         {/if}
-        {#if snippetTemplate}
+        {#if snippetTemplate && snippetTemplate.output}
         <div>
             <h3>Preview</h3>
             <div style="height: 450px; overflow-y: scroll; border: 1px solid #000000; padding: 8px 12px">

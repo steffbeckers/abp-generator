@@ -206,6 +206,16 @@ public class SnippetTemplatesService
                 .Replace(Path.DirectorySeparatorChar, '/')
                 .Replace(".hbs", string.Empty);
 
+            if (_settingsService.Settings.Context.Project.IsModule)
+            {
+                if (outputPath.StartsWith("aspnet-core/"))
+                {
+                    outputPath = outputPath.Replace("aspnet-core/", $"aspnet-core/modules/{_settingsService.Settings.Context.Project.Name}/");
+                }
+
+                // TODO: What with angular frontend project?
+            }
+
             string fullOutputPath = Path.Combine(_settingsService.Settings.ProjectPath, ReplaceVariables(outputPath));
             string outputFileText = string.Empty;
             if (!string.IsNullOrEmpty(fullOutputPath) && File.Exists(fullOutputPath))

@@ -63,6 +63,8 @@ namespace SteffBeckers.Abp.Generator.Settings
         [JsonIgnore]
         public string? CompanyName => Name.Contains('.') ? Name.Split('.').FirstOrDefault() : null;
 
+        public bool IsModule { get; set; }
+
         public string Name { get; set; } = string.Empty;
 
         [JsonIgnore]
