@@ -6,24 +6,25 @@ using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
-namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
+namespace {{Project.Name}}.{{AggregateRoot.NamePlural}};
+
+public class EfCore{{AggregateRoot.Name}}Repository : EfCoreRepository<{{Project.ProductName}}DbContext, {{AggregateRoot.Name}}, Guid>, I{{AggregateRoot.Name}}Repository
 {
-    public class EfCore{{AggregateRoot.Name}}Repository : EfCoreRepository<{{Project.ProductName}}DbContext, {{AggregateRoot.Name}}, Guid>, I{{AggregateRoot.Name}}Repository
+    public EfCore{{AggregateRoot.Name}}Repository(IDbContextProvider<{{Project.ProductName}}DbContext> dbContextProvider)
+        : base(dbContextProvider)
     {
-        public EfCore{{AggregateRoot.Name}}Repository(IDbContextProvider<{{Project.ProductName}}DbContext> dbContextProvider)
-            : base(dbContextProvider)
-        {
-        }
-
-        public override async Task DeleteAsync({{AggregateRoot.Name}} entity, bool autoSave = false, CancellationToken cancellationToken = default)
-        {
-            {{Project.ProductName}}DbContext dbContext = await GetDbContextAsync();
-
-            {{#each AggregateRoot.Entities}}
-            dbContext.{{NamePlural}}.RemoveRange(dbContext.{{NamePlural}}.Where(x => x.{{../AggregateRoot.Name}}Id == entity.Id));
-            {{/each}}
-
-            await base.DeleteAsync(entity, autoSave, cancellationToken);
-        }
     }
+
+    {{#if AggregateRoot.Entities}}
+    public override async Task DeleteAsync({{AggregateRoot.Name}} entity, bool autoSave = false, CancellationToken cancellationToken = default)
+    {
+        {{Project.ProductName}}DbContext dbContext = await GetDbContextAsync();
+
+        {{#each AggregateRoot.Entities}}
+        dbContext.{{NamePlural}}.RemoveRange(dbContext.{{NamePlural}}.Where(x => x.{{../AggregateRoot.Name}}Id == entity.Id));
+        {{/each}}
+
+        await base.DeleteAsync(entity, autoSave, cancellationToken);
+    }
+    {{/if}}
 }

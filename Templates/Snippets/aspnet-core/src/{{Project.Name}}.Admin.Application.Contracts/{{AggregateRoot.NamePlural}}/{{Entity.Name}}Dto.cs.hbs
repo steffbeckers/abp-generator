@@ -1,0 +1,16 @@
+{
+    "RunForEachEntity": true
+}
+#-#-#
+using System;
+using Volo.Abp.Application.Dtos;
+
+namespace {{Project.Name}}.Admin.{{AggregateRoot.NamePlural}};
+
+public class {{Entity.Name}}Dto : AuditedEntityDto<Guid>
+{
+    {{#each Entity.PropertiesOrderByName}}
+    public {{Type}} {{Name}} { get; set; }
+
+    {{/each}}
+}

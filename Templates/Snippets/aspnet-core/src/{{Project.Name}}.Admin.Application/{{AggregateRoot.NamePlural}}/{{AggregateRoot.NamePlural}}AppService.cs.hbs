@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using {{Project.Name}}.Permissions;
+using {{Project.Name}}.Admin.Permissions;
+using {{Project.Name}}.{{AggregateRoot.NamePlural}};
 using {{Project.Name}}.Shared;
 using System;
 using System.Collections.Generic;
@@ -9,11 +10,11 @@ using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.ObjectMapping;
 
-namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
+namespace {{Project.Name}}.Admin.{{AggregateRoot.NamePlural}}
 {
     [RemoteService(IsEnabled = false)]
-    [Authorize({{Project.ProductName}}Permissions.{{AggregateRoot.NamePlural}}.Default)]
-    public class {{AggregateRoot.NamePlural}}AppService : {{Project.ProductName}}AppService, I{{AggregateRoot.NamePlural}}AppService
+    [Authorize({{Project.ProductName}}AdminPermissions.{{AggregateRoot.NamePlural}}.Default)]
+    public class {{AggregateRoot.NamePlural}}AppService : {{Project.ProductName}}AdminAppService, I{{AggregateRoot.NamePlural}}AppService
     {
         private readonly I{{AggregateRoot.Name}}Repository _{{String.Camelcase AggregateRoot.Name}}Repository;
 
@@ -22,7 +23,7 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
             _{{String.Camelcase AggregateRoot.Name}}Repository = {{String.Camelcase AggregateRoot.Name}}Repository;
         }
 
-        [Authorize({{Project.ProductName}}Permissions.{{AggregateRoot.NamePlural}}.Create)]
+        [Authorize({{Project.ProductName}}AdminPermissions.{{AggregateRoot.NamePlural}}.Create)]
         public async Task<{{AggregateRoot.Name}}Dto> CreateAsync({{AggregateRoot.Name}}CreateInputDto input)
         {
             {{AggregateRoot.Name}} {{String.Camelcase AggregateRoot.Name}} = new {{AggregateRoot.Name}}(
@@ -59,7 +60,7 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
             return await GetAsync({{String.Camelcase AggregateRoot.Name}}.Id);
         }
 
-        [Authorize({{Project.ProductName}}Permissions.{{AggregateRoot.NamePlural}}.Delete)]
+        [Authorize({{Project.ProductName}}AdminPermissions.{{AggregateRoot.NamePlural}}.Delete)]
         public async Task DeleteAsync(Guid id)
         {
             await _{{String.Camelcase AggregateRoot.Name}}Repository.DeleteAsync(id);
@@ -69,7 +70,7 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
         {
             IQueryable<{{AggregateRoot.Name}}> {{String.Camelcase AggregateRoot.Name}}Queryable = await _{{String.Camelcase AggregateRoot.Name}}Repository.WithDetailsAsync();
 
-            {{AggregateRoot.Name}}Dto {{String.Camelcase AggregateRoot.Name}}Dto = await ObjectMapper.GetMapper()
+            {{AggregateRoot.Name}}Dto? {{String.Camelcase AggregateRoot.Name}}Dto = await ObjectMapper.GetMapper()
                 .ProjectTo<{{AggregateRoot.Name}}Dto>({{String.Camelcase AggregateRoot.Name}}Queryable.AsSingleQuery())
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id);
@@ -144,7 +145,7 @@ namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
             };
         }
 
-        [Authorize({{Project.ProductName}}Permissions.{{AggregateRoot.NamePlural}}.Update)]
+        [Authorize({{Project.ProductName}}AdminPermissions.{{AggregateRoot.NamePlural}}.Update)]
         public async Task<{{AggregateRoot.Name}}Dto> UpdateAsync(Guid id, {{AggregateRoot.Name}}UpdateInputDto input)
         {
             {{AggregateRoot.Name}} {{String.Camelcase AggregateRoot.Name}} = await _{{String.Camelcase AggregateRoot.Name}}Repository.GetAsync(id);

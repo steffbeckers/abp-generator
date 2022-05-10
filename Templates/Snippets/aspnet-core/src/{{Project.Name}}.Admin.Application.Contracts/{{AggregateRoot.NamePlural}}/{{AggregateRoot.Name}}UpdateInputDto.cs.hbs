@@ -1,0 +1,34 @@
+using FluentValidation;
+using Microsoft.Extensions.Localization;
+using {{Project.Name}}.Localization;
+using {{Project.Name}}.{{AggregateRoot.NamePlural}};
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
+namespace {{Project.Name}}.Admin.{{AggregateRoot.NamePlural}};
+
+public class {{AggregateRoot.Name}}UpdateInputDto
+{
+    {{#each AggregateRoot.PropertiesOrderByName}}
+    {{#if Required}}
+    [Required]
+    {{/if}}
+    {{#if MaxLength}}
+    [StringLength({{../AggregateRoot.Name}}Consts.{{Name}}MaxLength)]
+    {{/if}}
+    public {{Type}} {{Name}} { get; set; }
+
+    {{/each}}
+    {{#each AggregateRoot.Entities}}
+    public IList<{{../AggregateRoot.Name}}Update{{AggregateRootPropertyName}}InputDto> {{AggregateRootPropertyNamePlural}} { get; set; } = new List<{{../AggregateRoot.Name}}Update{{AggregateRootPropertyName}}InputDto>();
+
+    {{/each}}
+}
+
+public class {{AggregateRoot.Name}}UpdateInputDtoValidator : AbstractValidator<{{AggregateRoot.Name}}UpdateInputDto>
+{
+    public {{AggregateRoot.Name}}UpdateInputDtoValidator(IStringLocalizer<{{Project.ProductName}}Resource> stringLocalizer)
+    {
+    }
+}

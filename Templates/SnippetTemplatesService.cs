@@ -28,6 +28,19 @@ public class SnippetTemplatesService
         // Loading in helpers from https://github.com/Handlebars-Net/Handlebars.Net.Helpers.
         HandlebarsHelpers.Register(_handlebarsContext);
 
+        // String.Kebabcase helper.
+        _handlebarsContext.RegisterHelper("String.Kebabcase", (output, context, arguments) =>
+        {
+            output.Write(
+                Regex.Replace(
+                    arguments[0].ToString() ?? string.Empty,
+                    "(?<!^)([A-Z][a-z]|(?<=[a-z])[A-Z])",
+                    "-$1",
+                    RegexOptions.Compiled)
+                .Trim()
+                .ToLower());
+        });
+
         // Override String.Camelcase helper.
         _handlebarsContext.RegisterHelper("String.Camelcase", (output, context, arguments) =>
         {

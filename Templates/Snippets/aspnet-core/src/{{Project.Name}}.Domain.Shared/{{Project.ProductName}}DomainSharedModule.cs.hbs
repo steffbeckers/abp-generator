@@ -1,7 +1,7 @@
 {
   "RegexPattern": "(Configure<AbpExceptionLocalizationOptions>\\\\(options =>
-            {)",
+        {)",
   "RegexReplacement": "$1\n{0}"
 }
 #-#-#
-                options.MapCodeNamespace(nameof({{Project.ProductName}}DomainErrorCodes.{{AggregateRoot.NamePlural}}), typeof({{Project.ProductName}}Resource));
+            options.MapCodeNamespace(nameof({{Project.ProductName}}ErrorCodes.{{AggregateRoot.NamePlural}}), typeof({{Project.ProductName}}Resource));

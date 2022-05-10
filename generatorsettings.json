@@ -3,30 +3,9 @@
   "Generator": {
     "Context": {
       "AggregateRoot": {
-        "Entities": [
-          {
-            "AggregateRootPropertyName": "Translation",
-            "AggregateRootPropertyNamePlural": "Translations",
-            "Name": "SampleTranslation",
-            "NamePlural": "SampleTranslations",
-            "Properties": [
-              {
-                "MaxLength": 10,
-                "Name": "CultureName",
-                "Required": true,
-                "Type": "string"
-              },
-              {
-                "MaxLength": 500,
-                "Name": "TranslatedFieldName",
-                "Type": "string"
-              }
-            ]
-          }
-        ],
         "LookupPropertyName": "Name",
-        "Name": "Sample",
-        "NamePlural": "Samples",
+        "Name": "ProductType",
+        "NamePlural": "ProductTypes",
         "OrderByPropertyName": "Name",
         "Properties": [
           {
@@ -36,16 +15,17 @@
             "Type": "string"
           },
           {
-            "MaxLength": 500,
-            "Name": "Description",
+            "MaxLength": 10,
+            "Name": "Abbreviation",
             "Type": "string"
           }
         ]
       },
       "Project": {
-        "Name": "MyCompany.MyProduct"
+        "Name": "Codefined.InCtrl.ProductManagement",
+        "IsModule": true
       }
     },
-    "ProjectPath": "C:/Dev/tmp/abp-generator"
+    "ProjectPath": "C:/Dev/codefined/Codefined_InCtrl"
   }
 }

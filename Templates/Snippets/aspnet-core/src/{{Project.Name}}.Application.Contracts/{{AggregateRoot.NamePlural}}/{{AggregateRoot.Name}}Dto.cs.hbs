@@ -4,7 +4,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
 {
-    public class {{AggregateRoot.Name}}Dto : FullAuditedEntityDto<Guid>
+    public class {{AggregateRoot.Name}}Dto : AuditedEntityDto<Guid>
     {
         {{#each AggregateRoot.PropertiesOrderByName}}
         public {{Type}} {{Name}} { get; set; }

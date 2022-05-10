@@ -1,0 +1,22 @@
+{
+  "RegexPattern": "(using AutoMapper;)",
+  "RegexReplacement": "$1\n{0}"
+}
+#-#-#
+using {{Project.Name}}.Admin.{{AggregateRoot.NamePlural}};
+using {{Project.Name}}.{{AggregateRoot.NamePlural}};
+#-#-#
+{
+  "RegexPattern": "({{Project.ProductName}}AdminApplicationAutoMapperProfile\\\\(\\\\)
+    {)",
+  "RegexReplacement": "$1\n{0}"
+}
+#-#-#
+        CreateMap<{{AggregateRoot.Name}}, {{AggregateRoot.Name}}Dto>();
+        CreateMap<{{AggregateRoot.Name}}, {{AggregateRoot.Name}}ListDto>();
+        CreateMap<{{AggregateRoot.Name}}, {{AggregateRoot.Name}}SimpleDto>();
+        CreateMap<{{AggregateRoot.Name}}, LookupDto<Guid>>();
+
+        {{#each AggregateRoot.Entities}}
+        CreateMap<{{Name}}, {{Name}}Dto>();
+        {{/each}}

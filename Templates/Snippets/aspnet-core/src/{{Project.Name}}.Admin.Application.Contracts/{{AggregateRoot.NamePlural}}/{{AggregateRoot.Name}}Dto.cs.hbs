@@ -1,0 +1,17 @@
+using System;
+using System.Collections.Generic;
+using Volo.Abp.Application.Dtos;
+
+namespace {{Project.Name}}.Admin.{{AggregateRoot.NamePlural}};
+
+public class {{AggregateRoot.Name}}Dto : AuditedEntityDto<Guid>
+{
+    {{#each AggregateRoot.PropertiesOrderByName}}
+    public {{Type}} {{Name}} { get; set; }
+
+    {{/each}}
+    {{#each AggregateRoot.Entities}}
+    public IList<{{Name}}Dto> {{AggregateRootPropertyNamePlural}} { get; set; } = new List<{{Name}}Dto>();
+        
+    {{/each}}
+}

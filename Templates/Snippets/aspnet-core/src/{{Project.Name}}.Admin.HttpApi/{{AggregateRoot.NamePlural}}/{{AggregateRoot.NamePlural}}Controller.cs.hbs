@@ -1,0 +1,86 @@
+using Microsoft.AspNetCore.Mvc;
+using {{Project.Name}}.Shared;
+using System;
+using System.Threading.Tasks;
+using Volo.Abp;
+
+namespace {{Project.Name}}.Admin.{{AggregateRoot.NamePlural}};
+
+[RemoteService(Name = {{Project.ProductName}}AdminRemoteServiceConsts.RemoteServiceName)]
+[Area({{Project.ProductName}}AdminRemoteServiceConsts.ModuleName)]
+[ControllerName("{{AggregateRoot.NamePlural}}")]
+[Route("api/admin/{{String.Kebabcase Project.ProductName}}/{{String.Kebabcase AggregateRoot.NamePlural}}")]
+public class {{AggregateRoot.NamePlural}}Controller : {{Project.ProductName}}AdminController, I{{AggregateRoot.NamePlural}}AppService
+{
+    private readonly I{{AggregateRoot.NamePlural}}AppService _{{String.Camelcase AggregateRoot.NamePlural}}AppService;
+
+    public {{AggregateRoot.NamePlural}}Controller(I{{AggregateRoot.NamePlural}}AppService {{String.Camelcase AggregateRoot.NamePlural}}AppService)
+    {
+        _{{String.Camelcase AggregateRoot.NamePlural}}AppService = {{String.Camelcase AggregateRoot.NamePlural}}AppService;
+    }
+
+    /// <summary>
+    /// Create a {{String.Lowercase AggregateRoot.Name}}.
+    /// </summary>
+    /// <param name="input"><see cref="{{AggregateRoot.Name}}CreateInputDto" />.</param>
+    [HttpPost]
+    public Task<{{AggregateRoot.Name}}Dto> CreateAsync({{AggregateRoot.Name}}CreateInputDto input)
+    {
+        return _{{String.Camelcase AggregateRoot.NamePlural}}AppService.CreateAsync(input);
+    }
+
+    /// <summary>
+    /// Delete a {{String.Lowercase AggregateRoot.Name}}.
+    /// </summary>
+    /// <param name="id">{{AggregateRoot.Name}} id.</param>
+    [HttpDelete]
+    [Route("{id}")]
+    public Task DeleteAsync(Guid id)
+    {
+        return _{{String.Camelcase AggregateRoot.NamePlural}}AppService.DeleteAsync(id);
+    }
+
+    /// <summary>
+    /// Get a {{String.Lowercase AggregateRoot.Name}}.
+    /// </summary>
+    /// <param name="id">{{AggregateRoot.Name}} id.</param>
+    [HttpGet]
+    [Route("{id}")]
+    public Task<{{AggregateRoot.Name}}Dto> GetAsync(Guid id)
+    {
+        return _{{String.Camelcase AggregateRoot.NamePlural}}AppService.GetAsync(id);
+    }
+
+    /// <summary>
+    /// Get a list of {{String.Lowercase AggregateRoot.NamePlural}}.
+    /// </summary>
+    /// <param name="input"><see cref="{{AggregateRoot.Name}}ListInputDto" />.</param>
+    [HttpGet]
+    public Task<PagedListDto<{{AggregateRoot.Name}}ListDto>> GetListAsync({{AggregateRoot.Name}}ListInputDto input)
+    {
+        return _{{String.Camelcase AggregateRoot.NamePlural}}AppService.GetListAsync(input);
+    }
+
+    /// <summary>
+    /// Get a lookup list of {{String.Lowercase AggregateRoot.NamePlural}}.
+    /// </summary>
+    /// <param name="input"><see cref="LookupInputDto"/>.</param>
+    [HttpGet]
+    [Route("lookup")]
+    public Task<PagedListDto<LookupDto<Guid>>> GetLookupAsync(LookupInputDto input)
+    {
+        return _{{String.Camelcase AggregateRoot.NamePlural}}AppService.GetLookupAsync(input);
+    }
+
+    /// <summary>
+    /// Update a {{String.Lowercase AggregateRoot.Name}}.
+    /// </summary>
+    /// <param name="id">{{AggregateRoot.Name}} id.</param>
+    /// <param name="input"><see cref="{{AggregateRoot.Name}}UpdateInputDto"/>.</param>
+    [HttpPut]
+    [Route("{id}")]
+    public Task<{{AggregateRoot.Name}}Dto> UpdateAsync(Guid id, {{AggregateRoot.Name}}UpdateInputDto input)
+    {
+        return _{{String.Camelcase AggregateRoot.NamePlural}}AppService.UpdateAsync(id, input);
+    }
+}
