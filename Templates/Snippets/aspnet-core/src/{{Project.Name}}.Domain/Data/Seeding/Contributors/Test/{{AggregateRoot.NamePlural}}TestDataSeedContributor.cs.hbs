@@ -5,69 +5,68 @@ using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 
-namespace {{Project.Name}}.Data.Seeding.Contributors
+namespace {{Project.Name}}.Data.Seeding.Contributors.Test;
+
+public class {{AggregateRoot.NamePlural}}TestDataSeedContributor : IDataSeedContributor, ITransientDependency
 {
-    public class {{AggregateRoot.NamePlural}}TestDataSeedContributor : IDataSeedContributor, ITransientDependency
+    private readonly I{{AggregateRoot.Name}}Repository _{{String.Camelcase AggregateRoot.Name}}Repository;
+
+    public {{AggregateRoot.NamePlural}}TestDataSeedContributor(I{{AggregateRoot.Name}}Repository {{String.Camelcase AggregateRoot.Name}}Repository)
     {
-        private readonly I{{AggregateRoot.Name}}Repository _{{String.Camelcase AggregateRoot.Name}}Repository;
+        _{{String.Camelcase AggregateRoot.Name}}Repository = {{String.Camelcase AggregateRoot.Name}}Repository;
+    }
 
-        public {{AggregateRoot.NamePlural}}TestDataSeedContributor(I{{AggregateRoot.Name}}Repository {{String.Camelcase AggregateRoot.Name}}Repository)
+    public async Task SeedAsync(DataSeedContext context)
+    {
+        if (await _{{String.Camelcase AggregateRoot.Name}}Repository.AnyAsync())
         {
-            _{{String.Camelcase AggregateRoot.Name}}Repository = {{String.Camelcase AggregateRoot.Name}}Repository;
+            return;
         }
 
-        public async Task SeedAsync(DataSeedContext context)
+        {{AggregateRoot.Name}} {{String.Camelcase AggregateRoot.Name}}1 = new {{AggregateRoot.Name}}(
+            id: Guid.Parse("8a39344b-832a-4169-8105-a649e311cc17"),
+            {{#each AggregateRoot.RequiredProperties}}
+            {{#if IsString}}
+            {{String.Camelcase Name}}: "{{../AggregateRoot.Name}} 1 {{String.Lowercase Name}}"{{#if @last}}){{else}},{{/if}}
+            {{else}}
+            // TODO
+            {{String.Camelcase Name}}: 123{{#if @last}}){{else}},{{/if}}
+            {{/if}}
+            {{/each}}
         {
-            if (await _{{String.Camelcase AggregateRoot.Name}}Repository.AnyAsync())
-            {
-                return;
-            }
+            {{#each AggregateRoot.OptionalProperties}}
+            {{#if IsString}}
+            {{Name}} = "{{../AggregateRoot.Name}} 1 {{String.Lowercase Name}}"{{#if @last}}{{else}},{{/if}}
+            {{else}}
+            // TODO
+            {{String.Camelcase Name}}: 123{{#if @last}}{{else}},{{/if}}
+            {{/if}}
+            {{/each}}
+        };
 
-            {{AggregateRoot.Name}} {{String.Camelcase AggregateRoot.Name}}1 = new {{AggregateRoot.Name}}(
-                id: Guid.Parse("8a39344b-832a-4169-8105-a649e311cc17"),
-                {{#each AggregateRoot.RequiredProperties}}
-                {{#if IsString}}
-                {{String.Camelcase Name}}: "{{../AggregateRoot.Name}} 1 {{String.Lowercase Name}}"{{#if @last}}){{else}},{{/if}}
-                {{else}}
-                // TODO
-                {{String.Camelcase Name}}: 123{{#if @last}}){{else}},{{/if}}
-                {{/if}}
-                {{/each}}
-            {
-                {{#each AggregateRoot.OptionalProperties}}
-                {{#if IsString}}
-                {{Name}} = "{{../AggregateRoot.Name}} 1 {{String.Lowercase Name}}"{{#if @last}}{{else}},{{/if}}
-                {{else}}
-                // TODO
-                {{String.Camelcase Name}}: 123{{#if @last}}{{else}},{{/if}}
-                {{/if}}
-                {{/each}}
-            };
+        await _{{String.Camelcase AggregateRoot.Name}}Repository.InsertAsync({{String.Camelcase AggregateRoot.Name}}1);
 
-            await _{{String.Camelcase AggregateRoot.Name}}Repository.InsertAsync({{String.Camelcase AggregateRoot.Name}}1);
+        {{AggregateRoot.Name}} {{String.Camelcase AggregateRoot.Name}}2 = new {{AggregateRoot.Name}}(
+            id: Guid.Parse("1d53f062-08e5-443e-8eb5-298fc07ce4f9"),
+            {{#each AggregateRoot.RequiredProperties}}
+            {{#if IsString}}
+            {{String.Camelcase Name}}: "{{../AggregateRoot.Name}} 2 {{String.Lowercase Name}}"{{#if @last}}){{else}},{{/if}}
+            {{else}}
+            // TODO
+            {{String.Camelcase Name}}: 123{{#if @last}}){{else}},{{/if}}
+            {{/if}}
+            {{/each}}
+        {
+            {{#each AggregateRoot.OptionalProperties}}
+            {{#if IsString}}
+            {{Name}} = "{{../AggregateRoot.Name}} 2 {{String.Lowercase Name}}"{{#if @last}}{{else}},{{/if}}
+            {{else}}
+            // TODO
+            {{String.Camelcase Name}}: 123{{#if @last}}{{else}},{{/if}}
+            {{/if}}
+            {{/each}}
+        };
 
-            {{AggregateRoot.Name}} {{String.Camelcase AggregateRoot.Name}}2 = new {{AggregateRoot.Name}}(
-                id: Guid.Parse("1d53f062-08e5-443e-8eb5-298fc07ce4f9"),
-                {{#each AggregateRoot.RequiredProperties}}
-                {{#if IsString}}
-                {{String.Camelcase Name}}: "{{../AggregateRoot.Name}} 2 {{String.Lowercase Name}}"{{#if @last}}){{else}},{{/if}}
-                {{else}}
-                // TODO
-                {{String.Camelcase Name}}: 123{{#if @last}}){{else}},{{/if}}
-                {{/if}}
-                {{/each}}
-            {
-                {{#each AggregateRoot.OptionalProperties}}
-                {{#if IsString}}
-                {{Name}} = "{{../AggregateRoot.Name}} 2 {{String.Lowercase Name}}"{{#if @last}}{{else}},{{/if}}
-                {{else}}
-                // TODO
-                {{String.Camelcase Name}}: 123{{#if @last}}{{else}},{{/if}}
-                {{/if}}
-                {{/each}}
-            };
-
-            await _{{String.Camelcase AggregateRoot.Name}}Repository.InsertAsync({{String.Camelcase AggregateRoot.Name}}2);
-        }
+        await _{{String.Camelcase AggregateRoot.Name}}Repository.InsertAsync({{String.Camelcase AggregateRoot.Name}}2);
     }
 }
