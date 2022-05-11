@@ -3,7 +3,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace MyCompany.MyProduct.Samples
 {
-    public class SampleDto : FullAuditedEntityDto<Guid>
+    public class SampleDto : EntityDto<Guid>
     {
         public string Description { get; set; }
 
