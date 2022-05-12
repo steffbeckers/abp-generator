@@ -1,0 +1,12 @@
+using System;
+using Volo.Abp.Application.Dtos;
+
+namespace {{Project.Name}}.Portal.{{AggregateRoot.NamePlural}};
+
+public class {{AggregateRoot.Name}}SimpleDto : EntityDto<Guid>
+{
+    {{#each AggregateRoot.PropertiesOrderByName}}
+    public {{Type}} {{Name}} { get; set; }
+
+    {{/each}}
+}

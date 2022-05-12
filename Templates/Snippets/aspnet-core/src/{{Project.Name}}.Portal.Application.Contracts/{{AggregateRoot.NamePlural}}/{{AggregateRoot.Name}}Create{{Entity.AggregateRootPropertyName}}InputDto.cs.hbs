@@ -1,0 +1,32 @@
+{
+    "RunForEachEntity": true
+}
+#-#-#
+using FluentValidation;
+using Microsoft.Extensions.Localization;
+using {{Project.Name}}.Localization;
+using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace {{Project.Name}}.Portal.{{AggregateRoot.NamePlural}};
+
+public class {{AggregateRoot.Name}}Create{{Entity.AggregateRootPropertyName}}InputDto
+{
+    {{#each Entity.PropertiesOrderByName}}
+    {{#if Required}}
+    [Required]
+    {{/if}}
+    {{#if MaxLength}}
+    [StringLength({{../Entity.Name}}Consts.{{Name}}MaxLength)]
+    {{/if}}
+    public {{Type}} {{Name}} { get; set; }
+
+    {{/each}}
+}
+
+public class {{AggregateRoot.Name}}Create{{Entity.AggregateRootPropertyName}}InputDtoValidator : AbstractValidator<{{AggregateRoot.Name}}Create{{Entity.AggregateRootPropertyName}}InputDto>
+{
+    public {{AggregateRoot.Name}}Create{{Entity.AggregateRootPropertyName}}InputDtoValidator(IStringLocalizer<{{Project.ProductName}}Resource> stringLocalizer)
+    {
+    }
+}

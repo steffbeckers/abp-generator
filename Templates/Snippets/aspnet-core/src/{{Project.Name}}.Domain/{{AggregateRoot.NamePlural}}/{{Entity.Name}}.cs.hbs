@@ -1,4 +1,4 @@
-﻿{
+{
   "RunForEachEntity": true
 }
 #-#-#
@@ -7,28 +7,27 @@ using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
 
-namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
+namespace {{Project.Name}}.{{AggregateRoot.NamePlural}};
+
+public class {{Entity.Name}} : FullAuditedEntity<Guid>
 {
-    public class {{Entity.Name}} : FullAuditedEntity<Guid>
-    {
-        public Guid {{AggregateRoot.Name}}Id { get; set; }
+    public Guid {{AggregateRoot.Name}}Id { get; set; }
 
-        public virtual {{AggregateRoot.Name}} {{AggregateRoot.Name}} { get; }
+    public virtual {{AggregateRoot.Name}} {{AggregateRoot.Name}} { get; }
 
-        {{#each Entity.Properties}}
-        public {{Type}} {{Name}} { get; set; }
+    {{#each Entity.Properties}}
+    public {{Type}} {{Name}} { get; set; }
         
-        {{/each}}
-        public {{Entity.Name}}(
-            Guid id,
-            Guid {{String.Camelcase AggregateRoot.Name}}Id)
-        {
-            Id = id;
-            {{AggregateRoot.Name}}Id = {{String.Camelcase AggregateRoot.Name}}Id;
-        }
+    {{/each}}
+    public {{Entity.Name}}(
+        Guid id,
+        Guid {{String.Camelcase AggregateRoot.Name}}Id)
+    {
+        Id = id;
+        {{AggregateRoot.Name}}Id = {{String.Camelcase AggregateRoot.Name}}Id;
+    }
 
-        private {{Entity.Name}}()
-        {
-        }
+    private {{Entity.Name}}()
+    {
     }
 }

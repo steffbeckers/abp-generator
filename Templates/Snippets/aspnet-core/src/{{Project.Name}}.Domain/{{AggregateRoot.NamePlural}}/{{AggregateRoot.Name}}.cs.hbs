@@ -1,57 +1,56 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
 
-namespace {{Project.Name}}.{{AggregateRoot.NamePlural}}
+namespace {{Project.Name}}.{{AggregateRoot.NamePlural}};
+
+public class {{AggregateRoot.Name}} : FullAuditedAggregateRoot<Guid>
 {
-    public class {{AggregateRoot.Name}} : FullAuditedAggregateRoot<Guid>
+    {{#each AggregateRoot.PropertiesOrderByName}}
+    {{#if StringAsFullProperty}}
+    public {{Type}} {{Name}}
     {
-        {{#each AggregateRoot.PropertiesOrderByName}}
-        {{#if StringAsFullProperty}}
-        public {{Type}} {{Name}}
+        get => _{{String.Camelcase Name}};
+        set
         {
-            get => _{{String.Camelcase Name}};
-            set
-            {
-                {{#if Required}}
-                Check.NotNull(value, nameof({{Name}}));
-                {{/if}}
-                {{#if MaxLength}}
-                Check.Length(value, nameof({{Name}}), {{../AggregateRoot.Name}}Consts.{{Name}}MaxLength, 0);
-                {{/if}}
-                _{{String.Camelcase Name}} = value;
-            }
+            {{#if Required}}
+            Check.NotNull(value, nameof({{Name}}));
+            {{/if}}
+            {{#if MaxLength}}
+            Check.Length(value, nameof({{Name}}), {{../AggregateRoot.Name}}Consts.{{Name}}MaxLength, 0);
+            {{/if}}
+            _{{String.Camelcase Name}} = value;
         }
-        private {{Type}} _{{String.Camelcase Name}};
-        {{else}}
-        public {{Type}} {{Name}} { get; set; }
-        {{/if}}
+    }
+    private {{Type}} _{{String.Camelcase Name}};
+    {{else}}
+    public {{Type}} {{Name}} { get; set; }
+    {{/if}}
 
-        {{/each}}
-        {{#each AggregateRoot.Entities}}
-        public virtual ICollection<{{Name}}> {{AggregateRootPropertyNamePlural}} { get; private set; } = new Collection<{{Name}}>();
+    {{/each}}
+    {{#each AggregateRoot.Entities}}
+    public virtual ICollection<{{Name}}> {{AggregateRootPropertyNamePlural}} { get; private set; } = new Collection<{{Name}}>();
         
+    {{/each}}
+    public {{AggregateRoot.Name}}(
+        Guid id,
+        {{#each AggregateRoot.Properties}}
+        {{#if Required}}
+        {{Type}} {{String.Camelcase Name}}{{#if @last}},{{else}}){{/if}}
+        {{/if}}
         {{/each}}
-        public {{AggregateRoot.Name}}(
-            Guid id,
-            {{#each AggregateRoot.Properties}}
-            {{#if Required}}
-            {{Type}} {{String.Camelcase Name}}{{#if @last}},{{else}}){{/if}}
-            {{/if}}
-            {{/each}}
-        {
-            Id = id;
-            {{#each AggregateRoot.Properties}}
-            {{#if Required}}
-            {{Name}} = {{String.Camelcase Name}};
-            {{/if}}
-            {{/each}}
-        }
+    {
+        Id = id;
+        {{#each AggregateRoot.Properties}}
+        {{#if Required}}
+        {{Name}} = {{String.Camelcase Name}};
+        {{/if}}
+        {{/each}}
+    }
 
-        private {{AggregateRoot.Name}}()
-        {
-        }
+    private {{AggregateRoot.Name}}()
+    {
     }
 }

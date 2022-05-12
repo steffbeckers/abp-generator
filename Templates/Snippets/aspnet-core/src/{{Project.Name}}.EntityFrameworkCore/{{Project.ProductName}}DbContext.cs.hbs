@@ -34,7 +34,7 @@ using {{Project.Name}}.{{AggregateRoot.NamePlural}};
         {{#each AggregateRoot.Entities}}
         builder.Entity<{{Name}}>(b =>
         {
-            b.ToTable({{../Project.ProductName}}Consts.DbTablePrefix + "{{NamePlural}}", {{../Project.ProductName}}Consts.DbSchema);
+            b.ToTable({{../Project.ProductName}}DbProperties.DbTablePrefix + "{{NamePlural}}", {{../Project.ProductName}}DbProperties.DbSchema);
             b.ConfigureByConvention();
             b.Property(x => x.{{../AggregateRoot.Name}}Id).HasColumnName(nameof({{Name}}.{{../AggregateRoot.Name}}Id)).IsRequired();
             b.HasOne(x => x.{{../AggregateRoot.Name}}).WithMany(x => x.{{AggregateRootPropertyNamePlural}}).HasForeignKey(x => x.{{../AggregateRoot.Name}}Id);

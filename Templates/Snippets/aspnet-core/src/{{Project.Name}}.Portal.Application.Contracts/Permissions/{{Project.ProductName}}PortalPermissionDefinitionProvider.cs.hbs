@@ -1,0 +1,9 @@
+{
+  "RegexPattern": "(PermissionGroupDefinition {{String.Camelcase Project.ProductName}}PortalGroup = context.AddGroup\\\\({{Project.ProductName}}PortalPermissions.GroupName\\\\);)",
+  "RegexReplacement": "$1\n\n{0}"
+}
+#-#-#
+        PermissionDefinition {{String.Camelcase AggregateRoot.NamePlural}}Permission = {{String.Camelcase Project.ProductName}}PortalGroup.AddPermission({{Project.ProductName}}PortalPermissions.{{AggregateRoot.NamePlural}}.Default, L($"Permission:{nameof({{Project.ProductName}}PortalPermissions.{{AggregateRoot.NamePlural}})}"));
+        {{String.Camelcase AggregateRoot.NamePlural}}Permission.AddChild({{Project.ProductName}}PortalPermissions.{{AggregateRoot.NamePlural}}.Create, L($"Permission:{nameof({{Project.ProductName}}PortalPermissions.{{AggregateRoot.NamePlural}}.Create)}"));
+        {{String.Camelcase AggregateRoot.NamePlural}}Permission.AddChild({{Project.ProductName}}PortalPermissions.{{AggregateRoot.NamePlural}}.Update, L($"Permission:{nameof({{Project.ProductName}}PortalPermissions.{{AggregateRoot.NamePlural}}.Update)}"));
+        {{String.Camelcase AggregateRoot.NamePlural}}Permission.AddChild({{Project.ProductName}}PortalPermissions.{{AggregateRoot.NamePlural}}.Delete, L($"Permission:{nameof({{Project.ProductName}}PortalPermissions.{{AggregateRoot.NamePlural}}.Delete)}"));
