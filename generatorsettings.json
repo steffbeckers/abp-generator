@@ -3,37 +3,11 @@
   "Generator": {
     "Context": {
       "AggregateRoot": {
-        "Entities": [
-          {
-            "AggregateRootPropertyName": "ProductPhoto",
-            "AggregateRootPropertyNamePlural": "ProductPhotos",
-            "Name": "ProductPhoto",
-            "NamePlural": "ProductPhotos",
-            "Properties": [
-              {
-                "Name": "FileId",
-                "Required": true,
-                "Type": "Guid"
-              },
-              {
-                "Name": "SortOrder",
-                "Required": true,
-                "Type": "int"
-              }
-            ]
-          }
-        ],
         "LookupPropertyName": "Name",
-        "Name": "Product",
-        "NamePlural": "Products",
+        "Name": "ProductType",
+        "NamePlural": "ProductTypes",
         "OrderByPropertyName": "Name",
         "Properties": [
-          {
-            "MaxLength": 50,
-            "Name": "Code",
-            "Required": true,
-            "Type": "string"
-          },
           {
             "MaxLength": 100,
             "Name": "Name",
@@ -41,18 +15,9 @@
             "Type": "string"
           },
           {
-            "MaxLength": 4000,
-            "Name": "Description",
+            "MaxLength": 10,
+            "Name": "Abbreviation",
             "Type": "string"
-          },
-          {
-            "Name": "IsArchived",
-            "Type": "bool"
-          },
-          {
-            "Name": "ProductTypeId",
-            "Required": true,
-            "Type": "Guid"
           }
         ]
       },

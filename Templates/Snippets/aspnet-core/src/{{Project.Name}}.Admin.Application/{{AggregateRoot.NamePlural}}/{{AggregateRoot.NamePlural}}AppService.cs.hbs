@@ -6,6 +6,7 @@ using {{Project.Name}}.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.ObjectMapping;
@@ -105,7 +106,7 @@ public class {{AggregateRoot.NamePlural}}AppService : {{Project.ProductName}}Adm
         }
         else
         {
-            {{String.Camelcase AggregateRoot.Name}}Queryable = {{String.Camelcase AggregateRoot.Name}}Queryable.OrderBy(x => input.Sorting);
+            {{String.Camelcase AggregateRoot.Name}}Queryable = {{String.Camelcase AggregateRoot.Name}}Queryable.OrderBy(input.Sorting);
         }
 
         {{String.Camelcase AggregateRoot.Name}}Queryable = {{String.Camelcase AggregateRoot.Name}}Queryable.PageBy(input.SkipCount, input.MaxResultCount);
