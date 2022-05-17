@@ -1,0 +1,24 @@
+import { CREATE_{{String.UppercasedSnakecase AggregateRoot.NamePlural}}_FEATURE_KEY, State } from './create-{{String.Kebabcase AggregateRoot.Name}}.reducer';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
+
+export const getCreate{{AggregateRoot.Name}}State = createFeatureSelector<State>(CREATE_{{String.UppercasedSnakecase AggregateRoot.NamePlural}}_FEATURE_KEY);
+
+export const getCreating = createSelector(getCreate{{AggregateRoot.Name}}State, (state: State) => state.creating);
+
+export const getForm = createSelector(getCreate{{AggregateRoot.Name}}State, (state: State) => state.form);
+
+export const getIgnoreUnsavedChanges = createSelector(
+  getCreate{{AggregateRoot.Name}}State,
+  (state: State) => state.ignoreUnsavedChanges
+);
+
+export const getHasUnsavedChanges = createSelector(
+  getIgnoreUnsavedChanges,
+  getForm,
+  (ignoreUnsavedChanges, form) => !ignoreUnsavedChanges && form.isDirty
+);
+
+export const getCreate{{AggregateRoot.Name}}ModalVM = createSelector(getCreating, getForm, (creating, form) => ({
+  creating,
+  form
+}));

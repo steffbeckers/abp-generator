@@ -41,6 +41,31 @@ public class SnippetTemplatesService
                 .ToLower());
         });
 
+        // String.SpacedPascalcase helper.
+        _handlebarsContext.RegisterHelper("String.SpacedPascalcase", (output, context, arguments) =>
+        {
+            output.Write(
+                Regex.Replace(
+                    arguments[0].ToString() ?? string.Empty,
+                    "(?<!^)([A-Z][a-z]|(?<=[a-z])[A-Z])",
+                    " $1",
+                    RegexOptions.Compiled)
+                .Trim());
+        });
+
+        // String.UppercasedSnakecase helper.
+        _handlebarsContext.RegisterHelper("String.UppercasedSnakecase", (output, context, arguments) =>
+        {
+            output.Write(
+                Regex.Replace(
+                    arguments[0].ToString() ?? string.Empty,
+                    "(?<!^)([A-Z][a-z]|(?<=[a-z])[A-Z])",
+                    "_$1",
+                    RegexOptions.Compiled)
+                .Trim()
+                .ToUpper());
+        });
+
         // Override String.Camelcase helper.
         _handlebarsContext.RegisterHelper("String.Camelcase", (output, context, arguments) =>
         {

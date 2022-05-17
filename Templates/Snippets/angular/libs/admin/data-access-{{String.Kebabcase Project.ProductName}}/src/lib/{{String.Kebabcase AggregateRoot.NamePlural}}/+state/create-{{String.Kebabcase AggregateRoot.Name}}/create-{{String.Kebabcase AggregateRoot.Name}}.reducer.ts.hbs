@@ -1,0 +1,64 @@
+import * as Create{{AggregateRoot.Name}}Actions from './create-{{String.Kebabcase AggregateRoot.Name}}.actions';
+import * as {{AggregateRoot.NamePlural}}APIActions from '../api/{{String.Kebabcase AggregateRoot.NamePlural}}-api.actions';
+import {
+  createFormGroupState,
+  FormGroupState,
+  onNgrxForms,
+  updateGroup,
+  validate,
+  wrapReducerWithFormStateUpdate
+} from 'ngrx-forms';
+import { createReducer, on } from '@ngrx/store';
+import { ErrorDto } from '@inctrl/shared';
+import { required } from 'ngrx-forms/validation';
+
+export const CREATE_{{String.UppercasedSnakecase AggregateRoot.NamePlural}}_FEATURE_KEY = 'inctrl-admin-{{String.Kebabcase Project.ProductName}}-{{String.Kebabcase AggregateRoot.NamePlural}}-create-{{String.Kebabcase AggregateRoot.Name}}';
+
+export interface State {
+  error?: ErrorDto | null;
+  creating: boolean;
+  form: FormGroupState<{{AggregateRoot.Name}}CreateInputDto>;
+  ignoreUnsavedChanges: boolean;
+}
+
+export interface Create{{AggregateRoot.Name}}PartialState {
+  readonly [CREATE_{{String.UppercasedSnakecase AggregateRoot.NamePlural}}_FEATURE_KEY]: State;
+}
+
+export const initialState: State = {
+  creating: false,
+  form: createFormGroupState<{{AggregateRoot.Name}}CreateInputDto>(CREATE_{{String.UppercasedSnakecase AggregateRoot.NamePlural}}_FEATURE_KEY + '-form', {
+    name: '',
+    isPublic: true,
+    isDefault: false,
+    extraProperties: {}
+  }),
+  ignoreUnsavedChanges: false
+};
+
+const validateForm = updateGroup<{{AggregateRoot.Name}}CreateInputDto>({
+  name: validate(required)
+});
+
+const create{{AggregateRoot.Name}}Reducer = createReducer(
+  initialState,
+  onNgrxForms(),
+  on(Create{{AggregateRoot.Name}}Actions.formSubmitted, state => ({
+    ...state,
+    error: null,
+    creating: true
+  })),
+  on(Create{{AggregateRoot.Name}}Actions.cancelled, {{AggregateRoot.NamePlural}}APIActions.create{{AggregateRoot.Name}}Success, state => ({
+    ...state,
+    ignoreUnsavedChanges: true
+  })),
+  on(Create{{AggregateRoot.Name}}Actions.closed, () => initialState),
+  on({{AggregateRoot.NamePlural}}APIActions.create{{AggregateRoot.Name}}Success, state => ({ ...state, creating: false })),
+  on({{AggregateRoot.NamePlural}}APIActions.create{{AggregateRoot.Name}}Failure, (state, { error }) => ({
+    ...state,
+    error,
+    creating: false
+  }))
+);
+
+export const reducer = wrapReducerWithFormStateUpdate(create{{AggregateRoot.Name}}Reducer, x => x.form, validateForm);
