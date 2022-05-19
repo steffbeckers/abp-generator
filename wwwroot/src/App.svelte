@@ -190,7 +190,8 @@
             return;
         }
 
-        filteredSnippetTemplateProjectFiles = snippetTemplateProjectFiles.filter(x => x.includes(snippetTemplateProjectFilesSearchTerm));
+        filteredSnippetTemplateProjectFiles = snippetTemplateProjectFiles
+            .filter(function (str) { return str.relativePath.toLowerCase().indexOf(snippetTemplateProjectFilesSearchTerm.toLowerCase()) === -1; });
     }
 
     async function openProjectTemplatesFolder() {
@@ -308,7 +309,7 @@ on:loaded="{highlightJsLoaded}" /> -->
         </div>
         {/if}
         {#if filteredSnippetTemplateProjectFiles }
-        <h3>Create new snippet templates</h3>
+        <h3>Create new snippet templates (WIP)</h3>
         <input bind:value={snippetTemplateProjectFilesSearchTerm} on:keyup={setFilteredSnippetTemplateProjectFiles} type="text" id="createNewTemplatesSearch" placeholder="Search" />
         <div style="display: flex; flex-direction: column">
             <select style="flex: 1 1 200px" multiple>
