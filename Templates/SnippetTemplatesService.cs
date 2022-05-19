@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using SteffBeckers.Abp.Generator.Helpers;
 using SteffBeckers.Abp.Generator.Realtime;
 using SteffBeckers.Abp.Generator.Settings;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -71,6 +72,27 @@ public class SnippetTemplatesService
         {
             output.Write(JsonNamingPolicy.CamelCase.ConvertName(arguments[0].ToString() ?? string.Empty));
         });
+    }
+
+    public Task<List<SnippetTemplateProjectFile>> GetProjectFileListAsync()
+    {
+        return Task.FromResult(Directory
+            .GetFiles(
+                path: _settingsService.Settings.ProjectPath,
+                searchPattern: "*.*",
+                searchOption: SearchOption.AllDirectories)
+            .Where(x => x.EndsWith(".cs"))
+            .Select(projectFilePath =>
+            {
+                string relativeProjectFilePath = projectFilePath
+                    .Replace($"{_settingsService.Settings.ProjectPath}{Path.DirectorySeparatorChar}", string.Empty)
+                    .Replace(Path.DirectorySeparatorChar, '/');
+
+                return new SnippetTemplateProjectFile()
+                {
+                    RelativePath = relativeProjectFilePath
+                };
+            }).ToList());
     }
 
     public Task EditAsync(SnippetTemplateEditInputDto input)

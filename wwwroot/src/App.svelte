@@ -8,7 +8,7 @@
 
     import { onMount } from "svelte";
     import * as signalR from "@microsoft/signalr";
-    
+
     let version;
     let settings;
 
@@ -18,6 +18,10 @@
     let snippetTemplates = [];
     let selectedSnippetTemplateOutputPaths = [];
     let snippetTemplate;
+
+    let snippetTemplateProjectFiles = [];
+    let snippetTemplateProjectFilesSearchTerm = '';
+    let filteredSnippetTemplateProjectFiles = [];
 
     let projectTemplates = [];
     let selectedProjectTemplateName;
@@ -43,7 +47,13 @@
                 setSnippetTemplate();
             });
 
-            
+        fetch("/api/templates/snippets/project-files")
+            .then((response) => response.json())
+            .then((data) => {
+                snippetTemplateProjectFiles = data;
+                setFilteredSnippetTemplateProjectFiles();
+            });
+
         fetch("/api/templates/projects")
             .then((response) => response.json())
             .then((data) => {
@@ -55,7 +65,7 @@
             .withUrl("/signalr-hubs/realtime")
             .withAutomaticReconnect()
             .build();
-        
+
         realtimeConnection.on("SettingsUpdated", (updatedSettings) => {
             settings = updatedSettings;
         });
@@ -107,7 +117,7 @@
     // function highlightJsLoaded() {
     //     hljs.highlightAll();
     // }
-    
+
     async function openSettingsJson() {
         await fetch("/api/settings/open-json");
     }
@@ -121,7 +131,7 @@
             }
         });
     }
-    
+
     function aggregateRootNameChanged() {
         settings.context.aggregateRoot.namePlural = settings.context.aggregateRoot.name + 's';
     }
@@ -172,6 +182,15 @@
             // hljs.initHighlighting.called = false;
             // hljs.initHighlighting();
         }
+    }
+
+    function setFilteredSnippetTemplateProjectFiles() {
+        if (!snippetTemplateProjectFilesSearchTerm) {
+            filteredSnippetTemplateProjectFiles = snippetTemplateProjectFiles;
+            return;
+        }
+
+        filteredSnippetTemplateProjectFiles = snippetTemplateProjectFiles.filter(x => x.includes(snippetTemplateProjectFilesSearchTerm));
     }
 
     async function openProjectTemplatesFolder() {
@@ -285,6 +304,20 @@ on:loaded="{highlightJsLoaded}" /> -->
                         {snippetTemplate.output}
                     </code>
                 </pre>
+            </div>
+        </div>
+        {/if}
+        {#if filteredSnippetTemplateProjectFiles }
+        <h3>Create new snippet templates</h3>
+        <input bind:value={snippetTemplateProjectFilesSearchTerm} on:keyup={setFilteredSnippetTemplateProjectFiles} type="text" id="createNewTemplatesSearch" placeholder="Search" />
+        <div style="display: flex; flex-direction: column">
+            <select style="flex: 1 1 200px" multiple>
+                {#each filteredSnippetTemplateProjectFiles as projectFile}
+                <option value={projectFile.relativePath}>{projectFile.relativePath}</option>
+                {/each}
+            </select>
+            <div style="display: flex; gap: 12px">
+                <button style="flex: 1 1" type="button">Create</button>
             </div>
         </div>
         {/if}
