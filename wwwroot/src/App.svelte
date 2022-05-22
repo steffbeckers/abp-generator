@@ -47,12 +47,7 @@
                 setSnippetTemplate();
             });
 
-        fetch("/api/templates/snippets/project-files")
-            .then((response) => response.json())
-            .then((data) => {
-                snippetTemplateProjectFiles = data;
-                setFilteredSnippetTemplateProjectFiles();
-            });
+        searchSnippetTemplateProjectFiles();
 
         fetch("/api/templates/projects")
             .then((response) => response.json())
@@ -156,6 +151,13 @@
         });
     }
 
+    function getSnippetTemplateProjectFiles() {
+        return fetch("/api/templates/snippets/project-files?" + new URLSearchParams({
+            filterText: snippetTemplateProjectFilesSearchTerm
+        }))
+        .then((response) => response.json());
+    }
+
     async function generateSelectedSnippetTemplates() {
         await fetch("/api/templates/snippets/generate", {
             method: "POST",
@@ -184,14 +186,11 @@
         }
     }
 
-    function setFilteredSnippetTemplateProjectFiles() {
-        if (!snippetTemplateProjectFilesSearchTerm) {
-            filteredSnippetTemplateProjectFiles = snippetTemplateProjectFiles;
-            return;
-        }
-
-        filteredSnippetTemplateProjectFiles = snippetTemplateProjectFiles
-            .filter(function (str) { return str.relativePath.toLowerCase().indexOf(snippetTemplateProjectFilesSearchTerm.toLowerCase()) === -1; });
+    function searchSnippetTemplateProjectFiles() {
+        getSnippetTemplateProjectFiles()
+            .then((data) => {
+                snippetTemplateProjectFiles = data;
+            });
     }
 
     async function openProjectTemplatesFolder() {
@@ -308,12 +307,12 @@ on:loaded="{highlightJsLoaded}" /> -->
             </div>
         </div>
         {/if}
-        {#if filteredSnippetTemplateProjectFiles }
-        <h3>Create new snippet templates (WIP)</h3>
-        <input bind:value={snippetTemplateProjectFilesSearchTerm} on:keyup={setFilteredSnippetTemplateProjectFiles} type="text" id="createNewTemplatesSearch" placeholder="Search" />
+        {#if snippetTemplateProjectFiles }
+        <h3>Create new snippet templates</h3>
+        <input bind:value={snippetTemplateProjectFilesSearchTerm} on:keyup={searchSnippetTemplateProjectFiles} type="text" id="createNewTemplatesSearch" placeholder="Search" />
         <div style="display: flex; flex-direction: column">
             <select style="flex: 1 1 200px" multiple>
-                {#each filteredSnippetTemplateProjectFiles as projectFile}
+                {#each snippetTemplateProjectFiles as projectFile}
                 <option value={projectFile.relativePath}>{projectFile.relativePath}</option>
                 {/each}
             </select>

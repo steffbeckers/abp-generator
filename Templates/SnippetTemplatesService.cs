@@ -8,6 +8,7 @@ using SteffBeckers.Abp.Generator.Realtime;
 using SteffBeckers.Abp.Generator.Settings;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -74,7 +75,7 @@ public class SnippetTemplatesService
         });
     }
 
-    public Task<List<SnippetTemplateProjectFile>> GetProjectFileListAsync()
+    public Task<List<SnippetTemplateProjectFile>> GetProjectFileListAsync(SnippetTemplateProjectFileListInputDto input)
     {
         return Task.FromResult(Directory
             .GetFiles(
@@ -82,6 +83,7 @@ public class SnippetTemplatesService
                 searchPattern: "*.*",
                 searchOption: SearchOption.AllDirectories)
             .Where(x => x.EndsWith(".cs"))
+            .Where(x => !string.IsNullOrWhiteSpace(input.FilterText) ? x.Contains(input.FilterText) : true)
             .Select(projectFilePath =>
             {
                 string relativeProjectFilePath = projectFilePath
