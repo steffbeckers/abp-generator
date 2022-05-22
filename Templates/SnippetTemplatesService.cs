@@ -100,16 +100,45 @@ public class SnippetTemplatesService
 
     public Task CreateAsync(SnippetTemplateCreateInputDto input)
     {
-        Parallel.ForEach(
+        return Parallel.ForEachAsync(
             input.ProjectFiles,
-            (SnippetTemplateProjectFile projectFile) =>
+            async (SnippetTemplateProjectFile projectFile, CancellationToken cancellationToken) =>
             {
-                // TODO
+                if (projectFile == null)
+                {
+                    return;
+                }
+
+                // TODO: Remove
                 Console.WriteLine(projectFile.FullPath);
                 Console.WriteLine(projectFile.RelativePath);
-            });
 
-        return Task.CompletedTask;
+                string projectFileText;
+
+                using (StreamReader? projectFileTextStreamReader =
+                    new StreamReader(File.Open(projectFile.FullPath!, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+                {
+                    projectFileText = await projectFileTextStreamReader.ReadToEndAsync();
+                }
+
+                // TODO: Remove
+                Console.WriteLine(projectFileText);
+
+                string output = projectFileText;
+
+                GeneratorContext context = _settingsService.Settings.Context;
+
+                output = output.Replace(context.Project.Name, "{{Project.Name}}", StringComparison.Ordinal);
+                output = output.Replace(context.Project.CompanyName!, "{{Project.CompanyName}}", StringComparison.Ordinal);
+                output = output.Replace(context.Project.ProductName!, "{{Project.ProductName}}", StringComparison.Ordinal);
+                output = output.Replace(context.AggregateRoot.NamePlural, "{{AggregateRoot.NamePlural}}", StringComparison.Ordinal);
+
+                // TODO: Remove
+                Console.WriteLine("projectFileText");
+                Console.WriteLine(projectFileText);
+                Console.WriteLine("output");
+                Console.WriteLine(output);
+            });
     }
 
     public Task EditAsync(SnippetTemplateEditInputDto input)
