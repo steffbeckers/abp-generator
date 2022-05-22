@@ -21,7 +21,7 @@
 
     let snippetTemplateProjectFiles = [];
     let snippetTemplateProjectFilesSearchTerm = '';
-    let filteredSnippetTemplateProjectFiles = [];
+    let selectedSnippetTemplateProjectFilesOutputPaths = [];
 
     let projectTemplates = [];
     let selectedProjectTemplateName;
@@ -170,6 +170,19 @@
         });
     }
 
+    async function createSelectedSnippetTemplates() {
+        await fetch("/api/templates/snippets", {
+            method: "POST",
+            body: JSON.stringify({
+                projectFiles: snippetTemplateProjectFiles.filter(x =>
+                    selectedSnippetTemplateProjectFilesOutputPaths.includes(x.relativePath))
+            }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+    }
+
     function setSnippetTemplate() {
         if (selectedSnippetTemplateOutputPaths && selectedSnippetTemplateOutputPaths.length != 1) {
             snippetTemplate = null;
@@ -311,14 +324,16 @@ on:loaded="{highlightJsLoaded}" /> -->
         <h3>Create new snippet templates</h3>
         <input bind:value={snippetTemplateProjectFilesSearchTerm} on:keyup={searchSnippetTemplateProjectFiles} type="text" id="createNewTemplatesSearch" placeholder="Search" />
         <div style="display: flex; flex-direction: column">
-            <select style="flex: 1 1 200px" multiple>
+            <select bind:value={selectedSnippetTemplateProjectFilesOutputPaths} style="flex: 1 1 200px" multiple>
                 {#each snippetTemplateProjectFiles as projectFile}
                 <option value={projectFile.relativePath}>{projectFile.relativePath}</option>
                 {/each}
             </select>
+            {#if selectedSnippetTemplateProjectFilesOutputPaths.length > 0}
             <div style="display: flex; gap: 12px">
-                <button style="flex: 1 1" type="button">Create</button>
+                <button style="flex: 1 1" on:click={createSelectedSnippetTemplates} type="button">Create</button>
             </div>
+            {/if}
         </div>
         {/if}
     </div>

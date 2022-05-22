@@ -92,9 +92,24 @@ public class SnippetTemplatesService
 
                 return new SnippetTemplateProjectFile()
                 {
+                    FullPath = projectFilePath,
                     RelativePath = relativeProjectFilePath
                 };
             }).ToList());
+    }
+
+    public Task CreateAsync(SnippetTemplateCreateInputDto input)
+    {
+        Parallel.ForEach(
+            input.ProjectFiles,
+            (SnippetTemplateProjectFile projectFile) =>
+            {
+                // TODO
+                Console.WriteLine(projectFile.FullPath);
+                Console.WriteLine(projectFile.RelativePath);
+            });
+
+        return Task.CompletedTask;
     }
 
     public Task EditAsync(SnippetTemplateEditInputDto input)
