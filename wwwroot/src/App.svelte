@@ -8,7 +8,7 @@
 
     import { onMount } from "svelte";
     import * as signalR from "@microsoft/signalr";
-    
+
     let version;
     let settings;
 
@@ -18,6 +18,10 @@
     let snippetTemplates = [];
     let selectedSnippetTemplateOutputPaths = [];
     let snippetTemplate;
+
+    let snippetTemplateProjectFiles = [];
+    let snippetTemplateProjectFilesSearchTerm = '';
+    let selectedSnippetTemplateProjectFilesOutputPaths = [];
 
     let projectTemplates = [];
     let selectedProjectTemplateName;
@@ -43,7 +47,8 @@
                 setSnippetTemplate();
             });
 
-            
+        searchSnippetTemplateProjectFiles();
+
         fetch("/api/templates/projects")
             .then((response) => response.json())
             .then((data) => {
@@ -55,7 +60,7 @@
             .withUrl("/signalr-hubs/realtime")
             .withAutomaticReconnect()
             .build();
-        
+
         realtimeConnection.on("SettingsUpdated", (updatedSettings) => {
             settings = updatedSettings;
         });
@@ -107,7 +112,7 @@
     // function highlightJsLoaded() {
     //     hljs.highlightAll();
     // }
-    
+
     async function openSettingsJson() {
         await fetch("/api/settings/open-json");
     }
@@ -121,7 +126,7 @@
             }
         });
     }
-    
+
     function aggregateRootNameChanged() {
         settings.context.aggregateRoot.namePlural = settings.context.aggregateRoot.name + 's';
     }
@@ -146,11 +151,31 @@
         });
     }
 
+    function getSnippetTemplateProjectFiles() {
+        return fetch("/api/templates/snippets/project-files?" + new URLSearchParams({
+            filterText: snippetTemplateProjectFilesSearchTerm
+        }))
+        .then((response) => response.json());
+    }
+
     async function generateSelectedSnippetTemplates() {
         await fetch("/api/templates/snippets/generate", {
             method: "POST",
             body: JSON.stringify({
                 outputPaths: selectedSnippetTemplateOutputPaths
+            }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+    }
+
+    async function createSelectedSnippetTemplates() {
+        await fetch("/api/templates/snippets", {
+            method: "POST",
+            body: JSON.stringify({
+                projectFiles: snippetTemplateProjectFiles.filter(x =>
+                    selectedSnippetTemplateProjectFilesOutputPaths.includes(x.relativePath))
             }),
             headers: {
                 "Content-Type": "application/json"
@@ -172,6 +197,13 @@
             // hljs.initHighlighting.called = false;
             // hljs.initHighlighting();
         }
+    }
+
+    function searchSnippetTemplateProjectFiles() {
+        getSnippetTemplateProjectFiles()
+            .then((data) => {
+                snippetTemplateProjectFiles = data;
+            });
     }
 
     async function openProjectTemplatesFolder() {
@@ -286,6 +318,22 @@ on:loaded="{highlightJsLoaded}" /> -->
                     </code>
                 </pre>
             </div>
+        </div>
+        {/if}
+        {#if snippetTemplateProjectFiles }
+        <h3>Create new snippet templates</h3>
+        <input bind:value={snippetTemplateProjectFilesSearchTerm} on:keyup={searchSnippetTemplateProjectFiles} type="text" id="createNewTemplatesSearch" placeholder="Search" />
+        <div style="display: flex; flex-direction: column">
+            <select bind:value={selectedSnippetTemplateProjectFilesOutputPaths} style="flex: 1 1 200px" multiple>
+                {#each snippetTemplateProjectFiles as projectFile}
+                <option value={projectFile.relativePath}>{projectFile.relativePath}</option>
+                {/each}
+            </select>
+            {#if selectedSnippetTemplateProjectFilesOutputPaths.length > 0}
+            <div style="display: flex; gap: 12px">
+                <button style="flex: 1 1" on:click={createSelectedSnippetTemplates} type="button">Create</button>
+            </div>
+            {/if}
         </div>
         {/if}
     </div>

@@ -6,7 +6,9 @@ using Newtonsoft.Json;
 using SteffBeckers.Abp.Generator.Helpers;
 using SteffBeckers.Abp.Generator.Realtime;
 using SteffBeckers.Abp.Generator.Settings;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -71,6 +73,72 @@ public class SnippetTemplatesService
         {
             output.Write(JsonNamingPolicy.CamelCase.ConvertName(arguments[0].ToString() ?? string.Empty));
         });
+    }
+
+    public Task<List<SnippetTemplateProjectFile>> GetProjectFileListAsync(SnippetTemplateProjectFileListInputDto input)
+    {
+        return Task.FromResult(Directory
+            .GetFiles(
+                path: _settingsService.Settings.ProjectPath,
+                searchPattern: "*.*",
+                searchOption: SearchOption.AllDirectories)
+            .Where(x => x.EndsWith(".cs"))
+            .Where(x => !string.IsNullOrWhiteSpace(input.FilterText) ? x.Contains(input.FilterText) : true)
+            .Select(projectFilePath =>
+            {
+                string relativeProjectFilePath = projectFilePath
+                    .Replace($"{_settingsService.Settings.ProjectPath}{Path.DirectorySeparatorChar}", string.Empty)
+                    .Replace(Path.DirectorySeparatorChar, '/');
+
+                return new SnippetTemplateProjectFile()
+                {
+                    FullPath = projectFilePath,
+                    RelativePath = relativeProjectFilePath
+                };
+            }).ToList());
+    }
+
+    public Task CreateAsync(SnippetTemplateCreateInputDto input)
+    {
+        return Parallel.ForEachAsync(
+            input.ProjectFiles,
+            async (SnippetTemplateProjectFile projectFile, CancellationToken cancellationToken) =>
+            {
+                if (projectFile == null)
+                {
+                    return;
+                }
+
+                // TODO: Remove
+                Console.WriteLine(projectFile.FullPath);
+                Console.WriteLine(projectFile.RelativePath);
+
+                string projectFileText;
+
+                using (StreamReader? projectFileTextStreamReader =
+                    new StreamReader(File.Open(projectFile.FullPath!, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+                {
+                    projectFileText = await projectFileTextStreamReader.ReadToEndAsync();
+                }
+
+                // TODO: Remove
+                Console.WriteLine(projectFileText);
+
+                string output = projectFileText;
+
+                GeneratorContext context = _settingsService.Settings.Context;
+
+                output = output.Replace(context.Project.Name, "{{Project.Name}}", StringComparison.Ordinal);
+                output = output.Replace(context.Project.CompanyName!, "{{Project.CompanyName}}", StringComparison.Ordinal);
+                output = output.Replace(context.Project.ProductName!, "{{Project.ProductName}}", StringComparison.Ordinal);
+                output = output.Replace(context.AggregateRoot.NamePlural, "{{AggregateRoot.NamePlural}}", StringComparison.Ordinal);
+
+                // TODO: Remove
+                Console.WriteLine("projectFileText");
+                Console.WriteLine(projectFileText);
+                Console.WriteLine("output");
+                Console.WriteLine(output);
+            });
     }
 
     public Task EditAsync(SnippetTemplateEditInputDto input)
