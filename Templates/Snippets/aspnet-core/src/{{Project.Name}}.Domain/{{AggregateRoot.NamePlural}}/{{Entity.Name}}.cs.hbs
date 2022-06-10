@@ -9,8 +9,18 @@ using Volo.Abp.MultiTenancy;
 
 namespace {{Project.Name}}.{{AggregateRoot.NamePlural}};
 
-public class {{Entity.Name}} : FullAuditedEntity<Guid>
+public class {{Entity.Name}} : FullAuditedEntity<Guid>, IMultiTenant
 {
+    public Guid? TenantId
+    {
+        get => _tenantId;
+        set
+        {
+            Check.NotNull(value, nameof(TenantId));
+            _tenantId = value;
+        }
+    }
+
     public Guid {{AggregateRoot.Name}}Id { get; set; }
 
     public virtual {{AggregateRoot.Name}} {{AggregateRoot.Name}} { get; }

@@ -4,8 +4,8 @@
     "Context": {
       "AggregateRoot": {
         "LookupPropertyName": "Name",
-        "Name": "ProductType",
-        "NamePlural": "ProductTypes",
+        "Name": "EntityType",
+        "NamePlural": "EntityTypes",
         "OrderByPropertyName": "Name",
         "Properties": [
           {
@@ -13,16 +13,11 @@
             "Name": "Name",
             "Required": true,
             "Type": "string"
-          },
-          {
-            "MaxLength": 10,
-            "Name": "Abbreviation",
-            "Type": "string"
           }
         ]
       },
       "Project": {
-        "Name": "Codefined.InCtrl.ProductManagement",
+        "Name": "Codefined.InCtrl.InformationFields",
         "IsModule": true
       }
     },

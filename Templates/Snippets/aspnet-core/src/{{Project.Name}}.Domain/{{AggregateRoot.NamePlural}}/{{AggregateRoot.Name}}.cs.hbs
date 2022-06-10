@@ -3,11 +3,24 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Volo.Abp;
 using Volo.Abp.Domain.Entities.Auditing;
+using Volo.Abp.MultiTenancy;
 
 namespace {{Project.Name}}.{{AggregateRoot.NamePlural}};
 
-public class {{AggregateRoot.Name}} : FullAuditedAggregateRoot<Guid>
+public class {{AggregateRoot.Name}} : FullAuditedAggregateRoot<Guid>, IMultiTenant
 {
+    private Guid? _tenantId;
+
+    public Guid? TenantId
+    {
+        get => _tenantId;
+        set
+        {
+            Check.NotNull(value, nameof(TenantId));
+            _tenantId = value;
+        }
+    }
+
     {{#each AggregateRoot.PropertiesOrderByName}}
     {{#if StringAsFullProperty}}
     public {{Type}} {{Name}}
